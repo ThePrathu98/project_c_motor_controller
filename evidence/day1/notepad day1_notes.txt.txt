@@ -1,0 +1,24 @@
+Project C Day 1 Notes
+
+Date:
+Board: ESP8266 NodeMCU
+Port: COM5
+SDK: ESP8266 RTOS SDK v3.4
+Toolchain: xtensa-lx106-elf-gcc 8.4.0
+Python environment: Python 3.10.11 through ESP8266 RTOS SDK venv
+
+Completed:
+- Cloned ESP8266_RTOS_SDK v3.4.
+- Installed SDK tools using install.sh through Git Bash.
+- Fixed Python pkg_resources issue by pinning setuptools to 80.9.0.
+- Exported SDK environment using export.sh.
+- Built hello_world using idf.py build.
+- Flashed hello_world to ESP8266 NodeMCU on COM5.
+- Verified monitor output:
+  - ESP-IDF v3.4 bootloader log
+  - Hello world!
+  - ESP8266 chip info
+  - Restart countdown
+
+Conclusion:
+Day 1 toolchain proof is complete. ESP8266 RTOS SDK build, flash, and monitor workflow is working.

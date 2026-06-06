@@ -1,0 +1,20 @@
+# ESP-IDF / ESP8266 RTOS SDK build output
+build/
+sdkconfig.old
+
+# Editor files
+.vscode/
+*.code-workspace
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary files
+*.tmp
+*.log*.mp4
+*.mp4
