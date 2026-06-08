@@ -18,3 +18,16 @@ __pycache__/
 *.tmp
 *.log*.mp4
 *.mp4
+
+
+# Local Wi-Fi credentials - do not commit
+main/wifi_secrets.h
+
+# Large demo videos are submitted through Google Drive, not GitHub
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# ESP-IDF build output
+build/

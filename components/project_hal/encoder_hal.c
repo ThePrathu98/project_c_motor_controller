@@ -1,32 +1,84 @@
 #include "encoder_hal.h"
 
 #include "driver/gpio.h"
+#include "esp_attr.h"
+#include "esp_err.h"
 #include "esp_log.h"
 
 /*
- * Encoder wiring:
+ * encoder_hal.c
  *
- * Encoder yellow wire -> NodeMCU D1 -> GPIO5 -> Encoder channel A
- * Encoder white wire  -> NodeMCU D2 -> GPIO4 -> Encoder channel B
+ * Stable Day 3–4 encoder feedback implementation.
  *
- * Encoder blue wire   -> ESP8266 3V3
- * Encoder green wire  -> ESP8266 GND
+ * System role:
+ *   - Encoder A/B wires come from the motor encoder.
+ *   - This HAL configures GPIO5/GPIO4 as inputs.
+ *   - An interrupt fires on Encoder B edges.
+ *   - Encoder A is sampled inside the ISR to determine direction.
+ *
+ * Why B-edge now:
+ *   During low-speed 300 RPM testing, Saleae showed Encoder B toggling while
+ *   Encoder A was sometimes flat. Counting B edges gives the firmware a better
+ *   chance of seeing nonzero delta at low speed.
  */
-#define ENCODER_A_GPIO   5
-#define ENCODER_B_GPIO   4
+
+/*
+ * Wiring:
+ *   Encoder A / yellow -> NodeMCU D1 -> GPIO5
+ *   Encoder B / white  -> NodeMCU D2 -> GPIO4
+ */
+#define ENCODER_A_GPIO  5
+#define ENCODER_B_GPIO  4
 
 static const char *TAG = "encoder_hal";
+
+/*
+ * File-local encoder count.
+ *
+ * volatile:
+ *   Modified inside ISR and read/reset from FreeRTOS task.
+ */
+static volatile int32_t s_encoder_delta = 0;
+
+/*
+ * Direction sign correction.
+ *
+ * If positive motor duty produces negative RPM after this change,
+ * flip this from 1 to -1.
+ */
+static volatile int32_t s_dir_sign = 1;
+
+/*
+ * Encoder B interrupt handler.
+ *
+ * IRAM_ATTR:
+ *   Places ISR code in instruction RAM.
+ *
+ * ISR rule:
+ *   Keep it short. No logging, malloc, printf, or blocking calls here.
+ */
+static void IRAM_ATTR encoder_a_isr(void *arg)
+{
+    (void)arg;
+
+    int a = gpio_get_level(ENCODER_A_GPIO);
+    int b = gpio_get_level(ENCODER_B_GPIO);
+
+    if (a == b)
+    {
+        s_encoder_delta += s_dir_sign;
+    }
+    else
+    {
+        s_encoder_delta -= s_dir_sign;
+    }
+}
+
 
 void encoder_hal_init(void)
 {
     /*
-     * Configure encoder A/B pins as inputs.
-     *
-     * Pull-ups are enabled so the input has a defined logic level
-     * if the encoder output is temporarily floating.
-     *
-     * Interrupts are disabled for this first test.
-     * Later, we will enable edge interrupts for quadrature counting.
+     * Configure Encoder A and B as digital inputs.
      */
     gpio_config_t io_conf = {
         .pin_bit_mask = (1ULL << ENCODER_A_GPIO) | (1ULL << ENCODER_B_GPIO),
@@ -36,30 +88,59 @@ void encoder_hal_init(void)
         .intr_type = GPIO_INTR_DISABLE,
     };
 
-    gpio_config(&io_conf);
+    esp_err_t err = gpio_config(&io_conf);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "gpio_config failed err=%d", err);
+        return;
+    }
 
-    ESP_LOGI(TAG, "Encoder HAL initialized: A=D1/GPIO5, B=D2/GPIO4");
+    /*
+     * Install GPIO ISR service.
+     *
+     * ESP_ERR_INVALID_STATE means it was already installed.
+     */
+    err = gpio_install_isr_service(0);
+    if ((err != ESP_OK) && (err != ESP_ERR_INVALID_STATE))
+    {
+        ESP_LOGE(TAG, "gpio_install_isr_service failed err=%d", err);
+        return;
+    }
+
+    /*
+     * Attach ISR only to Encoder B.
+     *
+     * Encoder A is still read inside the ISR for direction/reference.
+     */
+    gpio_set_intr_type(ENCODER_A_GPIO, GPIO_INTR_ANYEDGE);
+    gpio_set_intr_type(ENCODER_B_GPIO, GPIO_INTR_DISABLE);
+
+    err = gpio_isr_handler_add(ENCODER_A_GPIO, encoder_a_isr, NULL);
+    if ((err != ESP_OK) && (err != ESP_ERR_INVALID_STATE))
+    {
+        ESP_LOGE(TAG, "gpio_isr_handler_add A failed err=%d", err);
+        return;
+    }
+
+    ESP_LOGI(TAG, "Encoder A-edge counting enabled: A=GPIO5, B=GPIO4");
+}
+
+int32_t encoder_hal_get_and_reset_delta(void)
+{
+    /*
+     * Snapshot and reset the encoder delta.
+     */
+    int32_t delta = s_encoder_delta;
+    s_encoder_delta = 0;
+    return delta;
 }
 
 int encoder_hal_read_a(void)
 {
-    /*
-     * Return the instantaneous digital logic level on encoder channel A.
-     *
-     * Expected value:
-     *   0 = low
-     *   1 = high
-     */
     return gpio_get_level(ENCODER_A_GPIO);
 }
 
 int encoder_hal_read_b(void)
 {
-    /*
-     * Return the instantaneous digital logic level on encoder channel B.
-     *
-     * At this stage we are not counting pulses yet.
-     * We are only confirming that the pin can be read.
-     */
     return gpio_get_level(ENCODER_B_GPIO);
 }

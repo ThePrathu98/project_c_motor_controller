@@ -1,36 +1,60 @@
 #ifndef MOTOR_HAL_H
 #define MOTOR_HAL_H
 
+#include <stdint.h>
+
 /*
  * motor_hal.h
  *
- * Public interface for the motor hardware abstraction layer.
+ * Public HAL interface for the DRV8870 motor driver.
  *
- * Higher-level application/control code should call these functions
- * instead of directly touching GPIO registers.
- *
- * This keeps the project layered:
- *   app_main/control logic -> motor_hal -> ESP8266 GPIO/PWM driver
+ * HAL rule:
+ *   Higher-level code should call motor_hal_set_duty().
+ *   Higher-level code should not directly call pwm_set_duty(),
+ *   know GPIO numbers, or know DRV8870 IN1/IN2 implementation details.
  */
 
-void motor_hal_init(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef enum
+{
+    MOTOR_HAL_OK = 0,
+    MOTOR_HAL_ERR = -1
+} motor_hal_status_t;
 
 /*
- * Set motor command.
+ * Initialize ESP8266 PWM channels used for DRV8870 IN1/IN2.
  *
- * Current Day 2 bring-up behavior:
- *   duty_percent > 0  -> forward
- *   duty_percent < 0  -> reverse
- *   duty_percent == 0 -> stop/coast
- *
- * Later Day 2/Day 3 behavior:
- *   this same API will be upgraded to real PWM duty control.
+ * Return:
+ *   MOTOR_HAL_OK  = PWM initialized successfully
+ *   MOTOR_HAL_ERR = PWM driver setup failed
  */
-void motor_hal_set_duty(int duty_percent);
+motor_hal_status_t motor_hal_init(void);
 
 /*
- * Convenience wrapper for stopping the motor.
+ * Set signed motor duty.
+ *
+ * duty_percent:
+ *   +1 to +100  = forward PWM on IN1, IN2 low
+ *   -1 to -100  = reverse PWM on IN2, IN1 low
+ *   0           = both inputs low, motor coasts/stops
+ *
+ * Return:
+ *   MOTOR_HAL_OK  = duty applied successfully
+ *   MOTOR_HAL_ERR = PWM update failed
+ */
+motor_hal_status_t motor_hal_set_duty(int32_t duty_percent);
+
+/*
+ * Convenience stop helper.
+ * Used when firmware wants to force both motor inputs low.
  */
 void motor_hal_stop(void);
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* MOTOR_HAL_H */

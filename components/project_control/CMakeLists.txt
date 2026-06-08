@@ -1,13 +1,14 @@
 idf_component_register(
     SRCS
-        "motor_hal.c"
-        "encoder_hal.c"
+        "pid.c"
+        "control_task.c"
 
     INCLUDE_DIRS
         "."
 
     REQUIRES
+        project_hal
         esp8266
+        freertos
         log
-        pthread
 )

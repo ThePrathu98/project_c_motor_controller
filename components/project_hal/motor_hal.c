@@ -1,117 +1,234 @@
 #include "motor_hal.h"
 
-#include "driver/gpio.h"
+#include <stdlib.h>
+
+#include "esp_err.h"
 #include "esp_log.h"
+#include "driver/pwm.h"
 
 /*
- * ESP8266 NodeMCU pin mapping:
+ * DRV8870 input pins:
  *
- * NodeMCU D5 = ESP8266 GPIO14 -> DRV8870 IN1
- * NodeMCU D6 = ESP8266 GPIO12 -> DRV8870 IN2
- *
- * DRV8870 input logic used here:
- *   IN1 = 1, IN2 = 0 -> motor forward
- *   IN1 = 0, IN2 = 1 -> motor reverse
- *   IN1 = 0, IN2 = 0 -> coast/stop
- *
- * For this first Day 2 test, we use simple GPIO ON/OFF control.
- * Later, this file will be upgraded to PWM duty control.
+ *   ESP8266 D5 / GPIO14 -> DRV8870 IN1
+ *   ESP8266 D6 / GPIO12 -> DRV8870 IN2
  */
-#define MOTOR_IN1_GPIO   14
-#define MOTOR_IN2_GPIO   12
+#define MOTOR_IN1_GPIO       14U
+#define MOTOR_IN2_GPIO       12U
+
+/*
+ * 50 us period = 20 kHz PWM.
+ */
+#define MOTOR_PWM_PERIOD_US  50U
+#define MOTOR_PWM_CHANNELS   2U
+
+#define MOTOR_CH_IN1         0U
+#define MOTOR_CH_IN2         1U
 
 static const char *TAG = "motor_hal";
 
-void motor_hal_init(void)
+/*
+ * ESP8266 RTOS SDK pwm_init() expects GPIO numbers here.
+ */
+static const uint32_t s_pwm_pins[MOTOR_PWM_CHANNELS] =
 {
-    /*
-     * gpio_config_t describes how GPIO pins should behave.
-     *
-     * pin_bit_mask:
-     *   Selects which pins are configured.
-     *   (1ULL << GPIO_NUMBER) creates a bit mask for that pin.
-     *
-     * mode:
-     *   GPIO_MODE_OUTPUT because IN1/IN2 are outputs from ESP8266
-     *   to the DRV8870 motor driver.
-     *
-     * pull_up_en / pull_down_en:
-     *   Disabled because these are actively driven output pins.
-     *
-     * intr_type:
-     *   Disabled because motor output pins do not need interrupts.
-     */
-    gpio_config_t io_conf = {
-        .pin_bit_mask = (1ULL << MOTOR_IN1_GPIO) | (1ULL << MOTOR_IN2_GPIO),
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE,
-    };
+    MOTOR_IN1_GPIO,
+    MOTOR_IN2_GPIO
+};
 
-    gpio_config(&io_conf);
-
-    /*
-     * Start in a safe state.
-     *
-     * Both inputs LOW means the motor should not be driven.
-     * This prevents unexpected motion immediately after boot.
-     */
-    gpio_set_level(MOTOR_IN1_GPIO, 0);
-    gpio_set_level(MOTOR_IN2_GPIO, 0);
-
-    ESP_LOGI(TAG, "Motor HAL initialized: D5/GPIO14=IN1, D6/GPIO12=IN2");
-}
-
-void motor_hal_set_duty(int duty_percent)
+static uint32_t s_pwm_duties[MOTOR_PWM_CHANNELS] =
 {
-    /*
-     * This function name intentionally uses "duty_percent" because
-     * the final project will control PWM duty cycle.
-     *
-     * For this first hardware bring-up step, we only use the sign:
-     *
-     *   positive -> forward
-     *   negative -> reverse
-     *   zero     -> stop/coast
-     *
-     * This proves the DRV8870 direction path before adding PWM.
-     */
-    if (duty_percent > 0) {
-        /*
-         * Forward:
-         * IN1 HIGH, IN2 LOW.
-         */
-        gpio_set_level(MOTOR_IN1_GPIO, 1);
-        gpio_set_level(MOTOR_IN2_GPIO, 0);
-        ESP_LOGI(TAG, "Motor FORWARD command");
-    } else if (duty_percent < 0) {
-        /*
-         * Reverse:
-         * IN1 LOW, IN2 HIGH.
-         */
-        gpio_set_level(MOTOR_IN1_GPIO, 0);
-        gpio_set_level(MOTOR_IN2_GPIO, 1);
-        ESP_LOGI(TAG, "Motor REVERSE command");
-    } else {
-        /*
-         * Stop/coast:
-         * IN1 LOW, IN2 LOW.
-         *
-         * This does not actively brake the motor.
-         * It lets the motor coast down.
-         */
-        gpio_set_level(MOTOR_IN1_GPIO, 0);
-        gpio_set_level(MOTOR_IN2_GPIO, 0);
-        ESP_LOGI(TAG, "Motor STOP command");
+    0,
+    0
+};
+
+
+
+
+motor_hal_status_t motor_hal_init(void)
+{
+    esp_err_t err;
+
+    ESP_LOGI(TAG, "Initializing motor PWM");
+    ESP_LOGI(TAG, "IN1 GPIO=%u, IN2 GPIO=%u, PWM period=%u us",
+             MOTOR_IN1_GPIO,
+             MOTOR_IN2_GPIO,
+             MOTOR_PWM_PERIOD_US);
+
+    s_pwm_duties[MOTOR_CH_IN1] = 0;
+    s_pwm_duties[MOTOR_CH_IN2] = 0;
+
+    err = pwm_init(MOTOR_PWM_PERIOD_US,
+                   s_pwm_duties,
+                   MOTOR_PWM_CHANNELS,
+                   s_pwm_pins);
+
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_init failed, err=%d", err);
+        return MOTOR_HAL_ERR;
     }
+
+
+    err = pwm_set_phase(MOTOR_CH_IN1, 0.0f);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_set_phase IN1 failed, err=%d", err);
+        return MOTOR_HAL_ERR;
+    }
+
+    err = pwm_set_phase(MOTOR_CH_IN2, 0.0f);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_set_phase IN2 failed, err=%d", err);
+        return MOTOR_HAL_ERR;
+    }
+
+    err = pwm_set_duty(MOTOR_CH_IN1, 0);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_set_duty IN1 init failed, err=%d", err);
+        return MOTOR_HAL_ERR;
+    }
+
+    err = pwm_set_duty(MOTOR_CH_IN2, 0);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_set_duty IN2 init failed, err=%d", err);
+        return MOTOR_HAL_ERR;
+    }
+
+    err = pwm_start();
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_start init failed, err=%d", err);
+        return MOTOR_HAL_ERR;
+    }
+
+    ESP_LOGI(TAG, "Motor PWM initialized");
+    return MOTOR_HAL_OK;
 }
+
+
+motor_hal_status_t motor_hal_set_duty(int32_t duty_percent)
+{
+    /*
+     * motor_hal_set_duty()
+     *
+     * This function is called frequently by the PID control task.
+     * Because it can run every 10 ms, do NOT print ESP_LOGI here.
+     * Frequent UART logging from a control path can overflow/delay the system.
+     *
+     * duty_percent:
+     *   + value = drive IN1 PWM, IN2 low
+     *   - value = drive IN1 low, IN2 PWM
+     *   0       = both inputs low, motor coasts/stops
+     */
+
+    int32_t clamped = duty_percent;
+
+    if (clamped > 100)
+    {
+        clamped = 100;
+    }
+    else if (clamped < -100)
+    {
+        clamped = -100;
+    }
+
+    /*
+     * PWM period is 50 us.
+     * So:
+     *   100% duty = 50 us HIGH
+     *   70% duty  = 35 us HIGH
+     *   30% duty  = 15 us HIGH
+     */
+    uint32_t pwm_count = (uint32_t)((abs(clamped) * MOTOR_PWM_PERIOD_US) / 100);
+
+    esp_err_t err;
+
+    if (clamped > 0)
+    {
+        /*
+         * Forward command:
+         *   IN1 gets PWM.
+         *   IN2 stays low.
+         */
+        err = pwm_set_duty(MOTOR_CH_IN1, pwm_count);
+        if (err != ESP_OK)
+        {
+            ESP_LOGE(TAG, "pwm_set_duty IN1 failed err=%d", err);
+            return MOTOR_HAL_ERR;
+        }
+
+        err = pwm_set_duty(MOTOR_CH_IN2, 0);
+        if (err != ESP_OK)
+        {
+            ESP_LOGE(TAG, "pwm_set_duty IN2 failed err=%d", err);
+            return MOTOR_HAL_ERR;
+        }
+    }
+    else if (clamped < 0)
+    {
+        /*
+         * Reverse command:
+         *   IN1 stays low.
+         *   IN2 gets PWM.
+         */
+        err = pwm_set_duty(MOTOR_CH_IN1, 0);
+        if (err != ESP_OK)
+        {
+            ESP_LOGE(TAG, "pwm_set_duty IN1 failed err=%d", err);
+            return MOTOR_HAL_ERR;
+        }
+
+        err = pwm_set_duty(MOTOR_CH_IN2, pwm_count);
+        if (err != ESP_OK)
+        {
+            ESP_LOGE(TAG, "pwm_set_duty IN2 failed err=%d", err);
+            return MOTOR_HAL_ERR;
+        }
+    }
+    else
+    {
+        /*
+         * Stop/coast command:
+         *   Both DRV8870 inputs low.
+         */
+        err = pwm_set_duty(MOTOR_CH_IN1, 0);
+        if (err != ESP_OK)
+        {
+            ESP_LOGE(TAG, "pwm_set_duty IN1 stop failed err=%d", err);
+            return MOTOR_HAL_ERR;
+        }
+
+        err = pwm_set_duty(MOTOR_CH_IN2, 0);
+        if (err != ESP_OK)
+        {
+            ESP_LOGE(TAG, "pwm_set_duty IN2 stop failed err=%d", err);
+            return MOTOR_HAL_ERR;
+        }
+    }
+
+    /*
+     * Apply PWM duty changes.
+     * Keep only error logging here; no normal ESP_LOGI.
+     */
+    err = pwm_start();
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG, "pwm_start failed err=%d", err);
+        return MOTOR_HAL_ERR;
+    }
+
+    return MOTOR_HAL_OK;
+}
+
 
 void motor_hal_stop(void)
 {
-    /*
-     * motor_hal_stop() gives higher-level code a clear stop API.
-     * Internally it simply sends a zero command.
-     */
-    motor_hal_set_duty(0);
+    pwm_set_duty(MOTOR_CH_IN1, 0);
+    pwm_set_duty(MOTOR_CH_IN2, 0);
+    pwm_start();
+
+    ESP_LOGI(TAG, "motor stopped");
 }
