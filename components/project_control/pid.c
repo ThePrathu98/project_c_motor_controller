@@ -1,6 +1,15 @@
 #include "pid.h"
 
 /*
+ * pid.c
+ *
+ * Pure C PID implementation used by control_task.c.
+ *
+ * The PID output is not the full motor duty. In the final Day 3-4 tuning,
+ * feed-forward supplies the approximate duty and PID returns a small trim.
+ */
+
+/*
  * Local helper.
  *
  * static:
@@ -43,6 +52,12 @@ void pid_init(pid_controller_t *pid,
     pid_reset(pid);
 }
 
+/*
+ * Clear accumulated state.
+ *
+ * This is called when stopping/disarming or before a new speed command so old
+ * integral memory does not affect the next test.
+ */
 void pid_reset(pid_controller_t *pid)
 {
     pid->integrator = 0.0f;
@@ -50,6 +65,12 @@ void pid_reset(pid_controller_t *pid)
     pid->initialized = 0;
 }
 
+/*
+ * Execute one PID sample.
+ *
+ * Inputs use floating point because gains and dt are fractional. The caller
+ * converts the returned correction back to integer duty percent.
+ */
 float pid_update(pid_controller_t *pid, float setpoint, float measurement, float dt_sec)
 {
     /*

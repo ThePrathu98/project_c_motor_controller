@@ -1,0 +1,38 @@
+Day 3-4 FINAL VIDEO step response test: warm-up -> 500 -> 1500
+03:11:39.419  ARM -> OK ARM
+03:11:43.892  SET_SPEED 300 -> OK SET_SPEED 300
+03:11:44.954  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=432 duty=50 error=-132 delta=-198 missed=72 step=0
+03:11:46.076  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=185 duty=51 error=115 delta=-85 missed=103 step=0
+03:11:47.192  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=209 duty=52 error=91 delta=-96 missed=138 step=0
+03:11:48.324  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=220 duty=53 error=80 delta=-101 missed=170 step=0
+03:11:49.442  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=268 duty=54 error=32 delta=-123 missed=205 step=0
+03:11:50.567  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=266 duty=54 error=34 delta=-122 missed=241 step=0
+03:11:51.696  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=248 duty=54 error=52 delta=-114 missed=285 step=0
+03:11:52.830  STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=248 duty=54 error=52 delta=-114 missed=319 step=0
+03:11:52.948  SET_SPEED 500 -> OK SET_SPEED 500
+03:11:53.995  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=473 duty=62 error=27 delta=-217 missed=363 step=0
+03:11:55.073  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=501 duty=62 error=-1 delta=-230 missed=396 step=0
+03:11:56.201  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=495 duty=62 error=5 delta=-227 missed=430 step=0
+03:11:57.328  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=480 duty=62 error=20 delta=-220 missed=470 step=0
+03:11:58.453  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=477 duty=62 error=23 delta=-219 missed=507 step=0
+03:11:59.579  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=477 duty=62 error=23 delta=-219 missed=545 step=0
+03:12:00.706  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=499 duty=62 error=1 delta=-229 missed=579 step=0
+03:12:01.843  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=499 duty=62 error=1 delta=-229 missed=611 step=0
+03:12:02.960  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=490 duty=62 error=10 delta=-225 missed=659 step=0
+03:12:04.117  STATUS -> OK STATUS state=RUNNING cmd=500 target=500 actual=484 duty=62 error=16 delta=-222 missed=691 step=0
+03:12:04.215  SET_SPEED 1500 -> OK SET_SPEED 1500
+03:12:05.241  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1878 duty=91 error=-378 delta=-861 missed=734 step=0
+03:12:06.336  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1804 duty=88 error=-304 delta=-827 missed=768 step=0
+03:12:07.464  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1680 duty=84 error=-180 delta=-770 missed=799 step=0
+03:12:08.610  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1675 duty=83 error=-175 delta=-768 missed=834 step=0
+03:12:09.730  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1488 duty=83 error=12 delta=-682 missed=878 step=0
+03:12:10.854  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1498 duty=82 error=2 delta=-687 missed=914 step=0
+03:12:11.997  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1492 duty=82 error=8 delta=-684 missed=951 step=0
+03:12:13.098  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1544 duty=82 error=-44 delta=-708 missed=993 step=0
+03:12:14.224  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1503 duty=82 error=-3 delta=-689 missed=1030 step=0
+03:12:15.349  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1538 duty=82 error=-38 delta=-705 missed=1065 step=0
+03:12:16.501  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1488 duty=82 error=12 delta=-682 missed=1114 step=0
+03:12:17.609  STATUS -> OK STATUS state=RUNNING cmd=1500 target=1500 actual=1492 duty=82 error=8 delta=-684 missed=1152 step=0
+03:12:17.753  STOP -> OK STOP
+03:12:19.780  STATUS -> OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1204 step=0
+03:12:19.873  DISARM -> OK DISARM

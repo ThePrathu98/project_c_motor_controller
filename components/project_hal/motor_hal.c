@@ -7,6 +7,15 @@
 #include "driver/pwm.h"
 
 /*
+ * motor_hal.c
+ *
+ * Hardware abstraction layer for the TI DRV8870EVM.
+ *
+ * The rest of the project gives this file a signed duty percentage. This file
+ * translates that request into ESP8266 PWM updates on IN1/IN2.
+ */
+
+/*
  * DRV8870 input pins:
  *
  *   ESP8266 D5 / GPIO14 -> DRV8870 IN1
@@ -44,6 +53,13 @@ static uint32_t s_pwm_duties[MOTOR_PWM_CHANNELS] =
 
 
 
+/*
+ * Initialize ESP8266 PWM for both DRV8870 input pins.
+ *
+ * pwm_init() receives the period, initial duty array, number of channels, and
+ * GPIO pin array. The channels are then started at 0% duty so the motor is safe
+ * until ARM/SET_SPEED commands are received.
+ */
 motor_hal_status_t motor_hal_init(void)
 {
     esp_err_t err;
@@ -109,21 +125,15 @@ motor_hal_status_t motor_hal_init(void)
 }
 
 
+/*
+ * Apply a signed duty command.
+ *
+ * Positive duty: IN1 PWM, IN2 LOW.
+ * Negative duty: IN1 LOW, IN2 PWM.
+ * Zero duty:     IN1 LOW, IN2 LOW.
+ */
 motor_hal_status_t motor_hal_set_duty(int32_t duty_percent)
 {
-    /*
-     * motor_hal_set_duty()
-     *
-     * This function is called frequently by the PID control task.
-     * Because it can run every 10 ms, do NOT print ESP_LOGI here.
-     * Frequent UART logging from a control path can overflow/delay the system.
-     *
-     * duty_percent:
-     *   + value = drive IN1 PWM, IN2 low
-     *   - value = drive IN1 low, IN2 PWM
-     *   0       = both inputs low, motor coasts/stops
-     */
-
     int32_t clamped = duty_percent;
 
     if (clamped > 100)
@@ -135,100 +145,58 @@ motor_hal_status_t motor_hal_set_duty(int32_t duty_percent)
         clamped = -100;
     }
 
-    /*
-     * PWM period is 50 us.
-     * So:
-     *   100% duty = 50 us HIGH
-     *   70% duty  = 35 us HIGH
-     *   30% duty  = 15 us HIGH
-     */
-    uint32_t pwm_count = (uint32_t)((abs(clamped) * MOTOR_PWM_PERIOD_US) / 100);
-
+    /* ESP8266 PWM driver expects duty in timer counts, not percent. */
+    uint32_t duty_count = (uint32_t)((abs(clamped) * MOTOR_PWM_PERIOD_US) / 100);
     esp_err_t err;
 
     if (clamped > 0)
     {
         /*
-         * Forward command:
-         *   IN1 gets PWM.
-         *   IN2 stays low.
+         * Forward drive for DRV8870:
+         *
+         * This matches the standalone test that worked:
+         *   IN1 = PWM / HIGH
+         *   IN2 = LOW
+         *
+         * Do not inverse-PWM IN2 here. Holding IN2 low gives the driver
+         * a clean forward command instead of mixing drive/brake.
          */
-        err = pwm_set_duty(MOTOR_CH_IN1, pwm_count);
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "pwm_set_duty IN1 failed err=%d", err);
-            return MOTOR_HAL_ERR;
-        }
+        err = pwm_set_duty(MOTOR_CH_IN1, duty_count);
+        if (err != ESP_OK) return MOTOR_HAL_ERR;
 
         err = pwm_set_duty(MOTOR_CH_IN2, 0);
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "pwm_set_duty IN2 failed err=%d", err);
-            return MOTOR_HAL_ERR;
-        }
+        if (err != ESP_OK) return MOTOR_HAL_ERR;
     }
     else if (clamped < 0)
     {
         /*
-         * Reverse command:
-         *   IN1 stays low.
-         *   IN2 gets PWM.
+         * Reverse drive:
+         *   IN1 = LOW
+         *   IN2 = PWM / HIGH
          */
         err = pwm_set_duty(MOTOR_CH_IN1, 0);
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "pwm_set_duty IN1 failed err=%d", err);
-            return MOTOR_HAL_ERR;
-        }
+        if (err != ESP_OK) return MOTOR_HAL_ERR;
 
-        err = pwm_set_duty(MOTOR_CH_IN2, pwm_count);
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "pwm_set_duty IN2 failed err=%d", err);
-            return MOTOR_HAL_ERR;
-        }
+        err = pwm_set_duty(MOTOR_CH_IN2, duty_count);
+        if (err != ESP_OK) return MOTOR_HAL_ERR;
     }
     else
     {
         /*
-         * Stop/coast command:
-         *   Both DRV8870 inputs low.
+         * Stop / coast:
+         *   IN1 = LOW
+         *   IN2 = LOW
          */
         err = pwm_set_duty(MOTOR_CH_IN1, 0);
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "pwm_set_duty IN1 stop failed err=%d", err);
-            return MOTOR_HAL_ERR;
-        }
+        if (err != ESP_OK) return MOTOR_HAL_ERR;
 
         err = pwm_set_duty(MOTOR_CH_IN2, 0);
-        if (err != ESP_OK)
-        {
-            ESP_LOGE(TAG, "pwm_set_duty IN2 stop failed err=%d", err);
-            return MOTOR_HAL_ERR;
-        }
+        if (err != ESP_OK) return MOTOR_HAL_ERR;
     }
 
-    /*
-     * Apply PWM duty changes.
-     * Keep only error logging here; no normal ESP_LOGI.
-     */
+    /* Apply the updated duty values to the PWM hardware. */
     err = pwm_start();
-    if (err != ESP_OK)
-    {
-        ESP_LOGE(TAG, "pwm_start failed err=%d", err);
-        return MOTOR_HAL_ERR;
-    }
+    if (err != ESP_OK) return MOTOR_HAL_ERR;
 
     return MOTOR_HAL_OK;
-}
-
-
-void motor_hal_stop(void)
-{
-    pwm_set_duty(MOTOR_CH_IN1, 0);
-    pwm_set_duty(MOTOR_CH_IN2, 0);
-    pwm_start();
-
-    ESP_LOGI(TAG, "motor stopped");
 }

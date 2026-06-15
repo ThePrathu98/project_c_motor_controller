@@ -6,6 +6,9 @@
  *
  * Pure C PID controller interface.
  *
+ * This file contains no ESP8266-specific APIs, so the controller logic remains
+ * portable ANSI C and easy to unit-test or reuse.
+ *
  * Important naming note:
  *   Do NOT name this type pid_t.
  *   pid_t is already a standard system typedef for process IDs.
@@ -36,6 +39,8 @@ typedef struct
     /*
      * Internal state.
      * These are kept inside the struct so each PID instance owns its memory.
+     * The controller must be reset before a new independent run if old integral
+     * history should not carry over.
      */
     float integrator;
     float prev_error;

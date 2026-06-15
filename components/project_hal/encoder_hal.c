@@ -8,18 +8,16 @@
 /*
  * encoder_hal.c
  *
- * Stable Day 3–4 encoder feedback implementation.
+ * Stable Day 3-4 encoder feedback implementation.
  *
  * System role:
  *   - Encoder A/B wires come from the motor encoder.
- *   - This HAL configures GPIO5/GPIO4 as inputs.
- *   - An interrupt fires on Encoder B edges.
- *   - Encoder A is sampled inside the ISR to determine direction.
+ *   - This HAL configures GPIO5/GPIO4 as inputs with pull-ups.
+ *   - An interrupt fires on Encoder A edges.
+ *   - Encoder B is sampled inside the ISR to determine direction.
  *
- * Why B-edge now:
- *   During low-speed 300 RPM testing, Saleae showed Encoder B toggling while
- *   Encoder A was sometimes flat. Counting B edges gives the firmware a better
- *   chance of seeing nonzero delta at low speed.
+ * This keeps encoder counting isolated from the control loop. control_task.c
+ * only asks for a signed delta count once per speed sample.
  */
 
 /*
@@ -49,7 +47,7 @@ static volatile int32_t s_encoder_delta = 0;
 static volatile int32_t s_dir_sign = 1;
 
 /*
- * Encoder B interrupt handler.
+ * Encoder A interrupt handler.
  *
  * IRAM_ATTR:
  *   Places ISR code in instruction RAM.
@@ -61,6 +59,7 @@ static void IRAM_ATTR encoder_a_isr(void *arg)
 {
     (void)arg;
 
+    /* Read both phases at the edge instant to infer rotation direction. */
     int a = gpio_get_level(ENCODER_A_GPIO);
     int b = gpio_get_level(ENCODER_B_GPIO);
 
@@ -75,6 +74,7 @@ static void IRAM_ATTR encoder_a_isr(void *arg)
 }
 
 
+/* Initialize encoder GPIOs and attach the interrupt handler. */
 void encoder_hal_init(void)
 {
     /*
@@ -108,9 +108,9 @@ void encoder_hal_init(void)
     }
 
     /*
-     * Attach ISR only to Encoder B.
+     * Attach ISR only to Encoder A.
      *
-     * Encoder A is still read inside the ISR for direction/reference.
+     * Encoder B is still read inside the ISR for direction/reference.
      */
     gpio_set_intr_type(ENCODER_A_GPIO, GPIO_INTR_ANYEDGE);
     gpio_set_intr_type(ENCODER_B_GPIO, GPIO_INTR_DISABLE);
@@ -125,6 +125,10 @@ void encoder_hal_init(void)
     ESP_LOGI(TAG, "Encoder A-edge counting enabled: A=GPIO5, B=GPIO4");
 }
 
+/*
+ * Return the signed count accumulated since the previous sample and then clear
+ * it. control_task.c uses this as one RPM measurement window.
+ */
 int32_t encoder_hal_get_and_reset_delta(void)
 {
     /*
@@ -135,11 +139,13 @@ int32_t encoder_hal_get_and_reset_delta(void)
     return delta;
 }
 
+/* Debug helper used in serial telemetry to compare against Saleae D2. */
 int encoder_hal_read_a(void)
 {
     return gpio_get_level(ENCODER_A_GPIO);
 }
 
+/* Debug helper used in serial telemetry to compare against Saleae D3. */
 int encoder_hal_read_b(void)
 {
     return gpio_get_level(ENCODER_B_GPIO);

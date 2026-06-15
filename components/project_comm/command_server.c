@@ -24,8 +24,19 @@
 /*
  * command_server.c
  *
- * Minimal BSD socket command parser for Day 3-4.
- * This is intentionally short and practical.
+ * Wi-Fi + lwIP/BSD socket command interface for Day 3-4.
+ *
+ * Structural flow:
+ *   1. Start ESP8266 Wi-Fi in station mode.
+ *   2. Wait until the board receives an IP address.
+ *   3. Open a TCP server socket on COMMAND_PORT / 5005.
+ *   4. Accept one client connection at a time.
+ *   5. Parse one line command and call the control_task public API.
+ *   6. Send a short text response back to the PC client.
+ *
+ * The command server never touches PWM or encoder registers directly. It only
+ * calls functions from control_task.c. That keeps communication separate from
+ * real-time motor control.
  */
 
 #define COMMAND_PORT        5005
@@ -35,6 +46,13 @@
 static const char *TAG = "command_server";
 static EventGroupHandle_t s_wifi_events;
 
+/*
+ * ESP-IDF Wi-Fi event callback.
+ *
+ * The event loop calls this function from the Wi-Fi system context whenever
+ * station mode starts, gets an IP, or disconnects. We use an event-group bit
+ * to tell wifi_start() when the board is ready to accept TCP connections.
+ */
 static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     (void)ctx;
@@ -65,6 +83,12 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
     return ESP_OK;
 }
 
+/*
+ * Bring up Wi-Fi station mode and block until connected.
+ *
+ * NVS is initialized because the ESP8266 Wi-Fi stack stores RF/Wi-Fi data
+ * there. tcpip_adapter_init() starts the network stack used by lwIP sockets.
+ */
 static void wifi_start(void)
 {
     s_wifi_events = xEventGroupCreate();
@@ -100,6 +124,11 @@ static void wifi_start(void)
                         pdMS_TO_TICKS(20000));
 }
 
+/*
+ * Remove newline, carriage return, spaces, and tabs from the end of a received
+ * command. PowerShell/Python sends commands with a trailing '\n', so trimming
+ * lets strcmp()/strncmp() compare the command text cleanly.
+ */
 static void trim(char *s)
 {
     size_t n = strlen(s);
@@ -115,8 +144,16 @@ static void trim(char *s)
     }
 }
 
+/*
+ * Convert a text command into a control_task API call.
+ *
+ * resp is filled with a short line-oriented response because the PowerShell
+ * client expects one response per TCP connection. snprintf() is used everywhere
+ * so the response buffer cannot overflow.
+ */
 static void handle_command(const char *cmd, char *resp, size_t resp_len)
 {
+    /* ARM enables later SET_SPEED commands but does not spin the motor yet. */
     if (strcmp(cmd, "ARM") == 0)
     {
         control_arm();
@@ -137,6 +174,11 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
         control_start_step_test();
         snprintf(resp, resp_len, "OK STEP_TEST 500 1500\n");
     }
+    /*
+     * SET_SPEED carries a signed integer RPM argument after the command name.
+     * strtol() gives both the numeric value and an end pointer so bad input
+     * like SET_SPEED abc can be rejected cleanly.
+     */
     else if (strncmp(cmd, "SET_SPEED ", 10) == 0)
     {
         char *end = NULL;
@@ -163,6 +205,7 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
             snprintf(resp, resp_len, "ERR RPM_RANGE\n");
         }
     }
+    /* STATUS snapshots control_task state for PowerShell logs and grading. */
     else if (strcmp(cmd, "STATUS") == 0)
     {
         control_status_t st = control_get_status();
@@ -186,12 +229,20 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
     }
 }
 
+/*
+ * FreeRTOS task that owns the TCP server socket.
+ *
+ * It accepts a connection, receives one command, responds, then closes the
+ * connection. The simple one-command-per-connection model makes the PC-side
+ * Python/PowerShell scripts easy to write and debug.
+ */
 static void server_task(void *arg)
 {
     (void)arg;
 
     wifi_start();
 
+    /* Create an IPv4 TCP socket. */
     int listen_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
     if (listen_fd < 0)
     {
@@ -200,12 +251,14 @@ static void server_task(void *arg)
         return;
     }
 
+    /* Allow quick restart/rebind after flashing or resetting the ESP8266. */
     int yes = 1;
     setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 
     struct sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
 
+    /* Bind to all local interfaces on TCP port 5005. */
     addr.sin_family = AF_INET;
     addr.sin_port = htons(COMMAND_PORT);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -230,6 +283,7 @@ static void server_task(void *arg)
 
     while (1)
     {
+        /* Wait for the PC client to connect. */
         int client_fd = accept(listen_fd, NULL, NULL);
         if (client_fd < 0)
         {
@@ -257,6 +311,7 @@ static void server_task(void *arg)
     }
 }
 
+/* Public entry point called from app_main(). */
 void command_server_start(void)
 {
     xTaskCreate(server_task, "cmd_server", 4096, NULL, 4, NULL);

@@ -1,0 +1,1222 @@
+02:37:30.276 
+02:37:30.283  ets Jan  8 2013,rst cause:2, boot mode:(3,7)
+02:37:30.283 
+02:37:30.287 load 0x40100000, len 6720, room 16
+02:37:30.297 tail 0
+02:37:30.299 chksum 0x6f
+02:37:30.304 load 0x3ffe8008, len 24, room 8
+02:37:30.304 tail 0
+02:37:30.306 chksum 0xe6
+02:37:30.310 load 0x3ffe8020, len 3184, room 8
+02:37:30.315 tail 8
+02:37:30.318 chksum 0xf8
+02:37:30.319 csum 0xf8
+02:37:30.329 [0;32mI (42) boot: ESP-IDF v3.4 2nd stage bootloader[0m
+02:37:30.332 [0;32mI (42) boot: compile time 02:07:08[0m
+02:37:30.340 [0;32mI (42) qio_mode: Enabling default flash chip QIO[0m
+02:37:30.347 [0;32mI (48) boot: SPI Speed      : 40MHz[0m
+02:37:30.353 [0;32mI (54) boot: SPI Mode       : QIO[0m
+02:37:30.361 [0;32mI (60) boot: SPI Flash Size : 2MB[0m
+02:37:30.365 [0;32mI (66) boot: Partition Table:[0m
+02:37:30.376 [0;32mI (72) boot: ## Label            Usage          Type ST Offset   Length[0m
+02:37:30.385 [0;32mI (83) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+02:37:30.399 [0;32mI (94) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+02:37:30.410 [0;32mI (105) boot:  2 factory          factory app      00 00 00010000 000f0000[0m
+02:37:30.416 [0;32mI (117) boot: End of partition table[0m
+02:37:30.430 [0;32mI (123) esp_image: segment 0: paddr=0x00010010 vaddr=0x40210010 size=0x58208 (360968) map[0m
+02:37:30.443 [0;32mI (137) esp_image: segment 1: paddr=0x00068220 vaddr=0x40268218 size=0x0f7d8 ( 63448) map[0m
+02:37:30.455 [0;32mI (150) esp_image: segment 2: paddr=0x00077a00 vaddr=0x3ffe8000 size=0x0060c (  1548) load[0m
+02:37:30.472 [0;32mI (164) esp_image: segment 3: paddr=0x00078014 vaddr=0x40100000 size=0x00080 (   128) load[0m
+02:37:30.483 [0;32mI (177) esp_image: segment 4: paddr=0x0007809c vaddr=0x40100080 size=0x05940 ( 22848) load[0m
+02:37:30.492 [0;32mI (191) boot: Loaded app from partition at offset 0x10000[0m
+02:37:30.529 [0;32mI (221) app_main: Project C Day 3-4 full firmware starting[0m
+02:37:30.537 [0;32mI (222) motor_hal: Initializing motor PWM[0m
+02:37:30.546 [0;32mI (223) motor_hal: IN1 GPIO=14, IN2 GPIO=12, PWM period=50 us[0m
+02:37:30.560 [0;32mI (232) gpio: GPIO[12]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+02:37:30.576 [0;32mI (246) gpio: GPIO[14]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+02:37:30.581 [0;32mI (260) pwm: --- PWM v3.4
+02:37:30.582 [0m
+02:37:30.588 [0;32mI (266) motor_hal: Motor PWM initialized[0m
+02:37:30.602 [0;32mI (273) gpio: GPIO[4]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+02:37:30.615 [0;32mI (287) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+02:37:30.626 [0;32mI (301) encoder_hal: Encoder A-edge counting enabled: A=GPIO5, B=GPIO4[0m
+02:37:30.638 [0;32mI (313) control_task: 1 kHz hw_timer -> binary semaphore control loop started[0m
+02:37:30.652 [0;32mI (326) system_api: Base MAC address is not set, read default base MAC address from EFUSE[0m
+02:37:30.665 [0;32mI (339) system_api: Base MAC address is not set, read default base MAC address from EFUSE[0m
+02:37:30.734 phy_version: 1163.0, 665d56c, Jun 24 2020, 10:00:08, RTOS new
+02:37:30.739 [0;32mI (428) phy_init: phy ver: 1163_0[0m
+02:37:30.761 [0;32mI (449) command_server: connecting to Wi-Fi SSID=NETGEAR38_EXT[0m
+02:37:30.768 [0;32mI (453) app_main: System bring-up complete[0m
+02:37:30.878 [0;32mI (571) wifi:state: 0 -> 2 (b0)
+02:37:30.881 [0m[0;32mI (576) wifi:state: 2 -> 3 (0)
+02:37:30.887 [0m[0;32mI (578) wifi:state: 3 -> 5 (10)
+02:37:30.930 [0m[0;32mI (618) wifi:connected with NETGEAR38_EXT, aid = 3, channel 9, HT20, bssid = 78:20:51:95:de:c4
+02:37:31.131 [0m
+02:37:31.168 [0;32mI (846) control_task: pid_telemetry t_ms=500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=33 enc_a=1 enc_b=0[0m
+02:37:31.639 [0;32mI (1324) tcpip_adapter: sta ip: 192.168.1.101, mask: 255.255.255.0, gw: 192.168.1.1[0m
+02:37:31.648 [0;32mI (1328) command_server: Wi-Fi connected, IP=192.168.1.101[0m
+02:37:31.658 [0;32mI (1335) command_server: TCP command server listening on port 5005[0m
+02:37:31.683 [0;32mI (1361) control_task: pid_telemetry t_ms=1000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=48 enc_a=1 enc_b=0[0m
+02:37:32.187 [0;32mI (1866) control_task: pid_telemetry t_ms=1500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=53 enc_a=1 enc_b=0[0m
+02:37:32.694 [0;32mI (2373) control_task: pid_telemetry t_ms=2000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=60 enc_a=1 enc_b=0[0m
+02:37:33.201 [0;32mI (2878) control_task: pid_telemetry t_ms=2500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=65 enc_a=1 enc_b=0[0m
+02:37:33.710 [0;32mI (3387) control_task: pid_telemetry t_ms=3000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=75 enc_a=1 enc_b=0[0m
+02:37:34.215 [0;32mI (3894) control_task: pid_telemetry t_ms=3500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=81 enc_a=1 enc_b=0[0m
+02:37:34.723 [0;32mI (4401) control_task: pid_telemetry t_ms=4000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=88 enc_a=1 enc_b=0[0m
+02:37:35.229 [0;32mI (4906) control_task: pid_telemetry t_ms=4500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=94 enc_a=1 enc_b=0[0m
+02:37:35.733 [0;32mI (5411) control_task: pid_telemetry t_ms=5000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=99 enc_a=1 enc_b=0[0m
+02:37:36.240 [0;32mI (5917) control_task: pid_telemetry t_ms=5500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=105 enc_a=1 enc_b=0[0m
+02:37:36.745 [0;32mI (6422) control_task: pid_telemetry t_ms=6000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=110 enc_a=1 enc_b=0[0m
+02:37:37.250 [0;32mI (6926) control_task: pid_telemetry t_ms=6500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=115 enc_a=1 enc_b=0[0m
+02:37:37.756 [0;32mI (7433) control_task: pid_telemetry t_ms=7000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=121 enc_a=1 enc_b=0[0m
+02:37:38.261 [0;32mI (7938) control_task: pid_telemetry t_ms=7500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=126 enc_a=1 enc_b=0[0m
+02:37:38.766 [0;32mI (8443) control_task: pid_telemetry t_ms=8000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=131 enc_a=1 enc_b=0[0m
+02:37:39.271 [0;32mI (8947) control_task: pid_telemetry t_ms=8500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=136 enc_a=1 enc_b=0[0m
+02:37:39.775 [0;32mI (9452) control_task: pid_telemetry t_ms=9000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=141 enc_a=1 enc_b=0[0m
+02:37:40.281 [0;32mI (9958) control_task: pid_telemetry t_ms=9500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=147 enc_a=1 enc_b=0[0m
+02:37:40.788 [0;32mI (10464) control_task: pid_telemetry t_ms=10000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=153 enc_a=1 enc_b=0[0m
+02:37:41.296 [0;32mI (10971) control_task: pid_telemetry t_ms=10500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=158 enc_a=1 enc_b=0[0m
+02:37:41.803 [0;32mI (11478) control_task: pid_telemetry t_ms=11000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=166 enc_a=1 enc_b=0[0m
+02:37:42.308 [0;32mI (11984) control_task: pid_telemetry t_ms=11500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=173 enc_a=1 enc_b=0[0m
+02:37:42.815 [0;32mI (12491) control_task: pid_telemetry t_ms=12000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=180 enc_a=1 enc_b=0[0m
+02:37:43.321 [0;32mI (12997) control_task: pid_telemetry t_ms=12500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=186 enc_a=1 enc_b=0[0m
+02:37:43.827 [0;32mI (13502) control_task: pid_telemetry t_ms=13000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=192 enc_a=1 enc_b=0[0m
+02:37:44.333 [0;32mI (14008) control_task: pid_telemetry t_ms=13500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=198 enc_a=1 enc_b=0[0m
+02:37:44.839 [0;32mI (14515) control_task: pid_telemetry t_ms=14000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=204 enc_a=1 enc_b=0[0m
+02:37:45.345 [0;32mI (15021) control_task: pid_telemetry t_ms=14500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=210 enc_a=1 enc_b=0[0m
+02:37:45.851 [0;32mI (15525) control_task: pid_telemetry t_ms=15000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=215 enc_a=1 enc_b=0[0m
+02:37:46.356 [0;32mI (16031) control_task: pid_telemetry t_ms=15500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=221 enc_a=1 enc_b=0[0m
+02:37:46.862 [0;32mI (16537) control_task: pid_telemetry t_ms=16000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=227 enc_a=1 enc_b=0[0m
+02:37:47.369 [0;32mI (17043) control_task: pid_telemetry t_ms=16500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=234 enc_a=1 enc_b=0[0m
+02:37:47.876 [0;32mI (17551) control_task: pid_telemetry t_ms=17000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=241 enc_a=1 enc_b=0[0m
+02:37:48.382 [0;32mI (18057) control_task: pid_telemetry t_ms=17500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=247 enc_a=1 enc_b=0[0m
+02:37:48.890 [0;32mI (18564) control_task: pid_telemetry t_ms=18000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=254 enc_a=1 enc_b=0[0m
+02:37:49.396 [0;32mI (19070) control_task: pid_telemetry t_ms=18500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=260 enc_a=1 enc_b=0[0m
+02:37:49.901 [0;32mI (19575) control_task: pid_telemetry t_ms=19000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=266 enc_a=1 enc_b=0[0m
+02:37:50.408 [0;32mI (20081) control_task: pid_telemetry t_ms=19500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=271 enc_a=1 enc_b=0[0m
+02:37:50.917 [0;32mI (20588) control_task: pid_telemetry t_ms=20000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=279 enc_a=1 enc_b=0[0m
+02:37:51.422 [0;32mI (21097) control_task: pid_telemetry t_ms=20500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=287 enc_a=1 enc_b=0[0m
+02:37:51.928 [0;32mI (21601) control_task: pid_telemetry t_ms=21000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=292 enc_a=1 enc_b=0[0m
+02:37:52.434 [0;32mI (22107) control_task: pid_telemetry t_ms=21500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=298 enc_a=1 enc_b=0[0m
+02:37:52.938 [0;32mI (22612) control_task: pid_telemetry t_ms=22000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=303 enc_a=1 enc_b=0[0m
+02:37:53.443 [0;32mI (23117) control_task: pid_telemetry t_ms=22500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=308 enc_a=1 enc_b=0[0m
+02:37:53.950 [0;32mI (23622) control_task: pid_telemetry t_ms=23000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=314 enc_a=1 enc_b=0[0m
+02:37:54.455 [0;32mI (24128) control_task: pid_telemetry t_ms=23500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=320 enc_a=1 enc_b=0[0m
+02:37:54.962 [0;32mI (24635) control_task: pid_telemetry t_ms=24000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=326 enc_a=1 enc_b=0[0m
+02:37:55.466 [0;32mI (25140) control_task: pid_telemetry t_ms=24500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=331 enc_a=1 enc_b=0[0m
+02:37:55.973 [0;32mI (25646) control_task: pid_telemetry t_ms=25000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=337 enc_a=1 enc_b=0[0m
+02:37:56.479 [0;32mI (26151) control_task: pid_telemetry t_ms=25500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=343 enc_a=1 enc_b=0[0m
+02:37:56.984 [0;32mI (26657) control_task: pid_telemetry t_ms=26000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=349 enc_a=1 enc_b=0[0m
+02:37:57.491 [0;32mI (27163) control_task: pid_telemetry t_ms=26500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=355 enc_a=1 enc_b=0[0m
+02:37:57.996 [0;32mI (27669) control_task: pid_telemetry t_ms=27000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=361 enc_a=1 enc_b=0[0m
+02:37:58.502 [0;32mI (28175) control_task: pid_telemetry t_ms=27500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=367 enc_a=1 enc_b=0[0m
+02:37:59.009 [0;32mI (28680) control_task: pid_telemetry t_ms=28000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=372 enc_a=1 enc_b=0[0m
+02:37:59.516 [0;32mI (29187) control_task: pid_telemetry t_ms=28500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=379 enc_a=1 enc_b=0[0m
+02:38:00.020 [0;32mI (29692) control_task: pid_telemetry t_ms=29000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=385 enc_a=1 enc_b=0[0m
+02:38:00.525 [0;32mI (30197) control_task: pid_telemetry t_ms=29500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=390 enc_a=1 enc_b=0[0m
+02:38:01.031 [0;32mI (30702) control_task: pid_telemetry t_ms=30000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=395 enc_a=1 enc_b=0[0m
+02:38:01.536 [0;32mI (31209) control_task: pid_telemetry t_ms=30500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=401 enc_a=1 enc_b=0[0m
+02:38:02.043 [0;32mI (31714) control_task: pid_telemetry t_ms=31000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=407 enc_a=1 enc_b=0[0m
+02:38:02.549 [0;32mI (32220) control_task: pid_telemetry t_ms=31500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=413 enc_a=1 enc_b=0[0m
+02:38:03.055 [0;32mI (32726) control_task: pid_telemetry t_ms=32000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=419 enc_a=1 enc_b=0[0m
+02:38:03.561 [0;32mI (33232) control_task: pid_telemetry t_ms=32500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=425 enc_a=1 enc_b=0[0m
+02:38:04.067 [0;32mI (33737) control_task: pid_telemetry t_ms=33000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=431 enc_a=1 enc_b=0[0m
+02:38:04.572 [0;32mI (34243) control_task: pid_telemetry t_ms=33500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=437 enc_a=1 enc_b=0[0m
+02:38:05.079 [0;32mI (34750) control_task: pid_telemetry t_ms=34000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=443 enc_a=1 enc_b=0[0m
+02:38:05.584 [0;32mI (35255) control_task: pid_telemetry t_ms=34500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=448 enc_a=1 enc_b=0[0m
+02:38:06.090 [0;32mI (35761) control_task: pid_telemetry t_ms=35000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=454 enc_a=1 enc_b=0[0m
+02:38:06.596 [0;32mI (36267) control_task: pid_telemetry t_ms=35500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=461 enc_a=1 enc_b=0[0m
+02:38:07.101 [0;32mI (36772) control_task: pid_telemetry t_ms=36000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=466 enc_a=1 enc_b=0[0m
+02:38:07.609 [0;32mI (37278) control_task: pid_telemetry t_ms=36500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=471 enc_a=1 enc_b=0[0m
+02:38:08.113 [0;32mI (37784) control_task: pid_telemetry t_ms=37000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=478 enc_a=1 enc_b=0[0m
+02:38:08.620 [0;32mI (38290) control_task: pid_telemetry t_ms=37500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=484 enc_a=1 enc_b=0[0m
+02:38:09.126 [0;32mI (38796) control_task: pid_telemetry t_ms=38000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=490 enc_a=1 enc_b=0[0m
+02:38:09.632 [0;32mI (39302) control_task: pid_telemetry t_ms=38500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=496 enc_a=1 enc_b=0[0m
+02:38:10.137 [0;32mI (39807) control_task: pid_telemetry t_ms=39000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=502 enc_a=1 enc_b=0[0m
+02:38:10.644 [0;32mI (40313) control_task: pid_telemetry t_ms=39500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=508 enc_a=1 enc_b=0[0m
+02:38:11.150 [0;32mI (40819) control_task: pid_telemetry t_ms=40000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=514 enc_a=1 enc_b=0[0m
+02:38:11.655 [0;32mI (41325) control_task: pid_telemetry t_ms=40500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=519 enc_a=1 enc_b=0[0m
+02:38:12.161 [0;32mI (41831) control_task: pid_telemetry t_ms=41000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=525 enc_a=1 enc_b=0[0m
+02:38:12.668 [0;32mI (42337) control_task: pid_telemetry t_ms=41500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=532 enc_a=1 enc_b=0[0m
+02:38:13.174 [0;32mI (42843) control_task: pid_telemetry t_ms=42000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=538 enc_a=1 enc_b=0[0m
+02:38:13.680 [0;32mI (43349) control_task: pid_telemetry t_ms=42500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=544 enc_a=1 enc_b=0[0m
+02:38:14.186 [0;32mI (43854) control_task: pid_telemetry t_ms=43000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=550 enc_a=1 enc_b=0[0m
+02:38:14.692 [0;32mI (44361) control_task: pid_telemetry t_ms=43500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=556 enc_a=1 enc_b=0[0m
+02:38:15.199 [0;32mI (44868) control_task: pid_telemetry t_ms=44000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=563 enc_a=1 enc_b=0[0m
+02:38:15.705 [0;32mI (45374) control_task: pid_telemetry t_ms=44500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=569 enc_a=1 enc_b=0[0m
+02:38:16.214 [0;32mI (45881) control_task: pid_telemetry t_ms=45000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=576 enc_a=1 enc_b=0[0m
+02:38:16.722 [0;32mI (46389) control_task: pid_telemetry t_ms=45500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=585 enc_a=1 enc_b=0[0m
+02:38:17.230 [0;32mI (46898) control_task: pid_telemetry t_ms=46000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=593 enc_a=1 enc_b=0[0m
+02:38:17.736 [0;32mI (47405) control_task: pid_telemetry t_ms=46500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=600 enc_a=1 enc_b=0[0m
+02:38:18.242 [0;32mI (47910) control_task: pid_telemetry t_ms=47000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=606 enc_a=1 enc_b=0[0m
+02:38:18.748 [0;32mI (48416) control_task: pid_telemetry t_ms=47500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=612 enc_a=1 enc_b=0[0m
+02:38:19.255 [0;32mI (48922) control_task: pid_telemetry t_ms=48000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=618 enc_a=1 enc_b=0[0m
+02:38:19.760 [0;32mI (49428) control_task: pid_telemetry t_ms=48500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=624 enc_a=1 enc_b=0[0m
+02:38:20.266 [0;32mI (49933) control_task: pid_telemetry t_ms=49000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=630 enc_a=1 enc_b=0[0m
+02:38:20.772 [0;32mI (50440) control_task: pid_telemetry t_ms=49500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=636 enc_a=1 enc_b=0[0m
+02:38:21.278 [0;32mI (50946) control_task: pid_telemetry t_ms=50000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=642 enc_a=1 enc_b=0[0m
+02:38:21.784 [0;32mI (51452) control_task: pid_telemetry t_ms=50500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=648 enc_a=1 enc_b=0[0m
+02:38:22.290 [0;32mI (51957) control_task: pid_telemetry t_ms=51000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=654 enc_a=1 enc_b=0[0m
+02:38:22.797 [0;32mI (52463) control_task: pid_telemetry t_ms=51500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=660 enc_a=1 enc_b=0[0m
+02:38:23.302 [0;32mI (52969) control_task: pid_telemetry t_ms=52000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=666 enc_a=1 enc_b=0[0m
+02:38:23.808 [0;32mI (53475) control_task: pid_telemetry t_ms=52500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=672 enc_a=1 enc_b=0[0m
+02:38:24.314 [0;32mI (53981) control_task: pid_telemetry t_ms=53000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=678 enc_a=1 enc_b=0[0m
+02:38:24.820 [0;32mI (54487) control_task: pid_telemetry t_ms=53500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=684 enc_a=1 enc_b=0[0m
+02:38:25.327 [0;32mI (54993) control_task: pid_telemetry t_ms=54000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=690 enc_a=1 enc_b=0[0m
+02:38:25.835 [0;32mI (55500) control_task: pid_telemetry t_ms=54500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=697 enc_a=1 enc_b=0[0m
+02:38:26.340 [0;32mI (56006) control_task: pid_telemetry t_ms=55000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=704 enc_a=1 enc_b=0[0m
+02:38:26.847 [0;32mI (56512) control_task: pid_telemetry t_ms=55500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=710 enc_a=1 enc_b=0[0m
+02:38:27.353 [0;32mI (57020) control_task: pid_telemetry t_ms=56000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=717 enc_a=1 enc_b=0[0m
+02:38:27.858 [0;32mI (57525) control_task: pid_telemetry t_ms=56500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=722 enc_a=1 enc_b=0[0m
+02:38:28.365 [0;32mI (58031) control_task: pid_telemetry t_ms=57000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=729 enc_a=1 enc_b=0[0m
+02:38:28.873 [0;32mI (58538) control_task: pid_telemetry t_ms=57500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=736 enc_a=1 enc_b=0[0m
+02:38:29.380 [0;32mI (59045) control_task: pid_telemetry t_ms=58000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=743 enc_a=1 enc_b=0[0m
+02:38:29.885 [0;32mI (59551) control_task: pid_telemetry t_ms=58500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=749 enc_a=1 enc_b=0[0m
+02:38:30.391 [0;32mI (60057) control_task: pid_telemetry t_ms=59000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=755 enc_a=1 enc_b=0[0m
+02:38:30.899 [0;32mI (60564) control_task: pid_telemetry t_ms=59500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=763 enc_a=1 enc_b=0[0m
+02:38:31.404 [0;32mI (61070) control_task: pid_telemetry t_ms=60000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=768 enc_a=1 enc_b=0[0m
+02:38:31.911 [0;32mI (61577) control_task: pid_telemetry t_ms=60500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=775 enc_a=1 enc_b=0[0m
+02:38:32.417 [0;32mI (62082) control_task: pid_telemetry t_ms=61000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=780 enc_a=1 enc_b=0[0m
+02:38:32.921 [0;32mI (62586) control_task: pid_telemetry t_ms=61500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=785 enc_a=1 enc_b=0[0m
+02:38:33.426 [0;32mI (63091) control_task: pid_telemetry t_ms=62000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=790 enc_a=1 enc_b=0[0m
+02:38:33.932 [0;32mI (63597) control_task: pid_telemetry t_ms=62500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=796 enc_a=1 enc_b=0[0m
+02:38:34.438 [0;32mI (64102) control_task: pid_telemetry t_ms=63000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=801 enc_a=1 enc_b=0[0m
+02:38:34.945 [0;32mI (64609) control_task: pid_telemetry t_ms=63500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=808 enc_a=1 enc_b=0[0m
+02:38:35.451 [0;32mI (65115) control_task: pid_telemetry t_ms=64000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=814 enc_a=1 enc_b=0[0m
+02:38:35.957 [0;32mI (65621) control_task: pid_telemetry t_ms=64500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=820 enc_a=1 enc_b=0[0m
+02:38:36.463 [0;32mI (66126) control_task: pid_telemetry t_ms=65000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=826 enc_a=1 enc_b=0[0m
+02:38:36.968 [0;32mI (66632) control_task: pid_telemetry t_ms=65500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=832 enc_a=1 enc_b=0[0m
+02:38:37.474 [0;32mI (67139) control_task: pid_telemetry t_ms=66000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=838 enc_a=1 enc_b=0[0m
+02:38:37.982 [0;32mI (67646) control_task: pid_telemetry t_ms=66500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=845 enc_a=1 enc_b=0[0m
+02:38:38.487 [0;32mI (68152) control_task: pid_telemetry t_ms=67000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=851 enc_a=1 enc_b=0[0m
+02:38:38.993 [0;32mI (68657) control_task: pid_telemetry t_ms=67500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=857 enc_a=1 enc_b=0[0m
+02:38:39.500 [0;32mI (69163) control_task: pid_telemetry t_ms=68000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=863 enc_a=1 enc_b=0[0m
+02:38:40.004 [0;32mI (69668) control_task: pid_telemetry t_ms=68500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=868 enc_a=1 enc_b=0[0m
+02:38:40.511 [0;32mI (70174) control_task: pid_telemetry t_ms=69000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=874 enc_a=1 enc_b=0[0m
+02:38:41.017 [0;32mI (70679) control_task: pid_telemetry t_ms=69500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=880 enc_a=1 enc_b=0[0m
+02:38:41.524 [0;32mI (71187) control_task: pid_telemetry t_ms=70000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=887 enc_a=1 enc_b=0[0m
+02:38:42.032 [0;32mI (71694) control_task: pid_telemetry t_ms=70500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=894 enc_a=1 enc_b=0[0m
+02:38:42.538 [0;32mI (72201) control_task: pid_telemetry t_ms=71000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=901 enc_a=1 enc_b=0[0m
+02:38:43.045 [0;32mI (72707) control_task: pid_telemetry t_ms=71500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=908 enc_a=1 enc_b=0[0m
+02:38:43.552 [0;32mI (73213) control_task: pid_telemetry t_ms=72000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=914 enc_a=1 enc_b=0[0m
+02:38:44.060 [0;32mI (73721) control_task: pid_telemetry t_ms=72500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=922 enc_a=1 enc_b=0[0m
+02:38:44.566 [0;32mI (74228) control_task: pid_telemetry t_ms=73000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=929 enc_a=1 enc_b=0[0m
+02:38:45.072 [0;32mI (74734) control_task: pid_telemetry t_ms=73500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=935 enc_a=1 enc_b=0[0m
+02:38:45.578 [0;32mI (75240) control_task: pid_telemetry t_ms=74000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=941 enc_a=1 enc_b=0[0m
+02:38:46.083 [0;32mI (75745) control_task: pid_telemetry t_ms=74500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=946 enc_a=1 enc_b=0[0m
+02:38:46.588 [0;32mI (76249) control_task: pid_telemetry t_ms=75000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=951 enc_a=1 enc_b=0[0m
+02:38:47.093 [0;32mI (76754) control_task: pid_telemetry t_ms=75500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=956 enc_a=1 enc_b=0[0m
+02:38:47.598 [0;32mI (77260) control_task: pid_telemetry t_ms=76000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=961 enc_a=1 enc_b=0[0m
+02:38:48.104 [0;32mI (77766) control_task: pid_telemetry t_ms=76500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=967 enc_a=1 enc_b=0[0m
+02:38:48.610 [0;32mI (78272) control_task: pid_telemetry t_ms=77000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=973 enc_a=1 enc_b=0[0m
+02:38:49.116 [0;32mI (78777) control_task: pid_telemetry t_ms=77500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=979 enc_a=1 enc_b=0[0m
+02:38:49.622 [0;32mI (79283) control_task: pid_telemetry t_ms=78000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=985 enc_a=1 enc_b=0[0m
+02:38:50.129 [0;32mI (79790) control_task: pid_telemetry t_ms=78500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=992 enc_a=1 enc_b=0[0m
+02:38:50.635 [0;32mI (80296) control_task: pid_telemetry t_ms=79000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=998 enc_a=1 enc_b=0[0m
+02:38:51.141 [0;32mI (80802) control_task: pid_telemetry t_ms=79500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1004 enc_a=1 enc_b=0[0m
+02:38:51.647 [0;32mI (81308) control_task: pid_telemetry t_ms=80000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1010 enc_a=1 enc_b=0[0m
+02:38:52.154 [0;32mI (81816) control_task: pid_telemetry t_ms=80500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1017 enc_a=1 enc_b=0[0m
+02:38:52.663 [0;32mI (82322) control_task: pid_telemetry t_ms=81000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1024 enc_a=1 enc_b=0[0m
+02:38:53.170 [0;32mI (82830) control_task: pid_telemetry t_ms=81500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1033 enc_a=1 enc_b=0[0m
+02:38:53.676 [0;32mI (83336) control_task: pid_telemetry t_ms=82000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1039 enc_a=1 enc_b=0[0m
+02:38:54.181 [0;32mI (83841) control_task: pid_telemetry t_ms=82500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1044 enc_a=1 enc_b=0[0m
+02:38:54.686 [0;32mI (84347) control_task: pid_telemetry t_ms=83000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1049 enc_a=1 enc_b=0[0m
+02:38:55.193 [0;32mI (84852) control_task: pid_telemetry t_ms=83500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1055 enc_a=1 enc_b=0[0m
+02:38:55.697 [0;32mI (85357) control_task: pid_telemetry t_ms=84000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1060 enc_a=1 enc_b=0[0m
+02:38:56.203 [0;32mI (85863) control_task: pid_telemetry t_ms=84500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1066 enc_a=1 enc_b=0[0m
+02:38:56.708 [0;32mI (86368) control_task: pid_telemetry t_ms=85000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1071 enc_a=1 enc_b=0[0m
+02:38:57.214 [0;32mI (86874) control_task: pid_telemetry t_ms=85500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1077 enc_a=1 enc_b=0[0m
+02:38:57.720 [0;32mI (87379) control_task: pid_telemetry t_ms=86000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1083 enc_a=1 enc_b=0[0m
+02:38:58.226 [0;32mI (87886) control_task: pid_telemetry t_ms=86500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1089 enc_a=1 enc_b=0[0m
+02:38:58.732 [0;32mI (88392) control_task: pid_telemetry t_ms=87000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1095 enc_a=1 enc_b=0[0m
+02:38:59.238 [0;32mI (88897) control_task: pid_telemetry t_ms=87500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1101 enc_a=1 enc_b=0[0m
+02:38:59.743 [0;32mI (89402) control_task: pid_telemetry t_ms=88000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1106 enc_a=1 enc_b=0[0m
+02:39:00.248 [0;32mI (89907) control_task: pid_telemetry t_ms=88500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1111 enc_a=1 enc_b=0[0m
+02:39:00.755 [0;32mI (90413) control_task: pid_telemetry t_ms=89000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1117 enc_a=1 enc_b=0[0m
+02:39:01.262 [0;32mI (90920) control_task: pid_telemetry t_ms=89500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1124 enc_a=1 enc_b=0[0m
+02:39:01.767 [0;32mI (91426) control_task: pid_telemetry t_ms=90000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1130 enc_a=1 enc_b=0[0m
+02:39:02.272 [0;32mI (91931) control_task: pid_telemetry t_ms=90500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1135 enc_a=1 enc_b=0[0m
+02:39:02.778 [0;32mI (92436) control_task: pid_telemetry t_ms=91000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1140 enc_a=1 enc_b=0[0m
+02:39:03.282 [0;32mI (92941) control_task: pid_telemetry t_ms=91500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1145 enc_a=1 enc_b=0[0m
+02:39:03.788 [0;32mI (93446) control_task: pid_telemetry t_ms=92000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1151 enc_a=1 enc_b=0[0m
+02:39:04.294 [0;32mI (93952) control_task: pid_telemetry t_ms=92500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1157 enc_a=1 enc_b=0[0m
+02:39:04.799 [0;32mI (94458) control_task: pid_telemetry t_ms=93000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1162 enc_a=1 enc_b=0[0m
+02:39:05.305 [0;32mI (94964) control_task: pid_telemetry t_ms=93500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1168 enc_a=1 enc_b=0[0m
+02:39:05.812 [0;32mI (95469) control_task: pid_telemetry t_ms=94000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1174 enc_a=1 enc_b=0[0m
+02:39:06.317 [0;32mI (95975) control_task: pid_telemetry t_ms=94500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1180 enc_a=1 enc_b=0[0m
+02:39:06.823 [0;32mI (96481) control_task: pid_telemetry t_ms=95000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1186 enc_a=1 enc_b=0[0m
+02:39:07.329 [0;32mI (96986) control_task: pid_telemetry t_ms=95500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1191 enc_a=1 enc_b=0[0m
+02:39:07.835 [0;32mI (97492) control_task: pid_telemetry t_ms=96000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1197 enc_a=1 enc_b=0[0m
+02:39:08.342 [0;32mI (97999) control_task: pid_telemetry t_ms=96500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1204 enc_a=1 enc_b=0[0m
+02:39:08.848 [0;32mI (98506) control_task: pid_telemetry t_ms=97000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1211 enc_a=1 enc_b=0[0m
+02:39:09.355 [0;32mI (99011) control_task: pid_telemetry t_ms=97500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1216 enc_a=1 enc_b=0[0m
+02:39:09.862 [0;32mI (99518) control_task: pid_telemetry t_ms=98000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1224 enc_a=1 enc_b=0[0m
+02:39:10.368 [0;32mI (100024) control_task: pid_telemetry t_ms=98500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1230 enc_a=1 enc_b=0[0m
+02:39:10.874 [0;32mI (100531) control_task: pid_telemetry t_ms=99000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1237 enc_a=1 enc_b=0[0m
+02:39:11.382 [0;32mI (101038) control_task: pid_telemetry t_ms=99500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1244 enc_a=1 enc_b=0[0m
+02:39:11.888 [0;32mI (101544) control_task: pid_telemetry t_ms=100000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1250 enc_a=1 enc_b=0[0m
+02:39:12.395 [0;32mI (102051) control_task: pid_telemetry t_ms=100500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1257 enc_a=1 enc_b=0[0m
+02:39:12.902 [0;32mI (102558) control_task: pid_telemetry t_ms=101000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1264 enc_a=1 enc_b=0[0m
+02:39:13.409 [0;32mI (103064) control_task: pid_telemetry t_ms=101500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1270 enc_a=1 enc_b=0[0m
+02:39:13.915 [0;32mI (103571) control_task: pid_telemetry t_ms=102000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1277 enc_a=1 enc_b=0[0m
+02:39:14.421 [0;32mI (104076) control_task: pid_telemetry t_ms=102500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1283 enc_a=1 enc_b=0[0m
+02:39:14.928 [0;32mI (104583) control_task: pid_telemetry t_ms=103000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1290 enc_a=1 enc_b=0[0m
+02:39:15.434 [0;32mI (105090) control_task: pid_telemetry t_ms=103500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1296 enc_a=1 enc_b=0[0m
+02:39:15.941 [0;32mI (105597) control_task: pid_telemetry t_ms=104000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1303 enc_a=1 enc_b=0[0m
+02:39:16.448 [0;32mI (106103) control_task: pid_telemetry t_ms=104500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1310 enc_a=1 enc_b=0[0m
+02:39:16.954 [0;32mI (106609) control_task: pid_telemetry t_ms=105000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1316 enc_a=1 enc_b=0[0m
+02:39:17.461 [0;32mI (107116) control_task: pid_telemetry t_ms=105500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1323 enc_a=1 enc_b=0[0m
+02:39:17.968 [0;32mI (107623) control_task: pid_telemetry t_ms=106000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1330 enc_a=1 enc_b=0[0m
+02:39:18.475 [0;32mI (108129) control_task: pid_telemetry t_ms=106500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1337 enc_a=1 enc_b=0[0m
+02:39:18.983 [0;32mI (108637) control_task: pid_telemetry t_ms=107000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1344 enc_a=1 enc_b=0[0m
+02:39:19.491 [0;32mI (109145) control_task: pid_telemetry t_ms=107500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1352 enc_a=1 enc_b=0[0m
+02:39:19.998 [0;32mI (109653) control_task: pid_telemetry t_ms=108000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1360 enc_a=1 enc_b=0[0m
+02:39:20.504 [0;32mI (110158) control_task: pid_telemetry t_ms=108500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1366 enc_a=1 enc_b=0[0m
+02:39:21.012 [0;32mI (110665) control_task: pid_telemetry t_ms=109000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1373 enc_a=1 enc_b=0[0m
+02:39:21.518 [0;32mI (111172) control_task: pid_telemetry t_ms=109500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1380 enc_a=1 enc_b=0[0m
+02:39:22.024 [0;32mI (111678) control_task: pid_telemetry t_ms=110000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1386 enc_a=1 enc_b=0[0m
+02:39:22.531 [0;32mI (112186) control_task: pid_telemetry t_ms=110500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1393 enc_a=1 enc_b=0[0m
+02:39:23.037 [0;32mI (112691) control_task: pid_telemetry t_ms=111000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1399 enc_a=1 enc_b=0[0m
+02:39:23.543 [0;32mI (113197) control_task: pid_telemetry t_ms=111500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1405 enc_a=1 enc_b=0[0m
+02:39:24.049 [0;32mI (113703) control_task: pid_telemetry t_ms=112000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1411 enc_a=1 enc_b=0[0m
+02:39:24.556 [0;32mI (114210) control_task: pid_telemetry t_ms=112500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1418 enc_a=1 enc_b=0[0m
+02:39:25.063 [0;32mI (114716) control_task: pid_telemetry t_ms=113000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1425 enc_a=1 enc_b=0[0m
+02:39:25.570 [0;32mI (115224) control_task: pid_telemetry t_ms=113500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1432 enc_a=1 enc_b=0[0m
+02:39:26.077 [0;32mI (115731) control_task: pid_telemetry t_ms=114000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1439 enc_a=1 enc_b=0[0m
+02:39:26.584 [0;32mI (116237) control_task: pid_telemetry t_ms=114500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1446 enc_a=1 enc_b=0[0m
+02:39:27.091 [0;32mI (116744) control_task: pid_telemetry t_ms=115000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1453 enc_a=1 enc_b=0[0m
+02:39:27.598 [0;32mI (117251) control_task: pid_telemetry t_ms=115500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1460 enc_a=1 enc_b=0[0m
+02:39:28.105 [0;32mI (117758) control_task: pid_telemetry t_ms=116000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1467 enc_a=1 enc_b=0[0m
+02:39:28.611 [0;32mI (118264) control_task: pid_telemetry t_ms=116500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1473 enc_a=1 enc_b=0[0m
+02:39:29.119 [0;32mI (118771) control_task: pid_telemetry t_ms=117000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1479 enc_a=1 enc_b=0[0m
+02:39:29.624 [0;32mI (119277) control_task: pid_telemetry t_ms=117500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1486 enc_a=1 enc_b=0[0m
+02:39:30.131 [0;32mI (119784) control_task: pid_telemetry t_ms=118000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1493 enc_a=1 enc_b=0[0m
+02:39:30.639 [0;32mI (120291) control_task: pid_telemetry t_ms=118500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1500 enc_a=1 enc_b=0[0m
+02:39:31.147 [0;32mI (120799) control_task: pid_telemetry t_ms=119000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1509 enc_a=1 enc_b=0[0m
+02:39:31.654 [0;32mI (121306) control_task: pid_telemetry t_ms=119500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1516 enc_a=1 enc_b=0[0m
+02:39:32.161 [0;32mI (121813) control_task: pid_telemetry t_ms=120000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1523 enc_a=1 enc_b=0[0m
+02:39:32.668 [0;32mI (122321) control_task: pid_telemetry t_ms=120500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1530 enc_a=1 enc_b=0[0m
+02:39:33.175 [0;32mI (122826) control_task: pid_telemetry t_ms=121000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1536 enc_a=1 enc_b=0[0m
+02:39:33.681 [0;32mI (123333) control_task: pid_telemetry t_ms=121500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1543 enc_a=1 enc_b=0[0m
+02:39:34.188 [0;32mI (123839) control_task: pid_telemetry t_ms=122000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1549 enc_a=1 enc_b=0[0m
+02:39:34.693 [0;32mI (124345) control_task: pid_telemetry t_ms=122500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1555 enc_a=1 enc_b=0[0m
+02:39:35.200 [0;32mI (124852) control_task: pid_telemetry t_ms=123000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1562 enc_a=1 enc_b=0[0m
+02:39:35.707 [0;32mI (125359) control_task: pid_telemetry t_ms=123500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1569 enc_a=1 enc_b=0[0m
+02:39:36.215 [0;32mI (125866) control_task: pid_telemetry t_ms=124000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1577 enc_a=1 enc_b=0[0m
+02:39:36.722 [0;32mI (126374) control_task: pid_telemetry t_ms=124500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1584 enc_a=1 enc_b=0[0m
+02:39:37.230 [0;32mI (126880) control_task: pid_telemetry t_ms=125000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1591 enc_a=1 enc_b=0[0m
+02:39:37.736 [0;32mI (127387) control_task: pid_telemetry t_ms=125500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1598 enc_a=1 enc_b=0[0m
+02:39:38.243 [0;32mI (127893) control_task: pid_telemetry t_ms=126000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1604 enc_a=1 enc_b=0[0m
+02:39:38.749 [0;32mI (128400) control_task: pid_telemetry t_ms=126500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1611 enc_a=1 enc_b=0[0m
+02:39:39.258 [0;32mI (128907) control_task: pid_telemetry t_ms=127000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1618 enc_a=1 enc_b=0[0m
+02:39:39.765 [0;32mI (129415) control_task: pid_telemetry t_ms=127500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1626 enc_a=1 enc_b=0[0m
+02:39:40.272 [0;32mI (129923) control_task: pid_telemetry t_ms=128000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1634 enc_a=1 enc_b=0[0m
+02:39:40.778 [0;32mI (130429) control_task: pid_telemetry t_ms=128500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1640 enc_a=1 enc_b=0[0m
+02:39:41.285 [0;32mI (130934) control_task: pid_telemetry t_ms=129000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1646 enc_a=1 enc_b=0[0m
+02:39:41.791 [0;32mI (131441) control_task: pid_telemetry t_ms=129500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1653 enc_a=1 enc_b=0[0m
+02:39:42.298 [0;32mI (131947) control_task: pid_telemetry t_ms=130000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1659 enc_a=1 enc_b=0[0m
+02:39:42.804 [0;32mI (132455) control_task: pid_telemetry t_ms=130500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1666 enc_a=1 enc_b=0[0m
+02:39:43.310 [0;32mI (132961) control_task: pid_telemetry t_ms=131000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1672 enc_a=1 enc_b=0[0m
+02:39:43.817 [0;32mI (133467) control_task: pid_telemetry t_ms=131500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1679 enc_a=1 enc_b=0[0m
+02:39:44.324 [0;32mI (133973) control_task: pid_telemetry t_ms=132000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1685 enc_a=1 enc_b=0[0m
+02:39:44.830 [0;32mI (134480) control_task: pid_telemetry t_ms=132500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1692 enc_a=1 enc_b=0[0m
+02:39:45.338 [0;32mI (134986) control_task: pid_telemetry t_ms=133000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1699 enc_a=1 enc_b=0[0m
+02:39:45.844 [0;32mI (135493) control_task: pid_telemetry t_ms=133500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1706 enc_a=1 enc_b=0[0m
+02:39:46.350 [0;32mI (136000) control_task: pid_telemetry t_ms=134000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1712 enc_a=1 enc_b=0[0m
+02:39:46.857 [0;32mI (136507) control_task: pid_telemetry t_ms=134500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1719 enc_a=1 enc_b=0[0m
+02:39:47.364 [0;32mI (137012) control_task: pid_telemetry t_ms=135000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1725 enc_a=1 enc_b=0[0m
+02:39:47.870 [0;32mI (137518) control_task: pid_telemetry t_ms=135500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1731 enc_a=1 enc_b=0[0m
+02:39:48.376 [0;32mI (138024) control_task: pid_telemetry t_ms=136000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1737 enc_a=1 enc_b=0[0m
+02:39:48.883 [0;32mI (138530) control_task: pid_telemetry t_ms=136500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1743 enc_a=1 enc_b=0[0m
+02:39:49.389 [0;32mI (139037) control_task: pid_telemetry t_ms=137000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1750 enc_a=1 enc_b=0[0m
+02:39:49.895 [0;32mI (139543) control_task: pid_telemetry t_ms=137500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1756 enc_a=1 enc_b=0[0m
+02:39:50.402 [0;32mI (140050) control_task: pid_telemetry t_ms=138000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1763 enc_a=1 enc_b=0[0m
+02:39:50.908 [0;32mI (140556) control_task: pid_telemetry t_ms=138500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1769 enc_a=1 enc_b=0[0m
+02:39:51.415 [0;32mI (141053) control_task: pid_telemetry t_ms=139000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1776 enc_a=1 enc_b=0[0m
+02:39:51.920 [0;32mI (141568) control_task: pid_telemetry t_ms=139500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1782 enc_a=1 enc_b=0[0m
+02:39:52.427 [0;32mI (142074) control_task: pid_telemetry t_ms=140000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1788 enc_a=1 enc_b=0[0m
+02:39:52.933 [0;32mI (142582) control_task: pid_telemetry t_ms=140500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1795 enc_a=1 enc_b=0[0m
+02:39:53.440 [0;32mI (143089) control_task: pid_telemetry t_ms=141000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1802 enc_a=1 enc_b=0[0m
+02:39:53.947 [0;32mI (143595) control_task: pid_telemetry t_ms=141500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1809 enc_a=1 enc_b=0[0m
+02:39:54.455 [0;32mI (144102) control_task: pid_telemetry t_ms=142000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1816 enc_a=1 enc_b=0[0m
+02:39:54.961 [0;32mI (144608) control_task: pid_telemetry t_ms=142500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1822 enc_a=1 enc_b=0[0m
+02:39:55.467 [0;32mI (145114) control_task: pid_telemetry t_ms=143000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1828 enc_a=1 enc_b=0[0m
+02:39:55.974 [0;32mI (145620) control_task: pid_telemetry t_ms=143500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1835 enc_a=1 enc_b=0[0m
+02:39:56.481 [0;32mI (146127) control_task: pid_telemetry t_ms=144000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1841 enc_a=1 enc_b=0[0m
+02:39:56.987 [0;32mI (146634) control_task: pid_telemetry t_ms=144500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1848 enc_a=1 enc_b=0[0m
+02:39:57.493 [0;32mI (147140) control_task: pid_telemetry t_ms=145000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1854 enc_a=1 enc_b=0[0m
+02:39:58.000 [0;32mI (147646) control_task: pid_telemetry t_ms=145500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1861 enc_a=1 enc_b=0[0m
+02:39:58.508 [0;32mI (148153) control_task: pid_telemetry t_ms=146000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1867 enc_a=1 enc_b=0[0m
+02:39:59.014 [0;32mI (148660) control_task: pid_telemetry t_ms=146500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1875 enc_a=1 enc_b=0[0m
+02:39:59.523 [0;32mI (149168) control_task: pid_telemetry t_ms=147000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1883 enc_a=1 enc_b=0[0m
+02:40:00.029 [0;32mI (149676) control_task: pid_telemetry t_ms=147500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1890 enc_a=1 enc_b=0[0m
+02:40:00.536 [0;32mI (150182) control_task: pid_telemetry t_ms=148000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1897 enc_a=1 enc_b=0[0m
+02:40:01.043 [0;32mI (150689) control_task: pid_telemetry t_ms=148500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1904 enc_a=1 enc_b=0[0m
+02:40:01.550 [0;32mI (151196) control_task: pid_telemetry t_ms=149000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1911 enc_a=1 enc_b=0[0m
+02:40:02.056 [0;32mI (151702) control_task: pid_telemetry t_ms=149500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1917 enc_a=1 enc_b=0[0m
+02:40:02.563 [0;32mI (152208) control_task: pid_telemetry t_ms=150000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1924 enc_a=1 enc_b=0[0m
+02:40:03.070 [0;32mI (152715) control_task: pid_telemetry t_ms=150500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1931 enc_a=1 enc_b=0[0m
+02:40:03.577 [0;32mI (153223) control_task: pid_telemetry t_ms=151000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1938 enc_a=1 enc_b=0[0m
+02:40:04.085 [0;32mI (153731) control_task: pid_telemetry t_ms=151500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1946 enc_a=1 enc_b=0[0m
+02:40:04.591 [0;32mI (154236) control_task: pid_telemetry t_ms=152000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1952 enc_a=1 enc_b=0[0m
+02:40:05.099 [0;32mI (154744) control_task: pid_telemetry t_ms=152500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1960 enc_a=1 enc_b=0[0m
+02:40:05.608 [0;32mI (155252) control_task: pid_telemetry t_ms=153000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1968 enc_a=1 enc_b=0[0m
+02:40:06.114 [0;32mI (155759) control_task: pid_telemetry t_ms=153500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1975 enc_a=1 enc_b=0[0m
+02:40:06.621 [0;32mI (156265) control_task: pid_telemetry t_ms=154000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1982 enc_a=1 enc_b=0[0m
+02:40:07.127 [0;32mI (156771) control_task: pid_telemetry t_ms=154500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1988 enc_a=1 enc_b=0[0m
+02:40:07.633 [0;32mI (157278) control_task: pid_telemetry t_ms=155000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1994 enc_a=1 enc_b=0[0m
+02:40:08.139 [0;32mI (157784) control_task: pid_telemetry t_ms=155500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2000 enc_a=1 enc_b=0[0m
+02:40:08.646 [0;32mI (158290) control_task: pid_telemetry t_ms=156000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2006 enc_a=1 enc_b=0[0m
+02:40:09.152 [0;32mI (158796) control_task: pid_telemetry t_ms=156500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2013 enc_a=1 enc_b=0[0m
+02:40:09.659 [0;32mI (159303) control_task: pid_telemetry t_ms=157000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2020 enc_a=1 enc_b=0[0m
+02:40:10.165 [0;32mI (159809) control_task: pid_telemetry t_ms=157500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2026 enc_a=1 enc_b=0[0m
+02:40:10.671 [0;32mI (160315) control_task: pid_telemetry t_ms=158000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2032 enc_a=1 enc_b=0[0m
+02:40:11.178 [0;32mI (160822) control_task: pid_telemetry t_ms=158500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2039 enc_a=1 enc_b=0[0m
+02:40:11.684 [0;32mI (161328) control_task: pid_telemetry t_ms=159000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2045 enc_a=1 enc_b=0[0m
+02:40:12.190 [0;32mI (161834) control_task: pid_telemetry t_ms=159500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2051 enc_a=1 enc_b=0[0m
+02:40:12.696 [0;32mI (162339) control_task: pid_telemetry t_ms=160000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2057 enc_a=1 enc_b=0[0m
+02:40:13.203 [0;32mI (162847) control_task: pid_telemetry t_ms=160500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2064 enc_a=1 enc_b=0[0m
+02:40:13.711 [0;32mI (163354) control_task: pid_telemetry t_ms=161000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2071 enc_a=1 enc_b=0[0m
+02:40:14.217 [0;32mI (163861) control_task: pid_telemetry t_ms=161500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2078 enc_a=1 enc_b=0[0m
+02:40:14.725 [0;32mI (164367) control_task: pid_telemetry t_ms=162000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2085 enc_a=1 enc_b=0[0m
+02:40:15.231 [0;32mI (164873) control_task: pid_telemetry t_ms=162500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2091 enc_a=1 enc_b=0[0m
+02:40:15.737 [0;32mI (165380) control_task: pid_telemetry t_ms=163000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2098 enc_a=1 enc_b=0[0m
+02:40:16.244 [0;32mI (165887) control_task: pid_telemetry t_ms=163500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2105 enc_a=1 enc_b=0[0m
+02:40:16.751 [0;32mI (166392) control_task: pid_telemetry t_ms=164000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2111 enc_a=1 enc_b=0[0m
+02:40:17.256 [0;32mI (166899) control_task: pid_telemetry t_ms=164500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2117 enc_a=1 enc_b=0[0m
+02:40:17.762 [0;32mI (167405) control_task: pid_telemetry t_ms=165000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2123 enc_a=1 enc_b=0[0m
+02:40:18.271 [0;32mI (167912) control_task: pid_telemetry t_ms=165500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2130 enc_a=1 enc_b=0[0m
+02:40:18.779 [0;32mI (168420) control_task: pid_telemetry t_ms=166000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2139 enc_a=1 enc_b=0[0m
+02:40:19.286 [0;32mI (168928) control_task: pid_telemetry t_ms=166500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2147 enc_a=1 enc_b=0[0m
+02:40:19.793 [0;32mI (169435) control_task: pid_telemetry t_ms=167000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2154 enc_a=1 enc_b=0[0m
+02:40:20.300 [0;32mI (169942) control_task: pid_telemetry t_ms=167500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2161 enc_a=1 enc_b=0[0m
+02:40:20.807 [0;32mI (170449) control_task: pid_telemetry t_ms=168000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2167 enc_a=1 enc_b=0[0m
+02:40:21.314 [0;32mI (170956) control_task: pid_telemetry t_ms=168500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2175 enc_a=1 enc_b=0[0m
+02:40:21.822 [0;32mI (171463) control_task: pid_telemetry t_ms=169000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2182 enc_a=1 enc_b=0[0m
+02:40:22.328 [0;32mI (171970) control_task: pid_telemetry t_ms=169500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2189 enc_a=1 enc_b=0[0m
+02:40:22.835 [0;32mI (172476) control_task: pid_telemetry t_ms=170000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2195 enc_a=1 enc_b=0[0m
+02:40:23.341 [0;32mI (172982) control_task: pid_telemetry t_ms=170500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2202 enc_a=1 enc_b=0[0m
+02:40:23.847 [0;32mI (173488) control_task: pid_telemetry t_ms=171000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2208 enc_a=1 enc_b=0[0m
+02:40:24.353 [0;32mI (173995) control_task: pid_telemetry t_ms=171500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2214 enc_a=1 enc_b=0[0m
+02:40:24.860 [0;32mI (174502) control_task: pid_telemetry t_ms=172000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2221 enc_a=1 enc_b=0[0m
+02:40:25.366 [0;32mI (175007) control_task: pid_telemetry t_ms=172500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2227 enc_a=1 enc_b=0[0m
+02:40:25.872 [0;32mI (175513) control_task: pid_telemetry t_ms=173000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2233 enc_a=1 enc_b=0[0m
+02:40:26.380 [0;32mI (176020) control_task: pid_telemetry t_ms=173500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2240 enc_a=1 enc_b=0[0m
+02:40:26.885 [0;32mI (176526) control_task: pid_telemetry t_ms=174000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2246 enc_a=1 enc_b=0[0m
+02:40:27.393 [0;32mI (177033) control_task: pid_telemetry t_ms=174500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2253 enc_a=1 enc_b=0[0m
+02:40:27.900 [0;32mI (177539) control_task: pid_telemetry t_ms=175000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2259 enc_a=1 enc_b=0[0m
+02:40:28.408 [0;32mI (178046) control_task: pid_telemetry t_ms=175500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2266 enc_a=1 enc_b=0[0m
+02:40:28.914 [0;32mI (178553) control_task: pid_telemetry t_ms=176000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2274 enc_a=1 enc_b=0[0m
+02:40:29.420 [0;32mI (179059) control_task: pid_telemetry t_ms=176500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2280 enc_a=1 enc_b=0[0m
+02:40:29.926 [0;32mI (179567) control_task: pid_telemetry t_ms=177000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2287 enc_a=1 enc_b=0[0m
+02:40:30.433 [0;32mI (180074) control_task: pid_telemetry t_ms=177500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2294 enc_a=1 enc_b=0[0m
+02:40:30.944 [0;32mI (180584) control_task: pid_telemetry t_ms=178000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2304 enc_a=1 enc_b=0[0m
+02:40:31.451 [0;32mI (181090) control_task: pid_telemetry t_ms=178500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2311 enc_a=1 enc_b=0[0m
+02:40:31.959 [0;32mI (181598) control_task: pid_telemetry t_ms=179000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2319 enc_a=1 enc_b=0[0m
+02:40:32.465 [0;32mI (182105) control_task: pid_telemetry t_ms=179500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2326 enc_a=1 enc_b=0[0m
+02:40:32.974 [0;32mI (182613) control_task: pid_telemetry t_ms=180000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2334 enc_a=1 enc_b=0[0m
+02:40:33.481 [0;32mI (183120) control_task: pid_telemetry t_ms=180500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2341 enc_a=1 enc_b=0[0m
+02:40:33.987 [0;32mI (183627) control_task: pid_telemetry t_ms=181000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2348 enc_a=1 enc_b=0[0m
+02:40:34.493 [0;32mI (184133) control_task: pid_telemetry t_ms=181500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2354 enc_a=1 enc_b=0[0m
+02:40:35.000 [0;32mI (184640) control_task: pid_telemetry t_ms=182000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2361 enc_a=1 enc_b=0[0m
+02:40:35.507 [0;32mI (185145) control_task: pid_telemetry t_ms=182500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2367 enc_a=1 enc_b=0[0m
+02:40:36.013 [0;32mI (185651) control_task: pid_telemetry t_ms=183000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2373 enc_a=1 enc_b=0[0m
+02:40:36.518 [0;32mI (186157) control_task: pid_telemetry t_ms=183500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2379 enc_a=1 enc_b=0[0m
+02:40:37.025 [0;32mI (186664) control_task: pid_telemetry t_ms=184000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2386 enc_a=1 enc_b=0[0m
+02:40:37.532 [0;32mI (187170) control_task: pid_telemetry t_ms=184500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2392 enc_a=1 enc_b=0[0m
+02:40:38.038 [0;32mI (187676) control_task: pid_telemetry t_ms=185000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2398 enc_a=1 enc_b=0[0m
+02:40:38.547 [0;32mI (188183) control_task: pid_telemetry t_ms=185500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2405 enc_a=1 enc_b=0[0m
+02:40:39.054 [0;32mI (188691) control_task: pid_telemetry t_ms=186000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2413 enc_a=1 enc_b=0[0m
+02:40:39.559 [0;32mI (189197) control_task: pid_telemetry t_ms=186500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2420 enc_a=1 enc_b=0[0m
+02:40:40.067 [0;32mI (189704) control_task: pid_telemetry t_ms=187000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2427 enc_a=1 enc_b=0[0m
+02:40:40.574 [0;32mI (190211) control_task: pid_telemetry t_ms=187500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2434 enc_a=1 enc_b=0[0m
+02:40:41.081 [0;32mI (190719) control_task: pid_telemetry t_ms=188000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2441 enc_a=1 enc_b=0[0m
+02:40:41.588 [0;32mI (191226) control_task: pid_telemetry t_ms=188500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2448 enc_a=1 enc_b=0[0m
+02:40:42.096 [0;32mI (191733) control_task: pid_telemetry t_ms=189000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2456 enc_a=1 enc_b=0[0m
+02:40:42.602 [0;32mI (192239) control_task: pid_telemetry t_ms=189500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2462 enc_a=1 enc_b=0[0m
+02:40:43.108 [0;32mI (192745) control_task: pid_telemetry t_ms=190000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2468 enc_a=1 enc_b=0[0m
+02:40:43.614 [0;32mI (193251) control_task: pid_telemetry t_ms=190500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2474 enc_a=1 enc_b=0[0m
+02:40:44.120 [0;32mI (193756) control_task: pid_telemetry t_ms=191000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2480 enc_a=1 enc_b=0[0m
+02:40:44.626 [0;32mI (194263) control_task: pid_telemetry t_ms=191500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2486 enc_a=1 enc_b=0[0m
+02:40:45.132 [0;32mI (194769) control_task: pid_telemetry t_ms=192000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2492 enc_a=1 enc_b=0[0m
+02:40:45.639 [0;32mI (195276) control_task: pid_telemetry t_ms=192500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2499 enc_a=1 enc_b=0[0m
+02:40:46.146 [0;32mI (195782) control_task: pid_telemetry t_ms=193000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2506 enc_a=1 enc_b=0[0m
+02:40:46.653 [0;32mI (196289) control_task: pid_telemetry t_ms=193500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2513 enc_a=1 enc_b=0[0m
+02:40:47.160 [0;32mI (196796) control_task: pid_telemetry t_ms=194000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2520 enc_a=1 enc_b=0[0m
+02:40:47.667 [0;32mI (197303) control_task: pid_telemetry t_ms=194500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2527 enc_a=1 enc_b=0[0m
+02:40:48.174 [0;32mI (197810) control_task: pid_telemetry t_ms=195000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2534 enc_a=1 enc_b=0[0m
+02:40:48.683 [0;32mI (198317) control_task: pid_telemetry t_ms=195500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2541 enc_a=1 enc_b=0[0m
+02:40:49.191 [0;32mI (198826) control_task: pid_telemetry t_ms=196000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2550 enc_a=1 enc_b=0[0m
+02:40:49.698 [0;32mI (199334) control_task: pid_telemetry t_ms=196500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2558 enc_a=1 enc_b=0[0m
+02:40:50.205 [0;32mI (199840) control_task: pid_telemetry t_ms=197000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2565 enc_a=1 enc_b=0[0m
+02:40:50.711 [0;32mI (200347) control_task: pid_telemetry t_ms=197500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2571 enc_a=1 enc_b=0[0m
+02:40:51.218 [0;32mI (200854) control_task: pid_telemetry t_ms=198000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2578 enc_a=1 enc_b=0[0m
+02:40:51.725 [0;32mI (201361) control_task: pid_telemetry t_ms=198500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2585 enc_a=1 enc_b=0[0m
+02:40:52.233 [0;32mI (201868) control_task: pid_telemetry t_ms=199000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2593 enc_a=1 enc_b=0[0m
+02:40:52.739 [0;32mI (202374) control_task: pid_telemetry t_ms=199500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2599 enc_a=1 enc_b=0[0m
+02:40:53.246 [0;32mI (202881) control_task: pid_telemetry t_ms=200000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2606 enc_a=1 enc_b=0[0m
+02:40:53.753 [0;32mI (203388) control_task: pid_telemetry t_ms=200500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2613 enc_a=1 enc_b=0[0m
+02:40:54.259 [0;32mI (203894) control_task: pid_telemetry t_ms=201000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2619 enc_a=1 enc_b=0[0m
+02:40:54.766 [0;32mI (204401) control_task: pid_telemetry t_ms=201500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2626 enc_a=1 enc_b=0[0m
+02:40:55.273 [0;32mI (204908) control_task: pid_telemetry t_ms=202000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2633 enc_a=1 enc_b=0[0m
+02:40:55.781 [0;32mI (205416) control_task: pid_telemetry t_ms=202500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2641 enc_a=1 enc_b=0[0m
+02:40:56.288 [0;32mI (205922) control_task: pid_telemetry t_ms=203000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2648 enc_a=1 enc_b=0[0m
+02:40:56.796 [0;32mI (206429) control_task: pid_telemetry t_ms=203500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2655 enc_a=1 enc_b=0[0m
+02:40:57.302 [0;32mI (206936) control_task: pid_telemetry t_ms=204000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2662 enc_a=1 enc_b=0[0m
+02:40:57.808 [0;32mI (207443) control_task: pid_telemetry t_ms=204500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2668 enc_a=1 enc_b=0[0m
+02:40:58.315 [0;32mI (207949) control_task: pid_telemetry t_ms=205000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2675 enc_a=1 enc_b=0[0m
+02:40:58.824 [0;32mI (208455) control_task: pid_telemetry t_ms=205500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2681 enc_a=1 enc_b=0[0m
+02:40:59.332 [0;32mI (208964) control_task: pid_telemetry t_ms=206000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2690 enc_a=1 enc_b=0[0m
+02:40:59.840 [0;32mI (209473) control_task: pid_telemetry t_ms=206500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2699 enc_a=1 enc_b=0[0m
+02:41:00.347 [0;32mI (209980) control_task: pid_telemetry t_ms=207000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2707 enc_a=1 enc_b=0[0m
+02:41:00.854 [0;32mI (210488) control_task: pid_telemetry t_ms=207500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2714 enc_a=1 enc_b=0[0m
+02:41:01.361 [0;32mI (210995) control_task: pid_telemetry t_ms=208000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2721 enc_a=1 enc_b=0[0m
+02:41:01.869 [0;32mI (211501) control_task: pid_telemetry t_ms=208500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2728 enc_a=1 enc_b=0[0m
+02:41:02.374 [0;32mI (212007) control_task: pid_telemetry t_ms=209000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2734 enc_a=1 enc_b=0[0m
+02:41:02.881 [0;32mI (212513) control_task: pid_telemetry t_ms=209500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2740 enc_a=1 enc_b=0[0m
+02:41:03.387 [0;32mI (213021) control_task: pid_telemetry t_ms=210000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2747 enc_a=1 enc_b=0[0m
+02:41:03.894 [0;32mI (213527) control_task: pid_telemetry t_ms=210500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2754 enc_a=1 enc_b=0[0m
+02:41:04.401 [0;32mI (214033) control_task: pid_telemetry t_ms=211000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2760 enc_a=1 enc_b=0[0m
+02:41:04.907 [0;32mI (214540) control_task: pid_telemetry t_ms=211500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2767 enc_a=1 enc_b=0[0m
+02:41:05.414 [0;32mI (215047) control_task: pid_telemetry t_ms=212000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2774 enc_a=1 enc_b=0[0m
+02:41:05.921 [0;32mI (215553) control_task: pid_telemetry t_ms=212500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2780 enc_a=1 enc_b=0[0m
+02:41:06.427 [0;32mI (216059) control_task: pid_telemetry t_ms=213000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2787 enc_a=1 enc_b=0[0m
+02:41:06.934 [0;32mI (216566) control_task: pid_telemetry t_ms=213500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2794 enc_a=1 enc_b=0[0m
+02:41:07.442 [0;32mI (217074) control_task: pid_telemetry t_ms=214000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2801 enc_a=1 enc_b=0[0m
+02:41:07.950 [0;32mI (217581) control_task: pid_telemetry t_ms=214500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2809 enc_a=1 enc_b=0[0m
+02:41:08.456 [0;32mI (218088) control_task: pid_telemetry t_ms=215000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2816 enc_a=1 enc_b=0[0m
+02:41:08.964 [0;32mI (218596) control_task: pid_telemetry t_ms=215500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2824 enc_a=1 enc_b=0[0m
+02:41:09.472 [0;32mI (219104) control_task: pid_telemetry t_ms=216000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2831 enc_a=1 enc_b=0[0m
+02:41:09.982 [0;32mI (219611) control_task: pid_telemetry t_ms=216500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2839 enc_a=1 enc_b=0[0m
+02:41:10.488 [0;32mI (220119) control_task: pid_telemetry t_ms=217000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2847 enc_a=1 enc_b=0[0m
+02:41:10.994 [0;32mI (220626) control_task: pid_telemetry t_ms=217500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2854 enc_a=1 enc_b=0[0m
+02:41:11.501 [0;32mI (221132) control_task: pid_telemetry t_ms=218000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2860 enc_a=1 enc_b=0[0m
+02:41:12.006 [0;32mI (221638) control_task: pid_telemetry t_ms=218500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2866 enc_a=1 enc_b=0[0m
+02:41:12.514 [0;32mI (222144) control_task: pid_telemetry t_ms=219000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2873 enc_a=1 enc_b=0[0m
+02:41:13.020 [0;32mI (222650) control_task: pid_telemetry t_ms=219500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2879 enc_a=1 enc_b=0[0m
+02:41:13.526 [0;32mI (223157) control_task: pid_telemetry t_ms=220000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2886 enc_a=1 enc_b=0[0m
+02:41:14.034 [0;32mI (223665) control_task: pid_telemetry t_ms=220500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2893 enc_a=1 enc_b=0[0m
+02:41:14.540 [0;32mI (224171) control_task: pid_telemetry t_ms=221000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2900 enc_a=1 enc_b=0[0m
+02:41:15.048 [0;32mI (224678) control_task: pid_telemetry t_ms=221500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2907 enc_a=1 enc_b=0[0m
+02:41:15.555 [0;32mI (225185) control_task: pid_telemetry t_ms=222000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2914 enc_a=1 enc_b=0[0m
+02:41:16.062 [0;32mI (225692) control_task: pid_telemetry t_ms=222500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2921 enc_a=1 enc_b=0[0m
+02:41:16.568 [0;32mI (226199) control_task: pid_telemetry t_ms=223000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2928 enc_a=1 enc_b=0[0m
+02:41:17.077 [0;32mI (226706) control_task: pid_telemetry t_ms=223500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2936 enc_a=1 enc_b=0[0m
+02:41:17.583 [0;32mI (227214) control_task: pid_telemetry t_ms=224000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2943 enc_a=1 enc_b=0[0m
+02:41:18.091 [0;32mI (227721) control_task: pid_telemetry t_ms=224500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2950 enc_a=1 enc_b=0[0m
+02:41:18.597 [0;32mI (228228) control_task: pid_telemetry t_ms=225000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2957 enc_a=1 enc_b=0[0m
+02:41:19.105 [0;32mI (228734) control_task: pid_telemetry t_ms=225500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2964 enc_a=1 enc_b=0[0m
+02:41:19.613 [0;32mI (229242) control_task: pid_telemetry t_ms=226000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2972 enc_a=1 enc_b=0[0m
+02:41:20.122 [0;32mI (229751) control_task: pid_telemetry t_ms=226500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2980 enc_a=1 enc_b=0[0m
+02:41:20.629 [0;32mI (230257) control_task: pid_telemetry t_ms=227000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2987 enc_a=1 enc_b=0[0m
+02:41:21.137 [0;32mI (230766) control_task: pid_telemetry t_ms=227500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2996 enc_a=1 enc_b=0[0m
+02:41:21.645 [0;32mI (231274) control_task: pid_telemetry t_ms=228000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3004 enc_a=1 enc_b=0[0m
+02:41:22.151 [0;32mI (231780) control_task: pid_telemetry t_ms=228500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3010 enc_a=1 enc_b=0[0m
+02:41:22.657 [0;32mI (232286) control_task: pid_telemetry t_ms=229000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3016 enc_a=1 enc_b=0[0m
+02:41:23.164 [0;32mI (232792) control_task: pid_telemetry t_ms=229500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3023 enc_a=1 enc_b=0[0m
+02:41:23.671 [0;32mI (233299) control_task: pid_telemetry t_ms=230000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3030 enc_a=1 enc_b=0[0m
+02:41:24.177 [0;32mI (233806) control_task: pid_telemetry t_ms=230500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3036 enc_a=1 enc_b=0[0m
+02:41:24.683 [0;32mI (234312) control_task: pid_telemetry t_ms=231000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3042 enc_a=1 enc_b=0[0m
+02:41:25.189 [0;32mI (234817) control_task: pid_telemetry t_ms=231500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3048 enc_a=1 enc_b=0[0m
+02:41:25.696 [0;32mI (235324) control_task: pid_telemetry t_ms=232000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3055 enc_a=1 enc_b=0[0m
+02:41:26.202 [0;32mI (235830) control_task: pid_telemetry t_ms=232500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3061 enc_a=1 enc_b=0[0m
+02:41:26.710 [0;32mI (236337) control_task: pid_telemetry t_ms=233000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3068 enc_a=1 enc_b=0[0m
+02:41:27.217 [0;32mI (236844) control_task: pid_telemetry t_ms=233500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3076 enc_a=1 enc_b=0[0m
+02:41:27.724 [0;32mI (237351) control_task: pid_telemetry t_ms=234000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3083 enc_a=1 enc_b=0[0m
+02:41:28.232 [0;32mI (237860) control_task: pid_telemetry t_ms=234500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3091 enc_a=1 enc_b=0[0m
+02:41:28.739 [0;32mI (238367) control_task: pid_telemetry t_ms=235000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3098 enc_a=1 enc_b=0[0m
+02:41:29.246 [0;32mI (238874) control_task: pid_telemetry t_ms=235500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3105 enc_a=1 enc_b=0[0m
+02:41:29.753 [0;32mI (239380) control_task: pid_telemetry t_ms=236000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3112 enc_a=1 enc_b=0[0m
+02:41:30.260 [0;32mI (239887) control_task: pid_telemetry t_ms=236500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3119 enc_a=1 enc_b=0[0m
+02:41:30.770 [0;32mI (240395) control_task: pid_telemetry t_ms=237000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3127 enc_a=1 enc_b=0[0m
+02:41:31.278 [0;32mI (240904) control_task: pid_telemetry t_ms=237500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3136 enc_a=1 enc_b=0[0m
+02:41:31.785 [0;32mI (241411) control_task: pid_telemetry t_ms=238000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3143 enc_a=1 enc_b=0[0m
+02:41:32.291 [0;32mI (241918) control_task: pid_telemetry t_ms=238500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3150 enc_a=1 enc_b=0[0m
+02:41:32.798 [0;32mI (242425) control_task: pid_telemetry t_ms=239000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3157 enc_a=1 enc_b=0[0m
+02:41:33.304 [0;32mI (242930) control_task: pid_telemetry t_ms=239500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3163 enc_a=1 enc_b=0[0m
+02:41:33.811 [0;32mI (243436) control_task: pid_telemetry t_ms=240000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3169 enc_a=1 enc_b=0[0m
+02:41:34.318 [0;32mI (243944) control_task: pid_telemetry t_ms=240500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3176 enc_a=1 enc_b=0[0m
+02:41:34.824 [0;32mI (244451) control_task: pid_telemetry t_ms=241000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3183 enc_a=1 enc_b=0[0m
+02:41:35.333 [0;32mI (244959) control_task: pid_telemetry t_ms=241500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3192 enc_a=1 enc_b=0[0m
+02:41:35.840 [0;32mI (245466) control_task: pid_telemetry t_ms=242000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3199 enc_a=1 enc_b=0[0m
+02:41:36.347 [0;32mI (245973) control_task: pid_telemetry t_ms=242500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3206 enc_a=1 enc_b=0[0m
+02:41:36.859 [0;32mI (246484) control_task: pid_telemetry t_ms=243000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3217 enc_a=1 enc_b=0[0m
+02:41:37.365 [0;32mI (246991) control_task: pid_telemetry t_ms=243500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3224 enc_a=1 enc_b=0[0m
+02:41:37.875 [0;32mI (247500) control_task: pid_telemetry t_ms=244000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3234 enc_a=1 enc_b=0[0m
+02:41:38.382 [0;32mI (248007) control_task: pid_telemetry t_ms=244500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3240 enc_a=1 enc_b=0[0m
+02:41:38.890 [0;32mI (248516) control_task: pid_telemetry t_ms=245000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3249 enc_a=1 enc_b=0[0m
+02:41:39.396 [0;32mI (249022) control_task: pid_telemetry t_ms=245500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3255 enc_a=1 enc_b=0[0m
+02:41:39.907 [0;32mI (249531) control_task: pid_telemetry t_ms=246000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3265 enc_a=1 enc_b=0[0m
+02:41:39.981 [0;32mI (249621) command_server: RX: ARM[0m
+02:41:39.985 [0;32mI (249623) control_task: ARM[0m
+02:41:40.418 [0;32mI (250044) control_task: pid_telemetry t_ms=246500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=5 enc_a=1 enc_b=0[0m
+02:41:40.925 [0;32mI (250550) control_task: pid_telemetry t_ms=247000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=11 enc_a=1 enc_b=0[0m
+02:41:41.430 [0;32mI (251056) control_task: pid_telemetry t_ms=247500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=16 enc_a=1 enc_b=0[0m
+02:41:41.937 [0;32mI (251562) control_task: pid_telemetry t_ms=248000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=23 enc_a=1 enc_b=0[0m
+02:41:42.058 [0;32mI (251697) command_server: RX: SET_SPEED 1500[0m
+02:41:42.065 [0;32mI (251700) control_task: SET_SPEED 1500[0m
+02:41:42.453 [0;32mI (252075) control_task: pid_telemetry t_ms=248500 state=RUNNING cmd=1500 target=742 actual=1302 duty=66 error=-560 delta=-597 missed=36 enc_a=1 enc_b=1[0m
+02:41:42.965 [0;32mI (252587) control_task: pid_telemetry t_ms=249000 state=RUNNING cmd=1500 target=1500 actual=1293 duty=90 error=207 delta=-593 missed=48 enc_a=0 enc_b=0[0m
+02:41:43.162 [0;32mI (252801) command_server: RX: STATUS[0m
+02:41:43.484 [0;32mI (253106) control_task: pid_telemetry t_ms=249500 state=RUNNING cmd=1500 target=1500 actual=1800 duty=87 error=-300 delta=-825 missed=67 enc_a=0 enc_b=1[0m
+02:41:43.996 [0;32mI (253618) control_task: pid_telemetry t_ms=250000 state=RUNNING cmd=1500 target=1500 actual=1675 duty=86 error=-175 delta=-768 missed=79 enc_a=1 enc_b=0[0m
+02:41:44.296 [0;32mI (253935) command_server: RX: STATUS[0m
+02:41:44.518 [0;32mI (254140) control_task: pid_telemetry t_ms=250500 state=RUNNING cmd=1500 target=1500 actual=1736 duty=85 error=-236 delta=-796 missed=101 enc_a=1 enc_b=0[0m
+02:41:45.029 [0;32mI (254650) control_task: pid_telemetry t_ms=251000 state=RUNNING cmd=1500 target=1500 actual=1564 duty=85 error=-64 delta=-717 missed=112 enc_a=0 enc_b=1[0m
+02:41:45.420 [0;32mI (255059) command_server: RX: STATUS[0m
+02:41:45.552 [0;32mI (255173) control_task: pid_telemetry t_ms=251500 state=RUNNING cmd=1500 target=1500 actual=1645 duty=84 error=-145 delta=-754 missed=134 enc_a=0 enc_b=1[0m
+02:41:46.062 [0;32mI (255683) control_task: pid_telemetry t_ms=252000 state=RUNNING cmd=1500 target=1500 actual=1566 duty=84 error=-66 delta=-718 missed=145 enc_a=1 enc_b=1[0m
+02:41:46.539 [0;32mI (256177) command_server: RX: STATUS[0m
+02:41:46.591 [0;32mI (256211) control_task: pid_telemetry t_ms=252500 state=RUNNING cmd=1500 target=1500 actual=1603 duty=83 error=-103 delta=-735 missed=173 enc_a=1 enc_b=0[0m
+02:41:47.100 [0;32mI (256722) control_task: pid_telemetry t_ms=253000 state=RUNNING cmd=1500 target=1500 actual=1461 duty=83 error=39 delta=-670 missed=183 enc_a=1 enc_b=1[0m
+02:41:47.611 [0;32mI (257232) control_task: pid_telemetry t_ms=253500 state=RUNNING cmd=1500 target=1500 actual=1470 duty=83 error=30 delta=-674 missed=194 enc_a=0 enc_b=1[0m
+02:41:47.683 [0;32mI (257322) command_server: RX: STATUS[0m
+02:41:48.135 [0;32mI (257755) control_task: pid_telemetry t_ms=254000 state=RUNNING cmd=1500 target=1500 actual=1461 duty=83 error=39 delta=-670 missed=217 enc_a=0 enc_b=0[0m
+02:41:48.646 [0;32mI (258267) control_task: pid_telemetry t_ms=254500 state=RUNNING cmd=1500 target=1500 actual=1466 duty=83 error=34 delta=-672 missed=229 enc_a=0 enc_b=0[0m
+02:41:48.802 [0;32mI (258440) command_server: RX: STATUS[0m
+02:41:49.169 [0;32mI (258790) control_task: pid_telemetry t_ms=255000 state=RUNNING cmd=1500 target=1500 actual=1468 duty=83 error=32 delta=-673 missed=252 enc_a=1 enc_b=1[0m
+02:41:49.683 [0;32mI (259302) control_task: pid_telemetry t_ms=255500 state=RUNNING cmd=1500 target=1500 actual=1474 duty=83 error=26 delta=-676 missed=265 enc_a=1 enc_b=0[0m
+02:41:49.921 [0;32mI (259559) command_server: RX: STATUS[0m
+02:41:50.206 [0;32mI (259827) control_task: pid_telemetry t_ms=256000 state=RUNNING cmd=1500 target=1500 actual=1492 duty=83 error=8 delta=-684 missed=289 enc_a=0 enc_b=0[0m
+02:41:50.719 [0;32mI (260339) control_task: pid_telemetry t_ms=256500 state=RUNNING cmd=1500 target=1500 actual=1468 duty=83 error=32 delta=-673 missed=301 enc_a=0 enc_b=0[0m
+02:41:51.042 [0;32mI (260679) command_server: RX: STATUS[0m
+02:41:51.242 [0;32mI (260861) control_task: pid_telemetry t_ms=257000 state=RUNNING cmd=1500 target=1500 actual=1538 duty=83 error=-38 delta=-705 missed=324 enc_a=1 enc_b=1[0m
+02:41:51.753 [0;32mI (261374) control_task: pid_telemetry t_ms=257500 state=RUNNING cmd=1500 target=1500 actual=1483 duty=83 error=17 delta=-680 missed=336 enc_a=0 enc_b=0[0m
+02:41:52.189 [0;32mI (261827) command_server: RX: STATUS[0m
+02:41:52.280 [0;32mI (261899) control_task: pid_telemetry t_ms=258000 state=RUNNING cmd=1500 target=1500 actual=1555 duty=82 error=-55 delta=-713 missed=361 enc_a=0 enc_b=1[0m
+02:41:52.791 [0;32mI (262410) control_task: pid_telemetry t_ms=258500 state=RUNNING cmd=1500 target=1500 actual=1466 duty=83 error=34 delta=-672 missed=373 enc_a=0 enc_b=1[0m
+02:41:53.311 [0;32mI (262927) control_task: pid_telemetry t_ms=259000 state=RUNNING cmd=1500 target=1500 actual=1498 duty=82 error=2 delta=-687 missed=389 enc_a=1 enc_b=1[0m
+02:41:53.316 [0;32mI (262945) command_server: RX: STATUS[0m
+02:41:53.830 [0;32mI (263450) control_task: pid_telemetry t_ms=259500 state=RUNNING cmd=1500 target=1500 actual=1481 duty=82 error=19 delta=-679 missed=413 enc_a=1 enc_b=1[0m
+02:41:54.342 [0;32mI (263960) control_task: pid_telemetry t_ms=260000 state=RUNNING cmd=1500 target=1500 actual=1466 duty=82 error=34 delta=-672 missed=424 enc_a=1 enc_b=0[0m
+02:41:54.420 [0;32mI (264058) command_server: RX: STATUS[0m
+02:41:54.865 [0;32mI (264485) control_task: pid_telemetry t_ms=260500 state=RUNNING cmd=1500 target=1500 actual=1472 duty=82 error=28 delta=-675 missed=448 enc_a=1 enc_b=1[0m
+02:41:55.377 [0;32mI (264995) control_task: pid_telemetry t_ms=261000 state=RUNNING cmd=1500 target=1500 actual=1468 duty=82 error=32 delta=-673 missed=459 enc_a=0 enc_b=1[0m
+02:41:55.548 [0;32mI (265184) command_server: RX: STATUS[0m
+02:41:55.901 [0;32mI (265520) control_task: pid_telemetry t_ms=261500 state=RUNNING cmd=1500 target=1500 actual=1464 duty=82 error=36 delta=-671 missed=483 enc_a=0 enc_b=0[0m
+02:41:56.413 [0;32mI (266031) control_task: pid_telemetry t_ms=262000 state=RUNNING cmd=1500 target=1500 actual=1481 duty=82 error=19 delta=-679 missed=495 enc_a=1 enc_b=0[0m
+02:41:56.674 [0;32mI (266310) command_server: RX: STATUS[0m
+02:41:56.937 [0;32mI (266555) control_task: pid_telemetry t_ms=262500 state=RUNNING cmd=1500 target=1500 actual=1542 duty=82 error=-42 delta=-707 missed=519 enc_a=1 enc_b=1[0m
+02:41:57.449 [0;32mI (267068) control_task: pid_telemetry t_ms=263000 state=RUNNING cmd=1500 target=1500 actual=1485 duty=82 error=15 delta=-681 missed=531 enc_a=1 enc_b=1[0m
+02:41:57.812 [0;32mI (267447) command_server: RX: STATUS[0m
+02:41:57.975 [0;32mI (267592) control_task: pid_telemetry t_ms=263500 state=RUNNING cmd=1500 target=1500 actual=1562 duty=81 error=-62 delta=-716 missed=556 enc_a=1 enc_b=0[0m
+02:41:58.485 [0;32mI (268104) control_task: pid_telemetry t_ms=264000 state=RUNNING cmd=1500 target=1500 actual=1444 duty=82 error=56 delta=-662 missed=568 enc_a=1 enc_b=1[0m
+02:41:58.935 [0;32mI (268571) command_server: RX: STATUS[0m
+02:41:58.967 [0;32mI (268601) command_server: RX: SET_SPEED 800[0m
+02:41:58.972 [0;32mI (268604) control_task: SET_SPEED 800[0m
+02:41:59.023 [0;32mI (268642) control_task: pid_telemetry t_ms=264500 state=RUNNING cmd=800 target=1440 actual=222 duty=92 error=1218 delta=-102 missed=606 enc_a=1 enc_b=0[0m
+02:41:59.532 [0;32mI (269151) control_task: pid_telemetry t_ms=265000 state=RUNNING cmd=800 target=800 actual=1564 duty=67 error=-764 delta=-717 missed=615 enc_a=0 enc_b=1[0m
+02:42:00.043 [0;32mI (269662) control_task: pid_telemetry t_ms=265500 state=RUNNING cmd=800 target=800 actual=735 duty=68 error=65 delta=-337 missed=626 enc_a=1 enc_b=1[0m
+02:42:00.058 [0;32mI (269693) command_server: RX: STATUS[0m
+02:42:00.571 [0;32mI (270187) control_task: pid_telemetry t_ms=266000 state=RUNNING cmd=800 target=800 actual=726 duty=68 error=74 delta=-333 missed=651 enc_a=0 enc_b=0[0m
+02:42:01.085 [0;32mI (270701) control_task: pid_telemetry t_ms=266500 state=RUNNING cmd=800 target=800 actual=726 duty=69 error=74 delta=-333 missed=666 enc_a=1 enc_b=1[0m
+02:42:01.179 [0;32mI (270814) command_server: RX: STATUS[0m
+02:42:01.609 [0;32mI (271227) control_task: pid_telemetry t_ms=267000 state=RUNNING cmd=800 target=800 actual=724 duty=69 error=76 delta=-332 missed=692 enc_a=0 enc_b=0[0m
+02:42:02.119 [0;32mI (271737) control_task: pid_telemetry t_ms=267500 state=RUNNING cmd=800 target=800 actual=726 duty=69 error=74 delta=-333 missed=702 enc_a=1 enc_b=1[0m
+02:42:02.316 [0;32mI (271951) command_server: RX: STATUS[0m
+02:42:02.640 [0;32mI (272258) control_task: pid_telemetry t_ms=268000 state=RUNNING cmd=800 target=800 actual=722 duty=69 error=78 delta=-331 missed=723 enc_a=1 enc_b=0[0m
+02:42:03.151 [0;32mI (272769) control_task: pid_telemetry t_ms=268500 state=RUNNING cmd=800 target=800 actual=722 duty=69 error=78 delta=-331 missed=734 enc_a=1 enc_b=0[0m
+02:42:03.464 [0;32mI (273099) command_server: RX: STATUS[0m
+02:42:03.675 [0;32mI (273292) control_task: pid_telemetry t_ms=269000 state=RUNNING cmd=800 target=800 actual=759 duty=69 error=41 delta=-348 missed=758 enc_a=0 enc_b=1[0m
+02:42:04.186 [0;32mI (273804) control_task: pid_telemetry t_ms=269500 state=RUNNING cmd=800 target=800 actual=722 duty=69 error=78 delta=-331 missed=769 enc_a=0 enc_b=0[0m
+02:42:04.558 [0;32mI (274193) command_server: RX: STATUS[0m
+02:42:04.708 [0;32mI (274325) control_task: pid_telemetry t_ms=270000 state=RUNNING cmd=800 target=800 actual=754 duty=69 error=46 delta=-346 missed=790 enc_a=1 enc_b=1[0m
+02:42:05.219 [0;32mI (274836) control_task: pid_telemetry t_ms=270500 state=RUNNING cmd=800 target=800 actual=772 duty=70 error=28 delta=-354 missed=802 enc_a=0 enc_b=0[0m
+02:42:05.699 [0;32mI (275333) command_server: RX: STATUS[0m
+02:42:05.741 [0;32mI (275358) control_task: pid_telemetry t_ms=271000 state=RUNNING cmd=800 target=800 actual=794 duty=70 error=6 delta=-364 missed=824 enc_a=0 enc_b=0[0m
+02:42:06.253 [0;32mI (275869) control_task: pid_telemetry t_ms=271500 state=RUNNING cmd=800 target=800 actual=802 duty=70 error=-2 delta=-368 missed=835 enc_a=0 enc_b=0[0m
+02:42:06.767 [0;32mI (276382) control_task: pid_telemetry t_ms=272000 state=RUNNING cmd=800 target=800 actual=770 duty=70 error=30 delta=-353 missed=849 enc_a=1 enc_b=1[0m
+02:42:06.819 [0;32mI (276452) command_server: RX: STATUS[0m
+02:42:07.291 [0;32mI (276906) control_task: pid_telemetry t_ms=272500 state=RUNNING cmd=800 target=800 actual=752 duty=70 error=48 delta=-345 missed=872 enc_a=0 enc_b=1[0m
+02:42:07.803 [0;32mI (277418) control_task: pid_telemetry t_ms=273000 state=RUNNING cmd=800 target=800 actual=800 duty=70 error=0 delta=-367 missed=885 enc_a=0 enc_b=1[0m
+02:42:07.951 [0;32mI (277584) command_server: RX: STATUS[0m
+02:42:08.327 [0;32mI (277942) control_task: pid_telemetry t_ms=273500 state=RUNNING cmd=800 target=800 actual=761 duty=70 error=39 delta=-349 missed=909 enc_a=0 enc_b=1[0m
+02:42:08.838 [0;32mI (278454) control_task: pid_telemetry t_ms=274000 state=RUNNING cmd=800 target=800 actual=759 duty=70 error=41 delta=-348 missed=921 enc_a=0 enc_b=0[0m
+02:42:09.064 [0;32mI (278696) command_server: RX: STATUS[0m
+02:42:09.361 [0;32mI (278976) control_task: pid_telemetry t_ms=274500 state=RUNNING cmd=800 target=800 actual=761 duty=70 error=39 delta=-349 missed=943 enc_a=0 enc_b=0[0m
+02:42:09.870 [0;32mI (279486) control_task: pid_telemetry t_ms=275000 state=RUNNING cmd=800 target=800 actual=805 duty=70 error=-5 delta=-369 missed=953 enc_a=1 enc_b=0[0m
+02:42:10.194 [0;32mI (279826) command_server: RX: STATUS[0m
+02:42:10.392 [0;32mI (280007) control_task: pid_telemetry t_ms=275500 state=RUNNING cmd=800 target=800 actual=794 duty=70 error=6 delta=-364 missed=974 enc_a=1 enc_b=1[0m
+02:42:10.902 [0;32mI (280517) control_task: pid_telemetry t_ms=276000 state=RUNNING cmd=800 target=800 actual=802 duty=69 error=-2 delta=-368 missed=985 enc_a=0 enc_b=0[0m
+02:42:11.328 [0;32mI (280960) command_server: RX: STATUS[0m
+02:42:11.426 [0;32mI (281038) control_task: pid_telemetry t_ms=276500 state=RUNNING cmd=800 target=800 actual=805 duty=70 error=-5 delta=-369 missed=1006 enc_a=1 enc_b=1[0m
+02:42:11.939 [0;32mI (281554) control_task: pid_telemetry t_ms=277000 state=RUNNING cmd=800 target=800 actual=757 duty=70 error=43 delta=-347 missed=1020 enc_a=1 enc_b=0[0m
+02:42:12.460 [0;32mI (282074) control_task: pid_telemetry t_ms=277500 state=RUNNING cmd=800 target=800 actual=805 duty=70 error=-5 delta=-369 missed=1038 enc_a=1 enc_b=1[0m
+02:42:12.466 [0;32mI (282085) command_server: RX: STATUS[0m
+02:42:12.976 [0;32mI (282590) control_task: pid_telemetry t_ms=278000 state=RUNNING cmd=800 target=800 actual=761 duty=70 error=39 delta=-349 missed=1058 enc_a=1 enc_b=1[0m
+02:42:13.486 [0;32mI (283100) control_task: pid_telemetry t_ms=278500 state=RUNNING cmd=800 target=800 actual=759 duty=70 error=41 delta=-348 missed=1068 enc_a=1 enc_b=0[0m
+02:42:13.576 [0;32mI (283207) command_server: RX: STATUS[0m
+02:42:14.008 [0;32mI (283621) control_task: pid_telemetry t_ms=279000 state=RUNNING cmd=800 target=800 actual=757 duty=70 error=43 delta=-347 missed=1090 enc_a=0 enc_b=1[0m
+02:42:14.520 [0;32mI (284134) control_task: pid_telemetry t_ms=279500 state=RUNNING cmd=800 target=800 actual=802 duty=70 error=-2 delta=-368 missed=1102 enc_a=1 enc_b=0[0m
+02:42:14.695 [0;32mI (284327) command_server: RX: STATUS[0m
+02:42:15.046 [0;32mI (284660) control_task: pid_telemetry t_ms=280000 state=RUNNING cmd=800 target=800 actual=763 duty=70 error=37 delta=-350 missed=1128 enc_a=1 enc_b=1[0m
+02:42:15.558 [0;32mI (285171) control_task: pid_telemetry t_ms=280500 state=RUNNING cmd=800 target=800 actual=759 duty=70 error=41 delta=-348 missed=1140 enc_a=1 enc_b=1[0m
+02:42:15.827 [0;32mI (285458) command_server: RX: STATUS[0m
+02:42:16.081 [0;32mI (285694) control_task: pid_telemetry t_ms=281000 state=RUNNING cmd=800 target=800 actual=833 duty=69 error=-33 delta=-382 missed=1163 enc_a=1 enc_b=0[0m
+02:42:16.593 [0;32mI (286206) control_task: pid_telemetry t_ms=281500 state=RUNNING cmd=800 target=800 actual=778 duty=70 error=22 delta=-357 missed=1175 enc_a=1 enc_b=1[0m
+02:42:16.949 [0;32mI (286578) command_server: RX: STATUS[0m
+02:42:17.116 [0;32mI (286728) control_task: pid_telemetry t_ms=282000 state=RUNNING cmd=800 target=800 actual=794 duty=70 error=6 delta=-364 missed=1198 enc_a=1 enc_b=0[0m
+02:42:17.628 [0;32mI (287240) control_task: pid_telemetry t_ms=282500 state=RUNNING cmd=800 target=800 actual=800 duty=70 error=0 delta=-367 missed=1209 enc_a=1 enc_b=1[0m
+02:42:18.076 [0;32mI (287707) command_server: RX: STATUS[0m
+02:42:18.151 [0;32mI (287763) control_task: pid_telemetry t_ms=283000 state=RUNNING cmd=800 target=800 actual=796 duty=69 error=4 delta=-365 missed=1232 enc_a=1 enc_b=1[0m
+02:42:18.662 [0;32mI (288274) control_task: pid_telemetry t_ms=283500 state=RUNNING cmd=800 target=800 actual=770 duty=70 error=30 delta=-353 missed=1244 enc_a=0 enc_b=0[0m
+02:42:19.172 [0;32mI (288785) control_task: pid_telemetry t_ms=284000 state=RUNNING cmd=800 target=800 actual=798 duty=70 error=2 delta=-366 missed=1255 enc_a=1 enc_b=1[0m
+02:42:19.215 [0;32mI (288845) command_server: RX: STATUS[0m
+02:42:19.240 [0;32mI (288866) command_server: RX: SET_SPEED 300[0m
+02:42:19.245 [0;32mI (288869) control_task: SET_SPEED 300[0m
+02:42:19.709 [0;32mI (289321) control_task: pid_telemetry t_ms=284500 state=RUNNING cmd=300 target=300 actual=648 duty=53 error=-348 delta=-297 missed=1291 enc_a=1 enc_b=0[0m
+02:42:20.221 [0;32mI (289833) control_task: pid_telemetry t_ms=285000 state=RUNNING cmd=300 target=300 actual=288 duty=53 error=12 delta=-132 missed=1303 enc_a=1 enc_b=1[0m
+02:42:20.329 [0;32mI (289959) command_server: RX: STATUS[0m
+02:42:20.744 [0;32mI (290355) control_task: pid_telemetry t_ms=285500 state=RUNNING cmd=300 target=300 actual=202 duty=53 error=98 delta=-93 missed=1325 enc_a=1 enc_b=1[0m
+02:42:21.257 [0;32mI (290870) control_task: pid_telemetry t_ms=286000 state=RUNNING cmd=300 target=300 actual=211 duty=54 error=89 delta=-97 missed=1338 enc_a=0 enc_b=1[0m
+02:42:21.466 [0;32mI (291096) command_server: RX: STATUS[0m
+02:42:21.780 [0;32mI (291392) control_task: pid_telemetry t_ms=286500 state=RUNNING cmd=300 target=300 actual=240 duty=54 error=60 delta=-110 missed=1362 enc_a=0 enc_b=0[0m
+02:42:22.290 [0;32mI (291901) control_task: pid_telemetry t_ms=287000 state=RUNNING cmd=300 target=300 actual=240 duty=54 error=60 delta=-110 missed=1372 enc_a=1 enc_b=0[0m
+02:42:22.598 [0;32mI (292228) command_server: RX: STATUS[0m
+02:42:22.814 [0;32mI (292426) control_task: pid_telemetry t_ms=287500 state=RUNNING cmd=300 target=300 actual=253 duty=54 error=47 delta=-116 missed=1396 enc_a=0 enc_b=1[0m
+02:42:23.326 [0;32mI (292937) control_task: pid_telemetry t_ms=288000 state=RUNNING cmd=300 target=300 actual=246 duty=54 error=54 delta=-113 missed=1408 enc_a=1 enc_b=0[0m
+02:42:23.707 [0;32mI (293335) command_server: RX: STATUS[0m
+02:42:23.849 [0;32mI (293461) control_task: pid_telemetry t_ms=288500 state=RUNNING cmd=300 target=300 actual=255 duty=54 error=45 delta=-117 missed=1431 enc_a=0 enc_b=0[0m
+02:42:24.358 [0;32mI (293969) control_task: pid_telemetry t_ms=289000 state=RUNNING cmd=300 target=300 actual=240 duty=54 error=60 delta=-110 missed=1440 enc_a=1 enc_b=0[0m
+02:42:24.833 [0;32mI (294462) command_server: RX: STATUS[0m
+02:42:24.879 [0;32mI (294489) control_task: pid_telemetry t_ms=289500 state=RUNNING cmd=300 target=300 actual=250 duty=54 error=50 delta=-115 missed=1460 enc_a=0 enc_b=1[0m
+02:42:25.390 [0;32mI (295001) control_task: pid_telemetry t_ms=290000 state=RUNNING cmd=300 target=300 actual=242 duty=55 error=58 delta=-111 missed=1472 enc_a=1 enc_b=0[0m
+02:42:25.900 [0;32mI (295510) control_task: pid_telemetry t_ms=290500 state=RUNNING cmd=300 target=300 actual=242 duty=55 error=58 delta=-111 missed=1482 enc_a=1 enc_b=0[0m
+02:42:25.959 [0;32mI (295588) command_server: RX: STATUS[0m
+02:42:26.424 [0;32mI (296034) control_task: pid_telemetry t_ms=291000 state=RUNNING cmd=300 target=300 actual=244 duty=55 error=56 delta=-112 missed=1505 enc_a=1 enc_b=0[0m
+02:42:26.935 [0;32mI (296544) control_task: pid_telemetry t_ms=291500 state=RUNNING cmd=300 target=300 actual=242 duty=56 error=58 delta=-111 missed=1516 enc_a=1 enc_b=0[0m
+02:42:27.091 [0;32mI (296718) command_server: RX: STATUS[0m
+02:42:27.456 [0;32mI (297067) control_task: pid_telemetry t_ms=292000 state=RUNNING cmd=300 target=300 actual=266 duty=56 error=34 delta=-122 missed=1538 enc_a=1 enc_b=1[0m
+02:42:27.966 [0;32mI (297576) control_task: pid_telemetry t_ms=292500 state=RUNNING cmd=300 target=300 actual=290 duty=56 error=10 delta=-133 missed=1548 enc_a=1 enc_b=1[0m
+02:42:28.224 [0;32mI (297852) command_server: RX: STATUS[0m
+02:42:28.490 [0;32mI (298101) control_task: pid_telemetry t_ms=293000 state=RUNNING cmd=300 target=300 actual=307 duty=56 error=-7 delta=-141 missed=1572 enc_a=1 enc_b=1[0m
+02:42:29.000 [0;32mI (298610) control_task: pid_telemetry t_ms=293500 state=RUNNING cmd=300 target=300 actual=298 duty=56 error=2 delta=-137 missed=1582 enc_a=1 enc_b=0[0m
+02:42:29.344 [0;32mI (298971) command_server: RX: STATUS[0m
+02:42:29.522 [0;32mI (299132) control_task: pid_telemetry t_ms=294000 state=RUNNING cmd=300 target=300 actual=309 duty=56 error=-9 delta=-142 missed=1604 enc_a=1 enc_b=1[0m
+02:42:30.033 [0;32mI (299643) control_task: pid_telemetry t_ms=294500 state=RUNNING cmd=300 target=300 actual=277 duty=56 error=23 delta=-127 missed=1615 enc_a=1 enc_b=0[0m
+02:42:30.468 [0;32mI (300095) command_server: RX: STATUS[0m
+02:42:30.555 [0;32mI (300164) control_task: pid_telemetry t_ms=295000 state=RUNNING cmd=300 target=300 actual=303 duty=56 error=-3 delta=-139 missed=1636 enc_a=1 enc_b=1[0m
+02:42:31.067 [0;32mI (300677) control_task: pid_telemetry t_ms=295500 state=RUNNING cmd=300 target=300 actual=292 duty=56 error=8 delta=-134 missed=1649 enc_a=1 enc_b=1[0m
+02:42:31.579 [0;32mI (301188) control_task: pid_telemetry t_ms=296000 state=RUNNING cmd=300 target=300 actual=290 duty=56 error=10 delta=-133 missed=1661 enc_a=0 enc_b=0[0m
+02:42:31.596 [0;32mI (301222) command_server: RX: STATUS[0m
+02:42:32.101 [0;32mI (301711) control_task: pid_telemetry t_ms=296500 state=RUNNING cmd=300 target=300 actual=283 duty=56 error=17 delta=-130 missed=1683 enc_a=1 enc_b=0[0m
+02:42:32.614 [0;32mI (302223) control_task: pid_telemetry t_ms=297000 state=RUNNING cmd=300 target=300 actual=294 duty=56 error=6 delta=-135 missed=1696 enc_a=1 enc_b=1[0m
+02:42:32.718 [0;32mI (302345) command_server: RX: STATUS[0m
+02:42:33.137 [0;32mI (302747) control_task: pid_telemetry t_ms=297500 state=RUNNING cmd=300 target=300 actual=290 duty=56 error=10 delta=-133 missed=1719 enc_a=1 enc_b=0[0m
+02:42:33.647 [0;32mI (303257) control_task: pid_telemetry t_ms=298000 state=RUNNING cmd=300 target=300 actual=298 duty=56 error=2 delta=-137 missed=1728 enc_a=0 enc_b=0[0m
+02:42:33.844 [0;32mI (303471) command_server: RX: STATUS[0m
+02:42:34.169 [0;32mI (303779) control_task: pid_telemetry t_ms=298500 state=RUNNING cmd=300 target=300 actual=298 duty=56 error=2 delta=-137 missed=1751 enc_a=0 enc_b=1[0m
+02:42:34.679 [0;32mI (304288) control_task: pid_telemetry t_ms=299000 state=RUNNING cmd=300 target=300 actual=294 duty=56 error=6 delta=-135 missed=1761 enc_a=0 enc_b=0[0m
+02:42:34.988 [0;32mI (304614) command_server: RX: STATUS[0m
+02:42:35.199 [0;32mI (304808) control_task: pid_telemetry t_ms=299500 state=RUNNING cmd=300 target=300 actual=301 duty=56 error=-1 delta=-138 missed=1781 enc_a=0 enc_b=1[0m
+02:42:35.710 [0;32mI (305319) control_task: pid_telemetry t_ms=300000 state=RUNNING cmd=300 target=300 actual=294 duty=56 error=6 delta=-135 missed=1792 enc_a=1 enc_b=1[0m
+02:42:36.098 [0;32mI (305724) command_server: RX: STATUS[0m
+02:42:36.233 [0;32mI (305842) control_task: pid_telemetry t_ms=300500 state=RUNNING cmd=300 target=300 actual=307 duty=56 error=-7 delta=-141 missed=1815 enc_a=0 enc_b=0[0m
+02:42:36.745 [0;32mI (306353) control_task: pid_telemetry t_ms=301000 state=RUNNING cmd=300 target=300 actual=292 duty=56 error=8 delta=-134 missed=1826 enc_a=1 enc_b=1[0m
+02:42:37.234 [0;32mI (306860) command_server: RX: STATUS[0m
+02:42:37.268 [0;32mI (306871) control_task: pid_telemetry t_ms=301500 state=RUNNING cmd=300 target=300 actual=298 duty=56 error=2 delta=-137 missed=1845 enc_a=0 enc_b=0[0m
+02:42:37.779 [0;32mI (307388) control_task: pid_telemetry t_ms=302000 state=RUNNING cmd=300 target=300 actual=292 duty=56 error=8 delta=-134 missed=1861 enc_a=1 enc_b=0[0m
+02:42:38.289 [0;32mI (307897) control_task: pid_telemetry t_ms=302500 state=RUNNING cmd=300 target=300 actual=292 duty=56 error=8 delta=-134 missed=1871 enc_a=1 enc_b=1[0m
+02:42:38.351 [0;32mI (307976) command_server: RX: STATUS[0m
+02:42:38.811 [0;32mI (308420) control_task: pid_telemetry t_ms=303000 state=RUNNING cmd=300 target=300 actual=294 duty=56 error=6 delta=-135 missed=1893 enc_a=1 enc_b=1[0m
+02:42:39.323 [0;32mI (308930) control_task: pid_telemetry t_ms=303500 state=RUNNING cmd=300 target=300 actual=290 duty=56 error=10 delta=-133 missed=1904 enc_a=1 enc_b=0[0m
+02:42:39.491 [0;32mI (309116) command_server: RX: STATUS[0m
+02:42:39.847 [0;32mI (309455) control_task: pid_telemetry t_ms=304000 state=RUNNING cmd=300 target=300 actual=288 duty=56 error=12 delta=-132 missed=1928 enc_a=1 enc_b=0[0m
+02:42:40.358 [0;32mI (309966) control_task: pid_telemetry t_ms=304500 state=RUNNING cmd=300 target=300 actual=292 duty=56 error=8 delta=-134 missed=1940 enc_a=1 enc_b=1[0m
+02:42:40.605 [0;32mI (310230) command_server: RX: STATUS[0m
+02:42:40.881 [0;32mI (310489) control_task: pid_telemetry t_ms=305000 state=RUNNING cmd=300 target=300 actual=298 duty=56 error=2 delta=-137 missed=1963 enc_a=1 enc_b=0[0m
+02:42:41.391 [0;32mI (310999) control_task: pid_telemetry t_ms=305500 state=RUNNING cmd=300 target=300 actual=288 duty=56 error=12 delta=-132 missed=1973 enc_a=0 enc_b=1[0m
+02:42:41.741 [0;32mI (311366) command_server: RX: STATUS[0m
+02:42:41.763 [0;32mI (311389) command_server: RX: STOP[0m
+02:42:41.769 [0;32mI (311391) control_task: STOP[0m
+02:42:41.921 [0;32mI (311531) control_task: pid_telemetry t_ms=306000 state=ARMED cmd=0 target=0 actual=213 duty=0 error=-213 delta=-98 missed=2005 enc_a=1 enc_b=1[0m
+02:42:42.426 [0;32mI (312037) control_task: pid_telemetry t_ms=306500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2011 enc_a=1 enc_b=0[0m
+02:42:42.932 [0;32mI (312543) control_task: pid_telemetry t_ms=307000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2017 enc_a=1 enc_b=0[0m
+02:42:43.438 [0;32mI (313048) control_task: pid_telemetry t_ms=307500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2023 enc_a=1 enc_b=0[0m
+02:42:43.945 [0;32mI (313554) control_task: pid_telemetry t_ms=308000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2029 enc_a=1 enc_b=0[0m
+02:42:44.451 [0;32mI (314060) control_task: pid_telemetry t_ms=308500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2035 enc_a=1 enc_b=0[0m
+02:42:44.906 [0;32mI (314531) command_server: RX: STATUS[0m
+02:42:44.924 [0;32mI (314548) command_server: RX: DISARM[0m
+02:42:44.928 [0;32mI (314550) control_task: DISARM[0m
+02:42:44.974 [0;32mI (314584) control_task: pid_telemetry t_ms=309000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2058 enc_a=1 enc_b=0[0m
+02:42:45.481 [0;32mI (315090) control_task: pid_telemetry t_ms=309500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2065 enc_a=1 enc_b=0[0m
+02:42:45.988 [0;32mI (315597) control_task: pid_telemetry t_ms=310000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2072 enc_a=1 enc_b=0[0m
+02:42:46.494 [0;32mI (316103) control_task: pid_telemetry t_ms=310500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2078 enc_a=1 enc_b=0[0m
+02:42:47.001 [0;32mI (316610) control_task: pid_telemetry t_ms=311000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2085 enc_a=1 enc_b=0[0m
+02:42:47.507 [0;32mI (317115) control_task: pid_telemetry t_ms=311500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2091 enc_a=1 enc_b=0[0m
+02:42:48.013 [0;32mI (317622) control_task: pid_telemetry t_ms=312000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2097 enc_a=1 enc_b=0[0m
+02:42:48.519 [0;32mI (318128) control_task: pid_telemetry t_ms=312500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2103 enc_a=1 enc_b=0[0m
+02:42:49.025 [0;32mI (318634) control_task: pid_telemetry t_ms=313000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2109 enc_a=1 enc_b=0[0m
+02:42:49.531 [0;32mI (319139) control_task: pid_telemetry t_ms=313500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2115 enc_a=1 enc_b=0[0m
+02:42:50.038 [0;32mI (319646) control_task: pid_telemetry t_ms=314000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2122 enc_a=1 enc_b=0[0m
+02:42:50.546 [0;32mI (320154) control_task: pid_telemetry t_ms=314500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2130 enc_a=1 enc_b=0[0m
+02:42:51.053 [0;32mI (320661) control_task: pid_telemetry t_ms=315000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2137 enc_a=1 enc_b=0[0m
+02:42:51.562 [0;32mI (321166) control_task: pid_telemetry t_ms=315500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2143 enc_a=1 enc_b=0[0m
+02:42:52.069 [0;32mI (321676) control_task: pid_telemetry t_ms=316000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2152 enc_a=1 enc_b=0[0m
+02:42:52.575 [0;32mI (322183) control_task: pid_telemetry t_ms=316500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2159 enc_a=1 enc_b=0[0m
+02:42:53.082 [0;32mI (322690) control_task: pid_telemetry t_ms=317000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2166 enc_a=1 enc_b=0[0m
+02:42:53.589 [0;32mI (323196) control_task: pid_telemetry t_ms=317500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2173 enc_a=1 enc_b=0[0m
+02:42:54.096 [0;32mI (323703) control_task: pid_telemetry t_ms=318000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2180 enc_a=1 enc_b=0[0m
+02:42:54.603 [0;32mI (324210) control_task: pid_telemetry t_ms=318500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2187 enc_a=1 enc_b=0[0m
+02:42:55.110 [0;32mI (324718) control_task: pid_telemetry t_ms=319000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2194 enc_a=1 enc_b=0[0m
+02:42:55.617 [0;32mI (325224) control_task: pid_telemetry t_ms=319500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2201 enc_a=1 enc_b=0[0m
+02:42:56.126 [0;32mI (325733) control_task: pid_telemetry t_ms=320000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2210 enc_a=1 enc_b=0[0m
+02:42:56.633 [0;32mI (326240) control_task: pid_telemetry t_ms=320500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2217 enc_a=1 enc_b=0[0m
+02:42:57.140 [0;32mI (326747) control_task: pid_telemetry t_ms=321000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2224 enc_a=1 enc_b=0[0m
+02:42:57.648 [0;32mI (327255) control_task: pid_telemetry t_ms=321500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2232 enc_a=1 enc_b=0[0m
+02:42:58.154 [0;32mI (327760) control_task: pid_telemetry t_ms=322000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2238 enc_a=1 enc_b=0[0m
+02:42:58.662 [0;32mI (328269) control_task: pid_telemetry t_ms=322500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2246 enc_a=1 enc_b=0[0m
+02:42:59.169 [0;32mI (328776) control_task: pid_telemetry t_ms=323000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2253 enc_a=1 enc_b=0[0m
+02:42:59.677 [0;32mI (329283) control_task: pid_telemetry t_ms=323500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2260 enc_a=1 enc_b=0[0m
+02:43:00.183 [0;32mI (329789) control_task: pid_telemetry t_ms=324000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2267 enc_a=1 enc_b=0[0m
+02:43:00.690 [0;32mI (330296) control_task: pid_telemetry t_ms=324500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2274 enc_a=1 enc_b=0[0m
+02:43:01.198 [0;32mI (330804) control_task: pid_telemetry t_ms=325000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2282 enc_a=1 enc_b=0[0m
+02:43:01.705 [0;32mI (331310) control_task: pid_telemetry t_ms=325500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2288 enc_a=1 enc_b=0[0m
+02:43:02.214 [0;32mI (331818) control_task: pid_telemetry t_ms=326000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2296 enc_a=1 enc_b=0[0m
+02:43:02.721 [0;32mI (332326) control_task: pid_telemetry t_ms=326500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2304 enc_a=1 enc_b=0[0m
+02:43:03.227 [0;32mI (332833) control_task: pid_telemetry t_ms=327000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2311 enc_a=1 enc_b=0[0m
+02:43:03.735 [0;32mI (333339) control_task: pid_telemetry t_ms=327500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2318 enc_a=1 enc_b=0[0m
+02:43:04.241 [0;32mI (333846) control_task: pid_telemetry t_ms=328000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2325 enc_a=1 enc_b=0[0m
+02:43:04.748 [0;32mI (334354) control_task: pid_telemetry t_ms=328500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2332 enc_a=1 enc_b=0[0m
+02:43:05.255 [0;32mI (334861) control_task: pid_telemetry t_ms=329000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2339 enc_a=1 enc_b=0[0m
+02:43:05.762 [0;32mI (335368) control_task: pid_telemetry t_ms=329500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2346 enc_a=1 enc_b=0[0m
+02:43:06.269 [0;32mI (335873) control_task: pid_telemetry t_ms=330000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2352 enc_a=1 enc_b=0[0m
+02:43:06.775 [0;32mI (336379) control_task: pid_telemetry t_ms=330500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2358 enc_a=1 enc_b=0[0m
+02:43:07.282 [0;32mI (336886) control_task: pid_telemetry t_ms=331000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2365 enc_a=1 enc_b=0[0m
+02:43:07.787 [0;32mI (337392) control_task: pid_telemetry t_ms=331500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2371 enc_a=1 enc_b=0[0m
+02:43:08.293 [0;32mI (337897) control_task: pid_telemetry t_ms=332000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2377 enc_a=1 enc_b=0[0m
+02:43:08.799 [0;32mI (338404) control_task: pid_telemetry t_ms=332500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2383 enc_a=1 enc_b=0[0m
+02:43:09.307 [0;32mI (338911) control_task: pid_telemetry t_ms=333000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2390 enc_a=1 enc_b=0[0m
+02:43:09.812 [0;32mI (339417) control_task: pid_telemetry t_ms=333500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2396 enc_a=1 enc_b=0[0m
+02:43:10.320 [0;32mI (339923) control_task: pid_telemetry t_ms=334000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2403 enc_a=1 enc_b=0[0m
+02:43:10.828 [0;32mI (340431) control_task: pid_telemetry t_ms=334500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2411 enc_a=1 enc_b=0[0m
+02:43:11.334 [0;32mI (340938) control_task: pid_telemetry t_ms=335000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2418 enc_a=1 enc_b=0[0m
+02:43:11.844 [0;32mI (341447) control_task: pid_telemetry t_ms=335500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2427 enc_a=1 enc_b=0[0m
+02:43:12.352 [0;32mI (341954) control_task: pid_telemetry t_ms=336000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2434 enc_a=1 enc_b=0[0m
+02:43:12.861 [0;32mI (342462) control_task: pid_telemetry t_ms=336500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2442 enc_a=1 enc_b=0[0m
+02:43:13.368 [0;32mI (342971) control_task: pid_telemetry t_ms=337000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2451 enc_a=1 enc_b=0[0m
+02:43:13.874 [0;32mI (343478) control_task: pid_telemetry t_ms=337500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2458 enc_a=1 enc_b=0[0m
+02:43:14.382 [0;32mI (343984) control_task: pid_telemetry t_ms=338000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2465 enc_a=1 enc_b=0[0m
+02:43:14.887 [0;32mI (344491) control_task: pid_telemetry t_ms=338500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2471 enc_a=1 enc_b=0[0m
+02:43:15.394 [0;32mI (344997) control_task: pid_telemetry t_ms=339000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2477 enc_a=1 enc_b=0[0m
+02:43:15.900 [0;32mI (345503) control_task: pid_telemetry t_ms=339500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2483 enc_a=1 enc_b=0[0m
+02:43:16.405 [0;32mI (346008) control_task: pid_telemetry t_ms=340000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2489 enc_a=1 enc_b=0[0m
+02:43:16.912 [0;32mI (346514) control_task: pid_telemetry t_ms=340500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2495 enc_a=1 enc_b=0[0m
+02:43:17.417 [0;32mI (347020) control_task: pid_telemetry t_ms=341000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2501 enc_a=1 enc_b=0[0m
+02:43:17.925 [0;32mI (347527) control_task: pid_telemetry t_ms=341500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2508 enc_a=1 enc_b=0[0m
+02:43:18.431 [0;32mI (348034) control_task: pid_telemetry t_ms=342000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2515 enc_a=1 enc_b=0[0m
+02:43:18.939 [0;32mI (348541) control_task: pid_telemetry t_ms=342500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2522 enc_a=1 enc_b=0[0m
+02:43:19.446 [0;32mI (349048) control_task: pid_telemetry t_ms=343000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2529 enc_a=1 enc_b=0[0m
+02:43:19.952 [0;32mI (349555) control_task: pid_telemetry t_ms=343500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2536 enc_a=1 enc_b=0[0m
+02:43:20.459 [0;32mI (350062) control_task: pid_telemetry t_ms=344000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2543 enc_a=1 enc_b=0[0m
+02:43:20.967 [0;32mI (350568) control_task: pid_telemetry t_ms=344500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2550 enc_a=1 enc_b=0[0m
+02:43:21.473 [0;32mI (351074) control_task: pid_telemetry t_ms=345000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2556 enc_a=1 enc_b=0[0m
+02:43:21.979 [0;32mI (351581) control_task: pid_telemetry t_ms=345500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2563 enc_a=1 enc_b=0[0m
+02:43:22.488 [0;32mI (352088) control_task: pid_telemetry t_ms=346000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2569 enc_a=1 enc_b=0[0m
+02:43:22.994 [0;32mI (352595) control_task: pid_telemetry t_ms=346500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2577 enc_a=1 enc_b=0[0m
+02:43:23.502 [0;32mI (353103) control_task: pid_telemetry t_ms=347000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2585 enc_a=1 enc_b=0[0m
+02:43:24.010 [0;32mI (353611) control_task: pid_telemetry t_ms=347500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2593 enc_a=1 enc_b=0[0m
+02:43:24.517 [0;32mI (354118) control_task: pid_telemetry t_ms=348000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2600 enc_a=1 enc_b=0[0m
+02:43:25.024 [0;32mI (354624) control_task: pid_telemetry t_ms=348500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2607 enc_a=1 enc_b=0[0m
+02:43:25.531 [0;32mI (355132) control_task: pid_telemetry t_ms=349000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2614 enc_a=1 enc_b=0[0m
+02:43:26.037 [0;32mI (355638) control_task: pid_telemetry t_ms=349500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2620 enc_a=1 enc_b=0[0m
+02:43:26.544 [0;32mI (356145) control_task: pid_telemetry t_ms=350000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2627 enc_a=1 enc_b=0[0m
+02:43:27.052 [0;32mI (356652) control_task: pid_telemetry t_ms=350500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2635 enc_a=1 enc_b=0[0m
+02:43:27.559 [0;32mI (357159) control_task: pid_telemetry t_ms=351000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2642 enc_a=1 enc_b=0[0m
+02:43:28.066 [0;32mI (357666) control_task: pid_telemetry t_ms=351500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2649 enc_a=1 enc_b=0[0m
+02:43:28.573 [0;32mI (358173) control_task: pid_telemetry t_ms=352000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2656 enc_a=1 enc_b=0[0m
+02:43:29.080 [0;32mI (358680) control_task: pid_telemetry t_ms=352500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2663 enc_a=1 enc_b=0[0m
+02:43:29.589 [0;32mI (359188) control_task: pid_telemetry t_ms=353000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2671 enc_a=1 enc_b=0[0m
+02:43:30.094 [0;32mI (359694) control_task: pid_telemetry t_ms=353500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2677 enc_a=1 enc_b=0[0m
+02:43:30.600 [0;32mI (360200) control_task: pid_telemetry t_ms=354000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2683 enc_a=1 enc_b=0[0m
+02:43:31.109 [0;32mI (360708) control_task: pid_telemetry t_ms=354500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2692 enc_a=1 enc_b=0[0m
+02:43:31.616 [0;32mI (361215) control_task: pid_telemetry t_ms=355000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2699 enc_a=1 enc_b=0[0m
+02:43:32.123 [0;32mI (361722) control_task: pid_telemetry t_ms=355500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2706 enc_a=1 enc_b=0[0m
+02:43:32.630 [0;32mI (362230) control_task: pid_telemetry t_ms=356000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2713 enc_a=1 enc_b=0[0m
+02:43:33.137 [0;32mI (362736) control_task: pid_telemetry t_ms=356500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2719 enc_a=1 enc_b=0[0m
+02:43:33.645 [0;32mI (363243) control_task: pid_telemetry t_ms=357000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2727 enc_a=1 enc_b=0[0m
+02:43:34.151 [0;32mI (363750) control_task: pid_telemetry t_ms=357500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2734 enc_a=1 enc_b=0[0m
+02:43:34.658 [0;32mI (364257) control_task: pid_telemetry t_ms=358000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2741 enc_a=1 enc_b=0[0m
+02:43:35.165 [0;32mI (364764) control_task: pid_telemetry t_ms=358500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2748 enc_a=1 enc_b=0[0m
+02:43:35.671 [0;32mI (365269) control_task: pid_telemetry t_ms=359000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2754 enc_a=1 enc_b=0[0m
+02:43:36.178 [0;32mI (365777) control_task: pid_telemetry t_ms=359500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2761 enc_a=1 enc_b=0[0m
+02:43:36.686 [0;32mI (366284) control_task: pid_telemetry t_ms=360000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2768 enc_a=1 enc_b=0[0m
+02:43:37.192 [0;32mI (366791) control_task: pid_telemetry t_ms=360500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2775 enc_a=1 enc_b=0[0m
+02:43:37.699 [0;32mI (367297) control_task: pid_telemetry t_ms=361000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2782 enc_a=1 enc_b=0[0m
+02:43:38.206 [0;32mI (367804) control_task: pid_telemetry t_ms=361500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2789 enc_a=1 enc_b=0[0m
+02:43:38.713 [0;32mI (368312) control_task: pid_telemetry t_ms=362000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2796 enc_a=1 enc_b=0[0m
+02:43:39.220 [0;32mI (368818) control_task: pid_telemetry t_ms=362500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2803 enc_a=1 enc_b=0[0m
+02:43:39.727 [0;32mI (369325) control_task: pid_telemetry t_ms=363000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2810 enc_a=1 enc_b=0[0m
+02:43:40.234 [0;32mI (369832) control_task: pid_telemetry t_ms=363500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2817 enc_a=1 enc_b=0[0m
+02:43:40.741 [0;32mI (370339) control_task: pid_telemetry t_ms=364000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2824 enc_a=1 enc_b=0[0m
+02:43:41.248 [0;32mI (370846) control_task: pid_telemetry t_ms=364500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2831 enc_a=1 enc_b=0[0m
+02:43:41.756 [0;32mI (371353) control_task: pid_telemetry t_ms=365000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2839 enc_a=1 enc_b=0[0m
+02:43:42.263 [0;32mI (371861) control_task: pid_telemetry t_ms=365500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2846 enc_a=1 enc_b=0[0m
+02:43:42.770 [0;32mI (372368) control_task: pid_telemetry t_ms=366000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2853 enc_a=1 enc_b=0[0m
+02:43:43.277 [0;32mI (372874) control_task: pid_telemetry t_ms=366500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2859 enc_a=1 enc_b=0[0m
+02:43:43.786 [0;32mI (373380) control_task: pid_telemetry t_ms=367000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2866 enc_a=1 enc_b=0[0m
+02:43:44.295 [0;32mI (373891) control_task: pid_telemetry t_ms=367500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2877 enc_a=1 enc_b=0[0m
+02:43:44.803 [0;32mI (374399) control_task: pid_telemetry t_ms=368000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2885 enc_a=1 enc_b=0[0m
+02:43:45.309 [0;32mI (374906) control_task: pid_telemetry t_ms=368500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2892 enc_a=1 enc_b=0[0m
+02:43:45.816 [0;32mI (375413) control_task: pid_telemetry t_ms=369000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2899 enc_a=1 enc_b=0[0m
+02:43:46.323 [0;32mI (375920) control_task: pid_telemetry t_ms=369500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2906 enc_a=1 enc_b=0[0m
+02:43:46.832 [0;32mI (376428) control_task: pid_telemetry t_ms=370000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2914 enc_a=1 enc_b=0[0m
+02:43:47.339 [0;32mI (376935) control_task: pid_telemetry t_ms=370500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2922 enc_a=1 enc_b=0[0m
+02:43:47.847 [0;32mI (377442) control_task: pid_telemetry t_ms=371000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2929 enc_a=1 enc_b=0[0m
+02:43:48.352 [0;32mI (377948) control_task: pid_telemetry t_ms=371500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2935 enc_a=1 enc_b=0[0m
+02:43:48.858 [0;32mI (378455) control_task: pid_telemetry t_ms=372000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2941 enc_a=1 enc_b=0[0m
+02:43:49.364 [0;32mI (378960) control_task: pid_telemetry t_ms=372500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2947 enc_a=1 enc_b=0[0m
+02:43:49.871 [0;32mI (379466) control_task: pid_telemetry t_ms=373000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2953 enc_a=1 enc_b=0[0m
+02:43:50.377 [0;32mI (379973) control_task: pid_telemetry t_ms=373500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2960 enc_a=1 enc_b=0[0m
+02:43:50.885 [0;32mI (380480) control_task: pid_telemetry t_ms=374000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2967 enc_a=1 enc_b=0[0m
+02:43:51.391 [0;32mI (380987) control_task: pid_telemetry t_ms=374500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2974 enc_a=1 enc_b=0[0m
+02:43:51.898 [0;32mI (381492) control_task: pid_telemetry t_ms=375000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2980 enc_a=1 enc_b=0[0m
+02:43:52.404 [0;32mI (382000) control_task: pid_telemetry t_ms=375500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2987 enc_a=1 enc_b=0[0m
+02:43:52.912 [0;32mI (382507) control_task: pid_telemetry t_ms=376000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=2994 enc_a=1 enc_b=0[0m
+02:43:53.418 [0;32mI (383014) control_task: pid_telemetry t_ms=376500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3001 enc_a=1 enc_b=0[0m
+02:43:53.927 [0;32mI (383521) control_task: pid_telemetry t_ms=377000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3008 enc_a=1 enc_b=0[0m
+02:43:54.435 [0;32mI (384027) control_task: pid_telemetry t_ms=377500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3015 enc_a=1 enc_b=0[0m
+02:43:54.941 [0;32mI (384536) control_task: pid_telemetry t_ms=378000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3024 enc_a=1 enc_b=0[0m
+02:43:55.449 [0;32mI (385043) control_task: pid_telemetry t_ms=378500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3031 enc_a=1 enc_b=0[0m
+02:43:55.955 [0;32mI (385549) control_task: pid_telemetry t_ms=379000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3037 enc_a=1 enc_b=0[0m
+02:43:56.463 [0;32mI (386058) control_task: pid_telemetry t_ms=379500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3046 enc_a=1 enc_b=0[0m
+02:43:56.970 [0;32mI (386565) control_task: pid_telemetry t_ms=380000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3053 enc_a=1 enc_b=0[0m
+02:43:57.477 [0;32mI (387071) control_task: pid_telemetry t_ms=380500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3059 enc_a=1 enc_b=0[0m
+02:43:57.984 [0;32mI (387578) control_task: pid_telemetry t_ms=381000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3066 enc_a=1 enc_b=0[0m
+02:43:58.490 [0;32mI (388084) control_task: pid_telemetry t_ms=381500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3073 enc_a=1 enc_b=0[0m
+02:43:58.998 [0;32mI (388591) control_task: pid_telemetry t_ms=382000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3080 enc_a=1 enc_b=0[0m
+02:43:59.505 [0;32mI (389100) control_task: pid_telemetry t_ms=382500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3088 enc_a=1 enc_b=0[0m
+02:44:00.013 [0;32mI (389606) control_task: pid_telemetry t_ms=383000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3095 enc_a=1 enc_b=0[0m
+02:44:00.520 [0;32mI (390113) control_task: pid_telemetry t_ms=383500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3102 enc_a=1 enc_b=0[0m
+02:44:01.027 [0;32mI (390620) control_task: pid_telemetry t_ms=384000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3109 enc_a=1 enc_b=0[0m
+02:44:01.532 [0;32mI (391126) control_task: pid_telemetry t_ms=384500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3115 enc_a=1 enc_b=0[0m
+02:44:02.039 [0;32mI (391633) control_task: pid_telemetry t_ms=385000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3122 enc_a=1 enc_b=0[0m
+02:44:02.546 [0;32mI (392139) control_task: pid_telemetry t_ms=385500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3128 enc_a=1 enc_b=0[0m
+02:44:03.052 [0;32mI (392645) control_task: pid_telemetry t_ms=386000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3134 enc_a=1 enc_b=0[0m
+02:44:03.558 [0;32mI (393151) control_task: pid_telemetry t_ms=386500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3140 enc_a=1 enc_b=0[0m
+02:44:04.064 [0;32mI (393657) control_task: pid_telemetry t_ms=387000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3146 enc_a=1 enc_b=0[0m
+02:44:04.571 [0;32mI (394162) control_task: pid_telemetry t_ms=387500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3152 enc_a=1 enc_b=0[0m
+02:44:05.077 [0;32mI (394669) control_task: pid_telemetry t_ms=388000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3159 enc_a=1 enc_b=0[0m
+02:44:05.584 [0;32mI (395177) control_task: pid_telemetry t_ms=388500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3166 enc_a=1 enc_b=0[0m
+02:44:06.091 [0;32mI (395683) control_task: pid_telemetry t_ms=389000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3173 enc_a=1 enc_b=0[0m
+02:44:06.598 [0;32mI (396190) control_task: pid_telemetry t_ms=389500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3180 enc_a=1 enc_b=0[0m
+02:44:07.105 [0;32mI (396697) control_task: pid_telemetry t_ms=390000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3187 enc_a=1 enc_b=0[0m
+02:44:07.612 [0;32mI (397204) control_task: pid_telemetry t_ms=390500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3194 enc_a=1 enc_b=0[0m
+02:44:08.119 [0;32mI (397710) control_task: pid_telemetry t_ms=391000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3201 enc_a=1 enc_b=0[0m
+02:44:08.625 [0;32mI (398216) control_task: pid_telemetry t_ms=391500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3207 enc_a=1 enc_b=0[0m
+02:44:09.132 [0;32mI (398724) control_task: pid_telemetry t_ms=392000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3214 enc_a=1 enc_b=0[0m
+02:44:09.639 [0;32mI (399231) control_task: pid_telemetry t_ms=392500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3221 enc_a=1 enc_b=0[0m
+02:44:10.146 [0;32mI (399737) control_task: pid_telemetry t_ms=393000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3228 enc_a=1 enc_b=0[0m
+02:44:10.653 [0;32mI (400244) control_task: pid_telemetry t_ms=393500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3235 enc_a=1 enc_b=0[0m
+02:44:11.159 [0;32mI (400750) control_task: pid_telemetry t_ms=394000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3241 enc_a=1 enc_b=0[0m
+02:44:11.666 [0;32mI (401257) control_task: pid_telemetry t_ms=394500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3248 enc_a=1 enc_b=0[0m
+02:44:12.174 [0;32mI (401764) control_task: pid_telemetry t_ms=395000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3255 enc_a=1 enc_b=0[0m
+02:44:12.680 [0;32mI (402271) control_task: pid_telemetry t_ms=395500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3262 enc_a=1 enc_b=0[0m
+02:44:13.188 [0;32mI (402779) control_task: pid_telemetry t_ms=396000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3270 enc_a=1 enc_b=0[0m
+02:44:13.695 [0;32mI (403286) control_task: pid_telemetry t_ms=396500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3277 enc_a=1 enc_b=0[0m
+02:44:14.202 [0;32mI (403793) control_task: pid_telemetry t_ms=397000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3284 enc_a=1 enc_b=0[0m
+02:44:14.712 [0;32mI (404299) control_task: pid_telemetry t_ms=397500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3291 enc_a=1 enc_b=0[0m
+02:44:15.218 [0;32mI (404808) control_task: pid_telemetry t_ms=398000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3300 enc_a=1 enc_b=0[0m
+02:44:15.726 [0;32mI (405316) control_task: pid_telemetry t_ms=398500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3308 enc_a=1 enc_b=0[0m
+02:44:16.232 [0;32mI (405823) control_task: pid_telemetry t_ms=399000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3314 enc_a=1 enc_b=0[0m
+02:44:16.738 [0;32mI (406328) control_task: pid_telemetry t_ms=399500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3320 enc_a=1 enc_b=0[0m
+02:44:17.244 [0;32mI (406834) control_task: pid_telemetry t_ms=400000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3326 enc_a=1 enc_b=0[0m
+02:44:17.750 [0;32mI (407340) control_task: pid_telemetry t_ms=400500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3332 enc_a=1 enc_b=0[0m
+02:44:18.257 [0;32mI (407847) control_task: pid_telemetry t_ms=401000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3339 enc_a=1 enc_b=0[0m
+02:44:18.764 [0;32mI (408353) control_task: pid_telemetry t_ms=401500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3346 enc_a=1 enc_b=0[0m
+02:44:19.272 [0;32mI (408861) control_task: pid_telemetry t_ms=402000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3353 enc_a=1 enc_b=0[0m
+02:44:19.778 [0;32mI (409368) control_task: pid_telemetry t_ms=402500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3360 enc_a=1 enc_b=0[0m
+02:44:20.286 [0;32mI (409875) control_task: pid_telemetry t_ms=403000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3367 enc_a=1 enc_b=0[0m
+02:44:20.792 [0;32mI (410381) control_task: pid_telemetry t_ms=403500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3374 enc_a=1 enc_b=0[0m
+02:44:21.300 [0;32mI (410889) control_task: pid_telemetry t_ms=404000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3382 enc_a=1 enc_b=0[0m
+02:44:21.806 [0;32mI (411395) control_task: pid_telemetry t_ms=404500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3388 enc_a=1 enc_b=0[0m
+02:44:22.314 [0;32mI (411903) control_task: pid_telemetry t_ms=405000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3396 enc_a=1 enc_b=0[0m
+02:44:22.821 [0;32mI (412410) control_task: pid_telemetry t_ms=405500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3403 enc_a=1 enc_b=0[0m
+02:44:23.327 [0;32mI (412916) control_task: pid_telemetry t_ms=406000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3409 enc_a=1 enc_b=0[0m
+02:44:23.834 [0;32mI (413423) control_task: pid_telemetry t_ms=406500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3416 enc_a=1 enc_b=0[0m
+02:44:24.341 [0;32mI (413929) control_task: pid_telemetry t_ms=407000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3422 enc_a=1 enc_b=0[0m
+02:44:24.850 [0;32mI (414436) control_task: pid_telemetry t_ms=407500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3429 enc_a=1 enc_b=0[0m
+02:44:25.357 [0;32mI (414944) control_task: pid_telemetry t_ms=408000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3438 enc_a=1 enc_b=0[0m
+02:44:25.865 [0;32mI (415452) control_task: pid_telemetry t_ms=408500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3446 enc_a=1 enc_b=0[0m
+02:44:26.372 [0;32mI (415961) control_task: pid_telemetry t_ms=409000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3454 enc_a=1 enc_b=0[0m
+02:44:26.879 [0;32mI (416468) control_task: pid_telemetry t_ms=409500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3461 enc_a=1 enc_b=0[0m
+02:44:27.386 [0;32mI (416974) control_task: pid_telemetry t_ms=410000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3468 enc_a=1 enc_b=0[0m
+02:44:27.893 [0;32mI (417481) control_task: pid_telemetry t_ms=410500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3475 enc_a=1 enc_b=0[0m
+02:44:28.400 [0;32mI (417988) control_task: pid_telemetry t_ms=411000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3482 enc_a=1 enc_b=0[0m
+02:44:28.908 [0;32mI (418495) control_task: pid_telemetry t_ms=411500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3489 enc_a=1 enc_b=0[0m
+02:44:29.414 [0;32mI (419001) control_task: pid_telemetry t_ms=412000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3496 enc_a=1 enc_b=0[0m
+02:44:29.922 [0;32mI (419509) control_task: pid_telemetry t_ms=412500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3503 enc_a=1 enc_b=0[0m
+02:44:30.429 [0;32mI (420017) control_task: pid_telemetry t_ms=413000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3511 enc_a=1 enc_b=0[0m
+02:44:30.936 [0;32mI (420524) control_task: pid_telemetry t_ms=413500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3518 enc_a=1 enc_b=0[0m
+02:44:31.443 [0;32mI (421030) control_task: pid_telemetry t_ms=414000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3525 enc_a=1 enc_b=0[0m
+02:44:31.950 [0;32mI (421536) control_task: pid_telemetry t_ms=414500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3531 enc_a=1 enc_b=0[0m
+02:44:32.457 [0;32mI (422044) control_task: pid_telemetry t_ms=415000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3539 enc_a=1 enc_b=0[0m
+02:44:32.964 [0;32mI (422551) control_task: pid_telemetry t_ms=415500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3546 enc_a=1 enc_b=0[0m
+02:44:33.470 [0;32mI (423057) control_task: pid_telemetry t_ms=416000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3552 enc_a=1 enc_b=0[0m
+02:44:33.979 [0;32mI (423565) control_task: pid_telemetry t_ms=416500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3560 enc_a=1 enc_b=0[0m
+02:44:34.485 [0;32mI (424072) control_task: pid_telemetry t_ms=417000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3567 enc_a=1 enc_b=0[0m
+02:44:34.992 [0;32mI (424579) control_task: pid_telemetry t_ms=417500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3574 enc_a=1 enc_b=0[0m
+02:44:35.500 [0;32mI (425085) control_task: pid_telemetry t_ms=418000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3580 enc_a=1 enc_b=0[0m
+02:44:36.007 [0;32mI (425592) control_task: pid_telemetry t_ms=418500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3588 enc_a=1 enc_b=0[0m
+02:44:36.513 [0;32mI (426100) control_task: pid_telemetry t_ms=419000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3595 enc_a=1 enc_b=0[0m
+02:44:37.019 [0;32mI (426606) control_task: pid_telemetry t_ms=419500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3601 enc_a=1 enc_b=0[0m
+02:44:37.526 [0;32mI (427112) control_task: pid_telemetry t_ms=420000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3608 enc_a=1 enc_b=0[0m
+02:44:38.034 [0;32mI (427619) control_task: pid_telemetry t_ms=420500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3615 enc_a=1 enc_b=0[0m
+02:44:38.541 [0;32mI (428126) control_task: pid_telemetry t_ms=421000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3622 enc_a=1 enc_b=0[0m
+02:44:39.048 [0;32mI (428633) control_task: pid_telemetry t_ms=421500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3629 enc_a=1 enc_b=0[0m
+02:44:39.555 [0;32mI (429139) control_task: pid_telemetry t_ms=422000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3636 enc_a=1 enc_b=0[0m
+02:44:40.063 [0;32mI (429648) control_task: pid_telemetry t_ms=422500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3644 enc_a=1 enc_b=0[0m
+02:44:40.569 [0;32mI (430155) control_task: pid_telemetry t_ms=423000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3651 enc_a=1 enc_b=0[0m
+02:44:41.077 [0;32mI (430663) control_task: pid_telemetry t_ms=423500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3659 enc_a=1 enc_b=0[0m
+02:44:41.585 [0;32mI (431169) control_task: pid_telemetry t_ms=424000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3666 enc_a=1 enc_b=0[0m
+02:44:42.091 [0;32mI (431675) control_task: pid_telemetry t_ms=424500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3672 enc_a=1 enc_b=0[0m
+02:44:42.597 [0;32mI (432182) control_task: pid_telemetry t_ms=425000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3679 enc_a=1 enc_b=0[0m
+02:44:43.104 [0;32mI (432690) control_task: pid_telemetry t_ms=425500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3686 enc_a=1 enc_b=0[0m
+02:44:43.610 [0;32mI (433195) control_task: pid_telemetry t_ms=426000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3692 enc_a=1 enc_b=0[0m
+02:44:44.117 [0;32mI (433701) control_task: pid_telemetry t_ms=426500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3698 enc_a=1 enc_b=0[0m
+02:44:44.623 [0;32mI (434207) control_task: pid_telemetry t_ms=427000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3704 enc_a=1 enc_b=0[0m
+02:44:45.129 [0;32mI (434713) control_task: pid_telemetry t_ms=427500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3710 enc_a=1 enc_b=0[0m
+02:44:45.636 [0;32mI (435219) control_task: pid_telemetry t_ms=428000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3716 enc_a=1 enc_b=0[0m
+02:44:46.144 [0;32mI (435727) control_task: pid_telemetry t_ms=428500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3724 enc_a=1 enc_b=0[0m
+02:44:46.650 [0;32mI (436235) control_task: pid_telemetry t_ms=429000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3732 enc_a=1 enc_b=0[0m
+02:44:47.157 [0;32mI (436741) control_task: pid_telemetry t_ms=429500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3738 enc_a=1 enc_b=0[0m
+02:44:47.664 [0;32mI (437247) control_task: pid_telemetry t_ms=430000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3745 enc_a=1 enc_b=0[0m
+02:44:48.171 [0;32mI (437754) control_task: pid_telemetry t_ms=430500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3752 enc_a=1 enc_b=0[0m
+02:44:48.677 [0;32mI (438261) control_task: pid_telemetry t_ms=431000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3759 enc_a=1 enc_b=0[0m
+02:44:49.185 [0;32mI (438768) control_task: pid_telemetry t_ms=431500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3766 enc_a=1 enc_b=0[0m
+02:44:49.692 [0;32mI (439275) control_task: pid_telemetry t_ms=432000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3773 enc_a=1 enc_b=0[0m
+02:44:50.199 [0;32mI (439782) control_task: pid_telemetry t_ms=432500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3780 enc_a=1 enc_b=0[0m
+02:44:50.707 [0;32mI (440290) control_task: pid_telemetry t_ms=433000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3788 enc_a=1 enc_b=0[0m
+02:44:51.215 [0;32mI (440798) control_task: pid_telemetry t_ms=433500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3796 enc_a=1 enc_b=0[0m
+02:44:51.722 [0;32mI (441305) control_task: pid_telemetry t_ms=434000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3803 enc_a=1 enc_b=0[0m
+02:44:52.228 [0;32mI (441810) control_task: pid_telemetry t_ms=434500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3809 enc_a=1 enc_b=0[0m
+02:44:52.735 [0;32mI (442317) control_task: pid_telemetry t_ms=435000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3816 enc_a=1 enc_b=0[0m
+02:44:53.242 [0;32mI (442825) control_task: pid_telemetry t_ms=435500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3823 enc_a=1 enc_b=0[0m
+02:44:53.749 [0;32mI (443332) control_task: pid_telemetry t_ms=436000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3830 enc_a=1 enc_b=0[0m
+02:44:54.257 [0;32mI (443838) control_task: pid_telemetry t_ms=436500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3837 enc_a=1 enc_b=0[0m
+02:44:54.763 [0;32mI (444345) control_task: pid_telemetry t_ms=437000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3844 enc_a=1 enc_b=0[0m
+02:44:55.270 [0;32mI (444852) control_task: pid_telemetry t_ms=437500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3851 enc_a=1 enc_b=0[0m
+02:44:55.776 [0;32mI (445358) control_task: pid_telemetry t_ms=438000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3857 enc_a=1 enc_b=0[0m
+02:44:56.286 [0;32mI (445865) control_task: pid_telemetry t_ms=438500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3864 enc_a=1 enc_b=0[0m
+02:44:56.793 [0;32mI (446374) control_task: pid_telemetry t_ms=439000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3873 enc_a=1 enc_b=0[0m
+02:44:57.300 [0;32mI (446882) control_task: pid_telemetry t_ms=439500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3881 enc_a=1 enc_b=0[0m
+02:44:57.807 [0;32mI (447388) control_task: pid_telemetry t_ms=440000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3888 enc_a=1 enc_b=0[0m
+02:44:58.314 [0;32mI (447895) control_task: pid_telemetry t_ms=440500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3895 enc_a=1 enc_b=0[0m
+02:44:58.820 [0;32mI (448401) control_task: pid_telemetry t_ms=441000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3901 enc_a=1 enc_b=0[0m
+02:44:59.326 [0;32mI (448907) control_task: pid_telemetry t_ms=441500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3907 enc_a=1 enc_b=0[0m
+02:44:59.833 [0;32mI (449415) control_task: pid_telemetry t_ms=442000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3914 enc_a=1 enc_b=0[0m
+02:45:00.341 [0;32mI (449921) control_task: pid_telemetry t_ms=442500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3921 enc_a=1 enc_b=0[0m
+02:45:00.847 [0;32mI (450428) control_task: pid_telemetry t_ms=443000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3928 enc_a=1 enc_b=0[0m
+02:45:01.355 [0;32mI (450936) control_task: pid_telemetry t_ms=443500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3936 enc_a=1 enc_b=0[0m
+02:45:01.862 [0;32mI (451443) control_task: pid_telemetry t_ms=444000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3943 enc_a=1 enc_b=0[0m
+02:45:02.370 [0;32mI (451950) control_task: pid_telemetry t_ms=444500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3951 enc_a=1 enc_b=0[0m
+02:45:02.878 [0;32mI (452457) control_task: pid_telemetry t_ms=445000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3958 enc_a=1 enc_b=0[0m
+02:45:03.384 [0;32mI (452965) control_task: pid_telemetry t_ms=445500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3965 enc_a=1 enc_b=0[0m
+02:45:03.890 [0;32mI (453471) control_task: pid_telemetry t_ms=446000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3971 enc_a=1 enc_b=0[0m
+02:45:04.397 [0;32mI (453977) control_task: pid_telemetry t_ms=446500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3978 enc_a=1 enc_b=0[0m
+02:45:04.903 [0;32mI (454483) control_task: pid_telemetry t_ms=447000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3984 enc_a=1 enc_b=0[0m
+02:45:05.410 [0;32mI (454989) control_task: pid_telemetry t_ms=447500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3990 enc_a=1 enc_b=0[0m
+02:45:05.915 [0;32mI (455495) control_task: pid_telemetry t_ms=448000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=3996 enc_a=1 enc_b=0[0m
+02:45:06.424 [0;32mI (456001) control_task: pid_telemetry t_ms=448500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4002 enc_a=1 enc_b=0[0m
+02:45:06.932 [0;32mI (456510) control_task: pid_telemetry t_ms=449000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4012 enc_a=1 enc_b=0[0m
+02:45:07.440 [0;32mI (457019) control_task: pid_telemetry t_ms=449500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4020 enc_a=1 enc_b=0[0m
+02:45:07.947 [0;32mI (457527) control_task: pid_telemetry t_ms=450000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4028 enc_a=1 enc_b=0[0m
+02:45:08.456 [0;32mI (458035) control_task: pid_telemetry t_ms=450500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4036 enc_a=1 enc_b=0[0m
+02:45:08.962 [0;32mI (458541) control_task: pid_telemetry t_ms=451000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4043 enc_a=1 enc_b=0[0m
+02:45:09.470 [0;32mI (459048) control_task: pid_telemetry t_ms=451500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4050 enc_a=1 enc_b=0[0m
+02:45:09.977 [0;32mI (459556) control_task: pid_telemetry t_ms=452000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4057 enc_a=1 enc_b=0[0m
+02:45:10.483 [0;32mI (460062) control_task: pid_telemetry t_ms=452500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4063 enc_a=1 enc_b=0[0m
+02:45:10.989 [0;32mI (460567) control_task: pid_telemetry t_ms=453000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4069 enc_a=1 enc_b=0[0m
+02:45:11.495 [0;32mI (461073) control_task: pid_telemetry t_ms=453500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4075 enc_a=1 enc_b=0[0m
+02:45:12.000 [0;32mI (461579) control_task: pid_telemetry t_ms=454000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4081 enc_a=1 enc_b=0[0m
+02:45:12.506 [0;32mI (462085) control_task: pid_telemetry t_ms=454500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4087 enc_a=1 enc_b=0[0m
+02:45:13.013 [0;32mI (462591) control_task: pid_telemetry t_ms=455000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4094 enc_a=1 enc_b=0[0m
+02:45:13.520 [0;32mI (463098) control_task: pid_telemetry t_ms=455500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4101 enc_a=1 enc_b=0[0m
+02:45:14.027 [0;32mI (463606) control_task: pid_telemetry t_ms=456000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4108 enc_a=1 enc_b=0[0m
+02:45:14.534 [0;32mI (464112) control_task: pid_telemetry t_ms=456500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4114 enc_a=1 enc_b=0[0m
+02:45:15.041 [0;32mI (464619) control_task: pid_telemetry t_ms=457000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4122 enc_a=1 enc_b=0[0m
+02:45:15.549 [0;32mI (465126) control_task: pid_telemetry t_ms=457500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4129 enc_a=1 enc_b=0[0m
+02:45:16.055 [0;32mI (465632) control_task: pid_telemetry t_ms=458000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4135 enc_a=1 enc_b=0[0m
+02:45:16.565 [0;32mI (466140) control_task: pid_telemetry t_ms=458500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4142 enc_a=1 enc_b=0[0m
+02:45:17.073 [0;32mI (466648) control_task: pid_telemetry t_ms=459000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4152 enc_a=1 enc_b=0[0m
+02:45:17.581 [0;32mI (467157) control_task: pid_telemetry t_ms=459500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4160 enc_a=1 enc_b=0[0m
+02:45:18.088 [0;32mI (467665) control_task: pid_telemetry t_ms=460000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4168 enc_a=1 enc_b=0[0m
+02:45:18.594 [0;32mI (468172) control_task: pid_telemetry t_ms=460500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4175 enc_a=1 enc_b=0[0m
+02:45:19.100 [0;32mI (468677) control_task: pid_telemetry t_ms=461000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4181 enc_a=1 enc_b=0[0m
+02:45:19.606 [0;32mI (469183) control_task: pid_telemetry t_ms=461500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4187 enc_a=1 enc_b=0[0m
+02:45:20.113 [0;32mI (469690) control_task: pid_telemetry t_ms=462000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4193 enc_a=1 enc_b=0[0m
+02:45:20.620 [0;32mI (470197) control_task: pid_telemetry t_ms=462500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4200 enc_a=1 enc_b=0[0m
+02:45:21.125 [0;32mI (470702) control_task: pid_telemetry t_ms=463000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4206 enc_a=1 enc_b=0[0m
+02:45:21.632 [0;32mI (471209) control_task: pid_telemetry t_ms=463500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4213 enc_a=1 enc_b=0[0m
+02:45:22.140 [0;32mI (471717) control_task: pid_telemetry t_ms=464000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4221 enc_a=1 enc_b=0[0m
+02:45:22.647 [0;32mI (472224) control_task: pid_telemetry t_ms=464500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4228 enc_a=1 enc_b=0[0m
+02:45:23.154 [0;32mI (472729) control_task: pid_telemetry t_ms=465000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4234 enc_a=1 enc_b=0[0m
+02:45:23.661 [0;32mI (473237) control_task: pid_telemetry t_ms=465500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4241 enc_a=1 enc_b=0[0m
+02:45:24.167 [0;32mI (473743) control_task: pid_telemetry t_ms=466000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4247 enc_a=1 enc_b=0[0m
+02:45:24.673 [0;32mI (474250) control_task: pid_telemetry t_ms=466500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4254 enc_a=1 enc_b=0[0m
+02:45:25.181 [0;32mI (474756) control_task: pid_telemetry t_ms=467000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4261 enc_a=1 enc_b=0[0m
+02:45:25.687 [0;32mI (475263) control_task: pid_telemetry t_ms=467500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4268 enc_a=1 enc_b=0[0m
+02:45:26.195 [0;32mI (475770) control_task: pid_telemetry t_ms=468000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4275 enc_a=1 enc_b=0[0m
+02:45:26.703 [0;32mI (476278) control_task: pid_telemetry t_ms=468500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4283 enc_a=1 enc_b=0[0m
+02:45:27.211 [0;32mI (476785) control_task: pid_telemetry t_ms=469000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4290 enc_a=1 enc_b=0[0m
+02:45:27.718 [0;32mI (477293) control_task: pid_telemetry t_ms=469500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4298 enc_a=1 enc_b=0[0m
+02:45:28.226 [0;32mI (477801) control_task: pid_telemetry t_ms=470000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4306 enc_a=1 enc_b=0[0m
+02:45:28.733 [0;32mI (478308) control_task: pid_telemetry t_ms=470500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4313 enc_a=1 enc_b=0[0m
+02:45:29.240 [0;32mI (478815) control_task: pid_telemetry t_ms=471000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4320 enc_a=1 enc_b=0[0m
+02:45:29.746 [0;32mI (479321) control_task: pid_telemetry t_ms=471500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4327 enc_a=1 enc_b=0[0m
+02:45:30.254 [0;32mI (479828) control_task: pid_telemetry t_ms=472000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4334 enc_a=1 enc_b=0[0m
+02:45:30.761 [0;32mI (480335) control_task: pid_telemetry t_ms=472500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4341 enc_a=1 enc_b=0[0m
+02:45:31.269 [0;32mI (480844) control_task: pid_telemetry t_ms=473000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4349 enc_a=1 enc_b=0[0m
+02:45:31.776 [0;32mI (481350) control_task: pid_telemetry t_ms=473500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4356 enc_a=1 enc_b=0[0m
+02:45:32.282 [0;32mI (481856) control_task: pid_telemetry t_ms=474000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4362 enc_a=1 enc_b=0[0m
+02:45:32.788 [0;32mI (482362) control_task: pid_telemetry t_ms=474500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4368 enc_a=1 enc_b=0[0m
+02:45:33.295 [0;32mI (482869) control_task: pid_telemetry t_ms=475000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4375 enc_a=1 enc_b=0[0m
+02:45:33.801 [0;32mI (483374) control_task: pid_telemetry t_ms=475500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4381 enc_a=1 enc_b=0[0m
+02:45:34.307 [0;32mI (483880) control_task: pid_telemetry t_ms=476000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4387 enc_a=1 enc_b=0[0m
+02:45:34.814 [0;32mI (484388) control_task: pid_telemetry t_ms=476500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4394 enc_a=1 enc_b=0[0m
+02:45:35.321 [0;32mI (484895) control_task: pid_telemetry t_ms=477000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4401 enc_a=1 enc_b=0[0m
+02:45:35.828 [0;32mI (485401) control_task: pid_telemetry t_ms=477500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4408 enc_a=1 enc_b=0[0m
+02:45:36.335 [0;32mI (485907) control_task: pid_telemetry t_ms=478000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4414 enc_a=1 enc_b=0[0m
+02:45:36.841 [0;32mI (486414) control_task: pid_telemetry t_ms=478500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4421 enc_a=1 enc_b=0[0m
+02:45:37.349 [0;32mI (486921) control_task: pid_telemetry t_ms=479000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4428 enc_a=1 enc_b=0[0m
+02:45:37.857 [0;32mI (487428) control_task: pid_telemetry t_ms=479500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=4436 enc_a=1 enc_b=0[0m
+02:45:37.958 [0;32mI (487545) command_server: RX: ARM[0m
+02:45:37.961 [0;32mI (487547) control_task: ARM[0m
+02:45:38.373 [0;32mI (487945) control_task: pid_telemetry t_ms=480000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=6 enc_a=1 enc_b=0[0m
+02:45:38.878 [0;32mI (488451) control_task: pid_telemetry t_ms=480500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=12 enc_a=1 enc_b=0[0m
+02:45:39.384 [0;32mI (488957) control_task: pid_telemetry t_ms=481000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=18 enc_a=1 enc_b=0[0m
+02:45:39.888 [0;32mI (489462) control_task: pid_telemetry t_ms=481500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=23 enc_a=1 enc_b=0[0m
+02:45:40.005 [0;32mI (489592) command_server: RX: SET_SPEED 300[0m
+02:45:40.011 [0;32mI (489594) control_task: SET_SPEED 300[0m
+02:45:40.406 [0;32mI (489976) control_task: pid_telemetry t_ms=482000 state=RUNNING cmd=300 target=300 actual=669 duty=75 error=-369 delta=-307 missed=37 enc_a=0 enc_b=1[0m
+02:45:40.915 [0;32mI (490485) control_task: pid_telemetry t_ms=482500 state=RUNNING cmd=300 target=300 actual=739 duty=51 error=-439 delta=-339 missed=46 enc_a=1 enc_b=0[0m
+02:45:41.146 [0;32mI (490733) command_server: RX: STATUS[0m
+02:45:41.444 [0;32mI (491012) control_task: pid_telemetry t_ms=483000 state=RUNNING cmd=300 target=300 actual=274 duty=51 error=26 delta=-126 missed=73 enc_a=1 enc_b=0[0m
+02:45:41.957 [0;32mI (491524) control_task: pid_telemetry t_ms=483500 state=RUNNING cmd=300 target=300 actual=189 duty=52 error=111 delta=-87 missed=86 enc_a=0 enc_b=0[0m
+02:45:42.259 [0;32mI (491846) command_server: RX: STATUS[0m
+02:45:42.478 [0;32mI (492049) control_task: pid_telemetry t_ms=484000 state=RUNNING cmd=300 target=300 actual=218 duty=52 error=82 delta=-100 missed=110 enc_a=1 enc_b=1[0m
+02:45:42.988 [0;32mI (492558) control_task: pid_telemetry t_ms=484500 state=RUNNING cmd=300 target=300 actual=213 duty=53 error=87 delta=-98 missed=120 enc_a=1 enc_b=0[0m
+02:45:43.398 [0;32mI (492985) command_server: RX: STATUS[0m
+02:45:43.510 [0;32mI (493080) control_task: pid_telemetry t_ms=485000 state=RUNNING cmd=300 target=300 actual=220 duty=53 error=80 delta=-101 missed=141 enc_a=0 enc_b=1[0m
+02:45:44.019 [0;32mI (493589) control_task: pid_telemetry t_ms=485500 state=RUNNING cmd=300 target=300 actual=207 duty=53 error=93 delta=-95 missed=151 enc_a=0 enc_b=0[0m
+02:45:44.535 [0;32mI (494104) control_task: pid_telemetry t_ms=486000 state=RUNNING cmd=300 target=300 actual=229 duty=54 error=71 delta=-105 missed=166 enc_a=1 enc_b=1[0m
+02:45:44.542 [0;32mI (494121) command_server: RX: STATUS[0m
+02:45:45.054 [0;32mI (494624) control_task: pid_telemetry t_ms=486500 state=RUNNING cmd=300 target=300 actual=250 duty=54 error=50 delta=-115 missed=186 enc_a=1 enc_b=0[0m
+02:45:45.564 [0;32mI (495133) control_task: pid_telemetry t_ms=487000 state=RUNNING cmd=300 target=300 actual=250 duty=54 error=50 delta=-115 missed=195 enc_a=1 enc_b=0[0m
+02:45:45.640 [0;32mI (495227) command_server: RX: STATUS[0m
+02:45:46.085 [0;32mI (495654) control_task: pid_telemetry t_ms=487500 state=RUNNING cmd=300 target=300 actual=246 duty=54 error=54 delta=-113 missed=216 enc_a=0 enc_b=0[0m
+02:45:46.597 [0;32mI (496165) control_task: pid_telemetry t_ms=488000 state=RUNNING cmd=300 target=300 actual=255 duty=54 error=45 delta=-117 missed=228 enc_a=0 enc_b=1[0m
+02:45:46.786 [0;32mI (496373) command_server: RX: STATUS[0m
+02:45:47.117 [0;32mI (496686) control_task: pid_telemetry t_ms=488500 state=RUNNING cmd=300 target=300 actual=248 duty=54 error=52 delta=-114 missed=248 enc_a=1 enc_b=1[0m
+02:45:47.629 [0;32mI (497197) control_task: pid_telemetry t_ms=489000 state=RUNNING cmd=300 target=300 actual=253 duty=54 error=47 delta=-116 missed=260 enc_a=0 enc_b=1[0m
+02:45:47.892 [0;32mI (497478) command_server: RX: STATUS[0m
+02:45:48.151 [0;32mI (497720) control_task: pid_telemetry t_ms=489500 state=RUNNING cmd=300 target=300 actual=257 duty=54 error=43 delta=-118 missed=282 enc_a=0 enc_b=1[0m
+02:45:48.660 [0;32mI (498229) control_task: pid_telemetry t_ms=490000 state=RUNNING cmd=300 target=300 actual=235 duty=55 error=65 delta=-108 missed=292 enc_a=1 enc_b=1[0m
+02:45:49.164 [0;32mI (498746) command_server: RX: STATUS[0m
+02:45:49.182 [0;32mI (498748) control_task: pid_telemetry t_ms=490500 state=RUNNING cmd=300 target=300 actual=248 duty=55 error=52 delta=-114 missed=309 enc_a=1 enc_b=0[0m
+02:45:49.391 [0;32mI (498975) command_server: RX: SET_SPEED 500[0m
+02:45:49.397 [0;32mI (498978) control_task: SET_SPEED 500[0m
+02:45:49.709 [0;32mI (499277) control_task: pid_telemetry t_ms=491000 state=RUNNING cmd=500 target=500 actual=270 duty=61 error=230 delta=-124 missed=340 enc_a=1 enc_b=0[0m
+02:45:50.219 [0;32mI (499786) control_task: pid_telemetry t_ms=491500 state=RUNNING cmd=500 target=500 actual=397 duty=62 error=103 delta=-182 missed=350 enc_a=1 enc_b=1[0m
+02:45:50.473 [0;32mI (500058) command_server: RX: STATUS[0m
+02:45:50.740 [0;32mI (500308) control_task: pid_telemetry t_ms=492000 state=RUNNING cmd=500 target=500 actual=482 duty=62 error=18 delta=-221 missed=371 enc_a=0 enc_b=1[0m
+02:45:51.252 [0;32mI (500820) control_task: pid_telemetry t_ms=492500 state=RUNNING cmd=500 target=500 actual=482 duty=62 error=18 delta=-221 missed=383 enc_a=0 enc_b=0[0m
+02:45:51.578 [0;32mI (501163) command_server: RX: STATUS[0m
+02:45:51.772 [0;32mI (501340) control_task: pid_telemetry t_ms=493000 state=RUNNING cmd=500 target=500 actual=499 duty=62 error=1 delta=-229 missed=403 enc_a=1 enc_b=1[0m
+02:45:52.282 [0;32mI (501849) control_task: pid_telemetry t_ms=493500 state=RUNNING cmd=500 target=500 actual=466 duty=62 error=34 delta=-214 missed=413 enc_a=0 enc_b=1[0m
+02:45:52.722 [0;32mI (502307) command_server: RX: STATUS[0m
+02:45:52.802 [0;32mI (502370) control_task: pid_telemetry t_ms=494000 state=RUNNING cmd=500 target=500 actual=495 duty=62 error=5 delta=-227 missed=433 enc_a=1 enc_b=0[0m
+02:45:53.313 [0;32mI (502880) control_task: pid_telemetry t_ms=494500 state=RUNNING cmd=500 target=500 actual=475 duty=62 error=25 delta=-218 missed=444 enc_a=1 enc_b=1[0m
+02:45:53.825 [0;32mI (503392) control_task: pid_telemetry t_ms=495000 state=RUNNING cmd=500 target=500 actual=477 duty=62 error=23 delta=-219 missed=456 enc_a=0 enc_b=1[0m
+02:45:53.833 [0;32mI (503418) command_server: RX: STATUS[0m
+02:45:54.350 [0;32mI (503915) control_task: pid_telemetry t_ms=495500 state=RUNNING cmd=500 target=500 actual=475 duty=62 error=25 delta=-218 missed=479 enc_a=1 enc_b=0[0m
+02:45:54.861 [0;32mI (504426) control_task: pid_telemetry t_ms=496000 state=RUNNING cmd=500 target=500 actual=480 duty=62 error=20 delta=-220 missed=490 enc_a=0 enc_b=0[0m
+02:45:54.957 [0;32mI (504541) command_server: RX: STATUS[0m
+02:45:55.384 [0;32mI (504950) control_task: pid_telemetry t_ms=496500 state=RUNNING cmd=500 target=500 actual=477 duty=62 error=23 delta=-219 missed=515 enc_a=0 enc_b=0[0m
+02:45:55.893 [0;32mI (505460) control_task: pid_telemetry t_ms=497000 state=RUNNING cmd=500 target=500 actual=473 duty=62 error=27 delta=-217 missed=525 enc_a=0 enc_b=1[0m
+02:45:56.082 [0;32mI (505667) command_server: RX: STATUS[0m
+02:45:56.414 [0;32mI (505981) control_task: pid_telemetry t_ms=497500 state=RUNNING cmd=500 target=500 actual=471 duty=62 error=29 delta=-216 missed=545 enc_a=0 enc_b=0[0m
+02:45:56.926 [0;32mI (506493) control_task: pid_telemetry t_ms=498000 state=RUNNING cmd=500 target=500 actual=462 duty=62 error=38 delta=-212 missed=557 enc_a=1 enc_b=1[0m
+02:45:57.218 [0;32mI (506801) command_server: RX: STATUS[0m
+02:45:57.450 [0;32mI (507016) control_task: pid_telemetry t_ms=498500 state=RUNNING cmd=500 target=500 actual=495 duty=62 error=5 delta=-227 missed=581 enc_a=0 enc_b=1[0m
+02:45:57.961 [0;32mI (507527) control_task: pid_telemetry t_ms=499000 state=RUNNING cmd=500 target=500 actual=475 duty=63 error=25 delta=-218 missed=592 enc_a=0 enc_b=1[0m
+02:45:58.368 [0;32mI (507950) command_server: RX: STATUS[0m
+02:45:58.482 [0;32mI (508048) control_task: pid_telemetry t_ms=499500 state=RUNNING cmd=500 target=500 actual=495 duty=63 error=5 delta=-227 missed=613 enc_a=0 enc_b=0[0m
+02:45:58.992 [0;32mI (508557) control_task: pid_telemetry t_ms=500000 state=RUNNING cmd=500 target=500 actual=473 duty=63 error=27 delta=-217 missed=623 enc_a=1 enc_b=0[0m
+02:45:59.466 [0;32mI (509047) command_server: RX: STATUS[0m
+02:45:59.513 [0;32mI (509079) control_task: pid_telemetry t_ms=500500 state=RUNNING cmd=500 target=500 actual=484 duty=63 error=16 delta=-222 missed=644 enc_a=0 enc_b=1[0m
+02:46:00.025 [0;32mI (509591) control_task: pid_telemetry t_ms=501000 state=RUNNING cmd=500 target=500 actual=477 duty=63 error=23 delta=-219 missed=656 enc_a=1 enc_b=1[0m
+02:46:00.535 [0;32mI (510099) control_task: pid_telemetry t_ms=501500 state=RUNNING cmd=500 target=500 actual=466 duty=63 error=34 delta=-214 missed=665 enc_a=1 enc_b=1[0m
+02:46:00.591 [0;32mI (510174) command_server: RX: STATUS[0m
+02:46:00.615 [0;32mI (510196) command_server: RX: SET_SPEED 1500[0m
+02:46:00.621 [0;32mI (510199) control_task: SET_SPEED 1500[0m
+02:46:01.071 [0;32mI (510636) control_task: pid_telemetry t_ms=502000 state=RUNNING cmd=1500 target=1356 actual=750 duty=88 error=606 delta=-344 missed=702 enc_a=0 enc_b=0[0m
+02:46:01.582 [0;32mI (511148) control_task: pid_telemetry t_ms=502500 state=RUNNING cmd=1500 target=1500 actual=1889 duty=91 error=-389 delta=-866 missed=713 enc_a=1 enc_b=1[0m
+02:46:01.720 [0;32mI (511303) command_server: RX: STATUS[0m
+02:46:02.106 [0;32mI (511670) control_task: pid_telemetry t_ms=503000 state=RUNNING cmd=1500 target=1500 actual=1889 duty=89 error=-389 delta=-866 missed=736 enc_a=1 enc_b=0[0m
+02:46:02.617 [0;32mI (512182) control_task: pid_telemetry t_ms=503500 state=RUNNING cmd=1500 target=1500 actual=1800 duty=88 error=-300 delta=-825 missed=748 enc_a=1 enc_b=1[0m
+02:46:02.846 [0;32mI (512429) command_server: RX: STATUS[0m
+02:46:03.140 [0;32mI (512704) control_task: pid_telemetry t_ms=504000 state=RUNNING cmd=1500 target=1500 actual=1734 duty=86 error=-234 delta=-795 missed=770 enc_a=0 enc_b=0[0m
+02:46:03.651 [0;32mI (513215) control_task: pid_telemetry t_ms=504500 state=RUNNING cmd=1500 target=1500 actual=1640 duty=85 error=-140 delta=-752 missed=781 enc_a=0 enc_b=1[0m
+02:46:03.970 [0;32mI (513553) command_server: RX: STATUS[0m
+02:46:04.178 [0;32mI (513740) control_task: pid_telemetry t_ms=505000 state=RUNNING cmd=1500 target=1500 actual=1677 duty=84 error=-177 delta=-769 missed=806 enc_a=0 enc_b=0[0m
+02:46:04.691 [0;32mI (514254) control_task: pid_telemetry t_ms=505500 state=RUNNING cmd=1500 target=1500 actual=1597 duty=84 error=-97 delta=-732 missed=819 enc_a=0 enc_b=0[0m
+02:46:05.105 [0;32mI (514686) command_server: RX: STATUS[0m
+02:46:05.214 [0;32mI (514777) control_task: pid_telemetry t_ms=506000 state=RUNNING cmd=1500 target=1500 actual=1608 duty=83 error=-108 delta=-737 missed=844 enc_a=1 enc_b=0[0m
+02:46:05.725 [0;32mI (515289) control_task: pid_telemetry t_ms=506500 state=RUNNING cmd=1500 target=1500 actual=1494 duty=83 error=6 delta=-685 missed=855 enc_a=0 enc_b=0[0m
+02:46:06.243 [0;32mI (515804) control_task: pid_telemetry t_ms=507000 state=RUNNING cmd=1500 target=1500 actual=1509 duty=83 error=-9 delta=-692 missed=870 enc_a=1 enc_b=1[0m
+02:46:06.249 [0;32mI (515817) command_server: RX: STATUS[0m
+02:46:06.762 [0;32mI (516325) control_task: pid_telemetry t_ms=507500 state=RUNNING cmd=1500 target=1500 actual=1505 duty=83 error=-5 delta=-690 missed=892 enc_a=1 enc_b=1[0m
+02:46:07.275 [0;32mI (516838) control_task: pid_telemetry t_ms=508000 state=RUNNING cmd=1500 target=1500 actual=1490 duty=83 error=10 delta=-683 missed=905 enc_a=1 enc_b=0[0m
+02:46:07.359 [0;32mI (516941) command_server: RX: STATUS[0m
+02:46:07.800 [0;32mI (517363) control_task: pid_telemetry t_ms=508500 state=RUNNING cmd=1500 target=1500 actual=1481 duty=82 error=19 delta=-679 missed=930 enc_a=0 enc_b=0[0m
+02:46:08.312 [0;32mI (517875) control_task: pid_telemetry t_ms=509000 state=RUNNING cmd=1500 target=1500 actual=1498 duty=82 error=2 delta=-687 missed=942 enc_a=0 enc_b=0[0m
+02:46:08.479 [0;32mI (518059) command_server: RX: STATUS[0m
+02:46:08.838 [0;32mI (518402) control_task: pid_telemetry t_ms=509500 state=RUNNING cmd=1500 target=1500 actual=1498 duty=82 error=2 delta=-687 missed=969 enc_a=0 enc_b=0[0m
+02:46:09.351 [0;32mI (518914) control_task: pid_telemetry t_ms=510000 state=RUNNING cmd=1500 target=1500 actual=1485 duty=82 error=15 delta=-681 missed=981 enc_a=1 enc_b=0[0m
+02:46:09.605 [0;32mI (519185) command_server: RX: STATUS[0m
+02:46:09.879 [0;32mI (519442) control_task: pid_telemetry t_ms=510500 state=RUNNING cmd=1500 target=1500 actual=1546 duty=82 error=-46 delta=-709 missed=1009 enc_a=0 enc_b=0[0m
+02:46:10.392 [0;32mI (519954) control_task: pid_telemetry t_ms=511000 state=RUNNING cmd=1500 target=1500 actual=1437 duty=82 error=63 delta=-659 missed=1022 enc_a=0 enc_b=1[0m
+02:46:10.729 [0;32mI (520309) command_server: RX: STATUS[0m
+02:46:10.918 [0;32mI (520481) control_task: pid_telemetry t_ms=511500 state=RUNNING cmd=1500 target=1500 actual=1560 duty=81 error=-60 delta=-715 missed=1048 enc_a=1 enc_b=1[0m
+02:46:11.430 [0;32mI (520992) control_task: pid_telemetry t_ms=512000 state=RUNNING cmd=1500 target=1500 actual=1446 duty=82 error=54 delta=-663 missed=1060 enc_a=1 enc_b=0[0m
+02:46:11.854 [0;32mI (521433) command_server: RX: STATUS[0m
+02:46:11.954 [0;32mI (521516) control_task: pid_telemetry t_ms=512500 state=RUNNING cmd=1500 target=1500 actual=1483 duty=82 error=17 delta=-680 missed=1084 enc_a=0 enc_b=1[0m
+02:46:12.464 [0;32mI (522026) control_task: pid_telemetry t_ms=513000 state=RUNNING cmd=1500 target=1500 actual=1472 duty=82 error=28 delta=-675 missed=1094 enc_a=1 enc_b=0[0m
+02:46:12.975 [0;32mI (522537) control_task: pid_telemetry t_ms=513500 state=RUNNING cmd=1500 target=1500 actual=1474 duty=82 error=26 delta=-676 missed=1105 enc_a=0 enc_b=0[0m
+02:46:12.982 [0;32mI (522561) command_server: RX: STATUS[0m
+02:46:13.499 [0;32mI (523058) control_task: pid_telemetry t_ms=514000 state=RUNNING cmd=1500 target=1500 actual=1429 duty=82 error=71 delta=-655 missed=1126 enc_a=0 enc_b=0[0m
+02:46:14.011 [0;32mI (523571) control_task: pid_telemetry t_ms=514500 state=RUNNING cmd=1500 target=1500 actual=1479 duty=82 error=21 delta=-678 missed=1139 enc_a=1 enc_b=1[0m
+02:46:14.106 [0;32mI (523686) command_server: RX: STATUS[0m
+02:46:14.129 [0;32mI (523708) command_server: RX: STOP[0m
+02:46:14.133 [0;32mI (523711) control_task: STOP[0m
+02:46:14.540 [0;32mI (524103) control_task: pid_telemetry t_ms=515000 state=ARMED cmd=0 target=0 actual=658 duty=0 error=-658 delta=-302 missed=1172 enc_a=1 enc_b=0[0m
+02:46:15.046 [0;32mI (524611) control_task: pid_telemetry t_ms=515500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1180 enc_a=1 enc_b=0[0m
+02:46:15.552 [0;32mI (525116) control_task: pid_telemetry t_ms=516000 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1185 enc_a=1 enc_b=0[0m
+02:46:16.057 [0;32mI (525622) control_task: pid_telemetry t_ms=516500 state=ARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1191 enc_a=1 enc_b=0[0m
+02:46:16.266 [0;32mI (525846) command_server: RX: STATUS[0m
+02:46:16.301 [0;32mI (525879) command_server: RX: DISARM[0m
+02:46:16.306 [0;32mI (525881) control_task: DISARM[0m
+02:46:16.578 [0;32mI (526142) control_task: pid_telemetry t_ms=517000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1211 enc_a=1 enc_b=0[0m
+02:46:17.085 [0;32mI (526649) control_task: pid_telemetry t_ms=517500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1218 enc_a=1 enc_b=0[0m
+02:46:17.593 [0;32mI (527157) control_task: pid_telemetry t_ms=518000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1225 enc_a=1 enc_b=0[0m
+02:46:18.102 [0;32mI (527663) control_task: pid_telemetry t_ms=518500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1233 enc_a=1 enc_b=0[0m
+02:46:18.609 [0;32mI (528172) control_task: pid_telemetry t_ms=519000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1242 enc_a=1 enc_b=0[0m
+02:46:19.117 [0;32mI (528681) control_task: pid_telemetry t_ms=519500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1250 enc_a=1 enc_b=0[0m
+02:46:19.623 [0;32mI (529187) control_task: pid_telemetry t_ms=520000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1256 enc_a=1 enc_b=0[0m
+02:46:20.130 [0;32mI (529693) control_task: pid_telemetry t_ms=520500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1263 enc_a=1 enc_b=0[0m
+02:46:20.637 [0;32mI (530200) control_task: pid_telemetry t_ms=521000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1270 enc_a=1 enc_b=0[0m
+02:46:21.144 [0;32mI (530707) control_task: pid_telemetry t_ms=521500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1277 enc_a=1 enc_b=0[0m
+02:46:21.650 [0;32mI (531213) control_task: pid_telemetry t_ms=522000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1283 enc_a=1 enc_b=0[0m
+02:46:22.159 [0;32mI (531721) control_task: pid_telemetry t_ms=522500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1292 enc_a=1 enc_b=0[0m
+02:46:22.666 [0;32mI (532229) control_task: pid_telemetry t_ms=523000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1299 enc_a=1 enc_b=0[0m
+02:46:23.172 [0;32mI (532735) control_task: pid_telemetry t_ms=523500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1305 enc_a=1 enc_b=0[0m
+02:46:23.679 [0;32mI (533242) control_task: pid_telemetry t_ms=524000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1312 enc_a=1 enc_b=0[0m
+02:46:24.186 [0;32mI (533748) control_task: pid_telemetry t_ms=524500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1319 enc_a=1 enc_b=0[0m
+02:46:24.693 [0;32mI (534255) control_task: pid_telemetry t_ms=525000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1326 enc_a=1 enc_b=0[0m
+02:46:25.201 [0;32mI (534762) control_task: pid_telemetry t_ms=525500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1333 enc_a=1 enc_b=0[0m
+02:46:25.706 [0;32mI (535268) control_task: pid_telemetry t_ms=526000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1339 enc_a=1 enc_b=0[0m
+02:46:26.213 [0;32mI (535776) control_task: pid_telemetry t_ms=526500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1346 enc_a=1 enc_b=0[0m
+02:46:26.721 [0;32mI (536283) control_task: pid_telemetry t_ms=527000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1354 enc_a=1 enc_b=0[0m
+02:46:27.228 [0;32mI (536790) control_task: pid_telemetry t_ms=527500 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1361 enc_a=1 enc_b=0[0m
+02:46:27.736 [0;32mI (537297) control_task: pid_telemetry t_ms=528000 state=DISARMED cmd=0 target=0 actual=0 duty=0 error=0 delta=0 missed=1368 enc_a=1 enc_b=0[0m

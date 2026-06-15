@@ -2,11 +2,17 @@
 #define COMMAND_SERVER_H
 
 /*
- * TCP command server on lwIP/BSD sockets.
+ * command_server.h
  *
- * Port: 5005
+ * Public interface for the Wi-Fi/TCP command server.
  *
- * Commands:
+ * Implementation details:
+ *   - Uses lwIP BSD sockets.
+ *   - Listens on TCP port 5005.
+ *   - Accepts simple line-based text commands from the PC.
+ *   - Calls control_task.c APIs to arm, stop, set RPM, and report status.
+ *
+ * Commands supported by command_server.c:
  *   ARM
  *   DISARM
  *   STOP
@@ -15,6 +21,10 @@
  *   STEP_TEST
  */
 
+/*
+ * Start Wi-Fi and the TCP command server task.
+ * Called once from app_main() after motor/encoder/control initialization.
+ */
 void command_server_start(void);
 
 #endif
