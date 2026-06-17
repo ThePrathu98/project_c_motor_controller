@@ -11,22 +11,38 @@
 #include "esp_attr.h"
 #include "esp_log.h"
 
+#include "adc_hal.h"
 #include "encoder_hal.h"
+#include "led_hal.h"
 #include "motor_hal.h"
 #include "pid.h"
+#include "safety_monitor.h"
 
 /*
  * control_task.c
  *
- * Closed-loop velocity controller for Project C Day 3-4.
+ * Closed-loop velocity controller plus safety state machine.
+ *
+ * Day 3-4 responsibility:
+ *   - run the 1 kHz timer/semaphore control loop,
+ *   - calculate actual RPM from encoder feedback,
+ *   - slew the requested setpoint,
+ *   - apply feed-forward + PID trim,
+ *   - drive the DRV8870 motor HAL.
+ *
+ * Day 5-6 additions in this file:
+ *   - CONTROL_FAULT state is part of the same state machine as IDLE/ARMED/RUNNING,
+ *   - ADC current is sampled and included in STATUS/telemetry,
+ *   - safety_monitor_update() is called from the 1 kHz task,
+ *   - FAULT latches immediately disable PWM and reset PID memory,
+ *   - GPIO2 LED patterns are updated from the same state machine.
  *
  * Important architecture:
- *   - A 1 kHz hardware timer interrupt gives a binary semaphore.
- *   - The ISR does not run PID, does not print logs, and does not touch Wi-Fi.
- *   - A FreeRTOS task wakes on the semaphore and performs all control work.
+ *   The timer ISR only releases a binary semaphore. The ISR does not run PID,
+ *   print logs, allocate memory, read sockets, or perform ADC work. The FreeRTOS
+ *   task that wakes on the semaphore owns the control/safety flow.
  *
- * This ISR -> semaphore -> task split is the main real-time embedded design
- * requirement for Days 3-4.
+ * The 1 kHz task is the single source of truth for IDLE/ARMED/RUNNING/FAULT.
  */
 
 /* 1 kHz ISR -> binary semaphore -> task. ISR does no PID/logging. */
@@ -39,8 +55,16 @@
  */
 #define SPEED_SAMPLE_MS         250
 
-#define NORMAL_TELEMETRY_MS     500
+#define NORMAL_TELEMETRY_MS     1000
 #define STEP_TELEMETRY_MS       100
+
+/*
+ * ESP8266 Wi-Fi is sensitive to long/high-frequency ADC work.
+ * Keep the 1 kHz control/state-machine tick, but only sample A0 current
+ * every 10 ms. Safety logic still runs every 1 ms using the most recent
+ * current sample, and telemetry still reports the latest current value.
+ */
+#define ADC_SAMPLE_MS           10
 
 /* Calibrated encoder scale used for RPM conversion during final testing. */
 #define ENCODER_TICKS_PER_REV   110
@@ -100,7 +124,7 @@ static pid_controller_t s_pid;
  * control task, and/or timer ISR context. It prevents the compiler from
  * caching these values in a way that would hide updates between contexts.
  */
-static volatile control_state_t s_state = CONTROL_DISARMED;
+static volatile control_state_t s_state = CONTROL_IDLE;
 static volatile int32_t s_cmd = 0;
 static volatile int32_t s_target = 0;
 static volatile int32_t s_actual = 0;
@@ -108,6 +132,8 @@ static volatile int32_t s_duty = 0;
 static volatile int32_t s_delta = 0;
 static volatile uint32_t s_ticks = 0;
 static volatile uint32_t s_missed = 0;
+static volatile int32_t s_current_ma = 0;
+static volatile uint8_t s_fault_flags = SAFETY_FAULT_NONE;
 
 
 /* Start-assist state used to overcome static friction when starting from rest. */
@@ -148,11 +174,17 @@ const char *control_state_name(control_state_t state)
 {
     switch (state)
     {
-        case CONTROL_DISARMED: return "DISARMED";
-        case CONTROL_ARMED:    return "ARMED";
-        case CONTROL_RUNNING:  return "RUNNING";
-        default:               return "UNKNOWN";
+        case CONTROL_IDLE:    return "IDLE";
+        case CONTROL_ARMED:   return "ARMED";
+        case CONTROL_RUNNING: return "RUNNING";
+        case CONTROL_FAULT:   return "FAULT";
+        default:              return "UNKNOWN";
     }
+}
+
+const char *control_fault_name(uint8_t fault_flags)
+{
+    return safety_monitor_fault_name(fault_flags);
 }
 
 /*
@@ -257,6 +289,37 @@ static void stop_now(void)
 
     pid_reset(&s_pid);
     motor_hal_set_duty(0);
+}
+
+/*
+ * Latch a safety fault into the controller state machine.
+ *
+ * safety_monitor.c only detects fault conditions and returns fault bits.
+ * This function is where the control layer reacts:
+ *   1. save the fault flags for STATUS and telemetry,
+ *   2. move to CONTROL_FAULT,
+ *   3. force duty to zero,
+ *   4. immediately command motor_hal_set_duty(0),
+ *   5. reset PID so recovery starts cleanly after CLEAR_FAULT.
+ */
+static void latch_fault_if_needed(uint8_t faults)
+{
+    if ((faults != SAFETY_FAULT_NONE) && (s_state != CONTROL_FAULT))
+    {
+        s_fault_flags = faults;
+        s_state = CONTROL_FAULT;
+        s_duty = 0;
+        motor_hal_set_duty(0);
+        pid_reset(&s_pid);
+
+        ESP_LOGE(TAG,
+                 "FAULT latched flags=0x%02x first=%s current_ma=%ld actual=%ld duty=%ld",
+                 (unsigned)s_fault_flags,
+                 safety_monitor_fault_name(s_fault_flags),
+                 (long)s_current_ma,
+                 (long)s_actual,
+                 (long)s_duty);
+    }
 }
 
 /*
@@ -366,10 +429,18 @@ static void run_speed_sample(void)
     }
 
 
-    if ((s_state == CONTROL_DISARMED) || ((s_cmd == 0) && (s_target == 0)))
+    if ((s_state == CONTROL_IDLE) || (s_state == CONTROL_FAULT) || ((s_cmd == 0) && (s_target == 0)))
     {
-        stop_now();
-        if (s_state != CONTROL_DISARMED) s_state = CONTROL_ARMED;
+        if (s_state == CONTROL_FAULT)
+        {
+            s_duty = 0;
+            motor_hal_set_duty(0);
+        }
+        else
+        {
+            stop_now();
+            if (s_state != CONTROL_IDLE) s_state = CONTROL_ARMED;
+        }
         return;
     }
 
@@ -436,13 +507,16 @@ static void run_speed_sample(void)
 static void log_status(void)
 {
     ESP_LOGI(TAG,
-             "pid_telemetry t_ms=%lu state=%s cmd=%ld target=%ld actual=%ld duty=%ld error=%ld delta=%ld missed=%lu enc_a=%d enc_b=%d",
+             "pid_telemetry t_ms=%lu state=%s cmd=%ld target=%ld actual=%ld duty=%ld current_ma=%ld fault=0x%02x fault_name=%s error=%ld delta=%ld missed=%lu enc_a=%d enc_b=%d",
              (unsigned long)s_ticks,
              control_state_name(s_state),
              (long)s_cmd,
              (long)s_target,
              (long)s_actual,
              (long)s_duty,
+             (long)s_current_ma,
+             (unsigned)s_fault_flags,
+             safety_monitor_fault_name(s_fault_flags),
              (long)(s_target - s_actual),
              (long)s_delta,
              (unsigned long)s_missed,
@@ -476,6 +550,7 @@ static void control_task(void *arg)
     uint32_t speed_ms = 0;
     uint32_t normal_log_ms = 0;
     uint32_t step_log_ms = 0;
+    uint32_t adc_sample_ms = 0;
 
     encoder_hal_get_and_reset_delta();
 
@@ -487,16 +562,83 @@ static void control_task(void *arg)
         speed_ms++;
         normal_log_ms++;
         step_log_ms++;
+        adc_sample_ms++;
 
-        update_step_test();
 
-        if (s_state == CONTROL_DISARMED)
+        if (adc_sample_ms >= ADC_SAMPLE_MS)
         {
-            stop_now();
+            adc_sample_ms = 0;
+            s_current_ma = adc_hal_read_current_ma();
+        }
+        
+
+        /*
+         * Build the safety monitor input from the latest control state.
+         *
+         * This is deliberately done inside the 1 kHz task so fault detection and
+         * state transitions are synchronized with motor-control updates. The
+         * monitor returns latched fault bits; latch_fault_if_needed() converts
+         * those bits into CONTROL_FAULT and kills PWM.
+         */
+        safety_monitor_input_t safety_in = {
+            .cmd_rpm = s_cmd,
+            .actual_rpm = s_actual,
+            .duty_percent = s_duty,
+            .current_ma = s_current_ma
+        };
+
+        latch_fault_if_needed(safety_monitor_update(&safety_in));
+
+        if (s_state == CONTROL_FAULT)
+        {
+            /*
+             * Keep the bridge disabled every millisecond while in FAULT. This
+             * makes FAULT a safe holding state, not a one-time stop command.
+             */
+            s_duty = 0;
+            motor_hal_set_duty(0);
         }
         else
         {
-            update_slew();
+            update_step_test();
+
+            if (s_state == CONTROL_IDLE)
+            {
+                stop_now();
+            }
+            else
+            {
+                update_slew();
+            }
+        }
+
+        /*
+         * LED pattern follows the same state machine used by motor control:
+         *   IDLE    -> off
+         *   ARMED   -> slow blink
+         *   RUNNING -> solid
+         *   FAULT   -> fast blink
+         *
+         * This gives a hardware-visible state indication even when the host
+         * terminal or GUI is not connected.
+         */
+        switch (s_state)
+        {
+            case CONTROL_IDLE:
+                led_hal_update(LED_HAL_OFF, s_ticks);
+                break;
+            case CONTROL_ARMED:
+                led_hal_update(LED_HAL_SLOW_BLINK, s_ticks);
+                break;
+            case CONTROL_RUNNING:
+                led_hal_update(LED_HAL_SOLID, s_ticks);
+                break;
+            case CONTROL_FAULT:
+                led_hal_update(LED_HAL_FAST_BLINK, s_ticks);
+                break;
+            default:
+                led_hal_update(LED_HAL_OFF, s_ticks);
+                break;
         }
 
         if (speed_ms >= SPEED_SAMPLE_MS)
@@ -535,17 +677,25 @@ void control_task_start(void)
     /* PI controller: no derivative because encoder RPM is quantized. */
     pid_init(&s_pid, 0.004f, 0.010f, 0.000f, 0.200f, -10.0f, 10.0f);
 
+    safety_monitor_init();
+
     xTaskCreate(control_task, "control_task", 4096, NULL, 6, NULL);
 
     hw_timer_init(timer_isr, NULL);
     hw_timer_alarm_us(CONTROL_PERIOD_US, true);
 
-    ESP_LOGI(TAG, "1 kHz hw_timer -> binary semaphore control loop started");
+    ESP_LOGI(TAG, "1 kHz control loop + Day 5-6 safety monitor started");
 }
 
 /* Public command API: enable the controller but keep motor stopped. */
 void control_arm(void)
 {
+    if (s_state == CONTROL_FAULT)
+    {
+        ESP_LOGW(TAG, "ARM rejected while FAULT is latched");
+        return;
+    }
+
     s_state = CONTROL_ARMED;
     s_step_active = 0;
     stop_now();
@@ -556,9 +706,21 @@ void control_arm(void)
 /* Public command API: disable the controller and force motor stopped. */
 void control_disarm(void)
 {
-    s_state = CONTROL_DISARMED;
+    if (s_state != CONTROL_FAULT)
+    {
+        s_state = CONTROL_IDLE;
+    }
+
     s_step_active = 0;
-    stop_now();
+    if (s_state != CONTROL_FAULT)
+    {
+        stop_now();
+    }
+    else
+    {
+        s_duty = 0;
+        motor_hal_set_duty(0);
+    }
     ESP_LOGI(TAG, "DISARM");
 }
 
@@ -568,7 +730,7 @@ void control_stop(void)
     s_step_active = 0;
     stop_now();
 
-    if (s_state != CONTROL_DISARMED)
+    if ((s_state != CONTROL_IDLE) && (s_state != CONTROL_FAULT))
     {
         s_state = CONTROL_ARMED;
     }
@@ -584,7 +746,8 @@ void control_stop(void)
  */
 int control_set_speed(int32_t rpm)
 {
-    if (s_state == CONTROL_DISARMED) return -1;
+    if (s_state == CONTROL_FAULT) return -3;
+    if (s_state == CONTROL_IDLE) return -1;
     if ((rpm < -2000) || (rpm > 2000)) return -2;
 
     s_step_active = 0;
@@ -630,7 +793,13 @@ int control_set_speed(int32_t rpm)
 /* Public command API: start internal 500 -> 1500 RPM step test. */
 void control_start_step_test(void)
 {
-    if (s_state == CONTROL_DISARMED)
+    if (s_state == CONTROL_FAULT)
+    {
+        ESP_LOGW(TAG, "STEP_TEST rejected while FAULT is latched");
+        return;
+    }
+
+    if (s_state == CONTROL_IDLE)
     {
         s_state = CONTROL_ARMED;
     }
@@ -651,6 +820,31 @@ void control_start_step_test(void)
     ESP_LOGI(TAG, "STEP_TEST 500 -> 1500 started");
 }
 
+
+int control_clear_fault(void)
+{
+    /*
+     * Re-read current at the moment of CLEAR_FAULT instead of relying only on
+     * the last 10 ms sampled value. This makes the recovery decision use fresh
+     * ADC data before the state machine returns to IDLE.
+     */
+    s_current_ma = adc_hal_read_current_ma();
+
+    if (safety_monitor_clear_if_safe(s_current_ma) != 0)
+    {
+        ESP_LOGW(TAG, "CLEAR_FAULT rejected current_ma=%ld", (long)s_current_ma);
+        return -1;
+    }
+
+    s_fault_flags = SAFETY_FAULT_NONE;
+    s_state = CONTROL_IDLE;
+    s_step_active = 0;
+    stop_now();
+
+    ESP_LOGI(TAG, "CLEAR_FAULT");
+    return 0;
+}
+
 /*
  * Snapshot current controller variables for STATUS replies.
  *
@@ -668,6 +862,8 @@ control_status_t control_get_status(void)
     st.duty = s_duty;
     st.error = s_target - s_actual;
     st.delta = s_delta;
+    st.current_ma = s_current_ma;
+    st.fault_flags = s_fault_flags;
     st.ticks = s_ticks;
     st.missed = s_missed;
     st.step_active = s_step_active;

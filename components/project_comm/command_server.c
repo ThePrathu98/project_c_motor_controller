@@ -24,7 +24,7 @@
 /*
  * command_server.c
  *
- * Wi-Fi + lwIP/BSD socket command interface for Day 3-4.
+ * Wi-Fi + lwIP/BSD socket command interface for Day 5-6.
  *
  * Structural flow:
  *   1. Start ESP8266 Wi-Fi in station mode.
@@ -71,7 +71,9 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
             break;
 
         case SYSTEM_EVENT_STA_DISCONNECTED:
-            ESP_LOGW(TAG, "Wi-Fi disconnected; reconnecting");
+            ESP_LOGW(TAG,
+                     "Wi-Fi disconnected reason=%d; reconnecting",
+                     event->event_info.disconnected.reason);
             xEventGroupClearBits(s_wifi_events, WIFI_CONNECTED_BIT);
             esp_wifi_connect();
             break;
@@ -100,6 +102,15 @@ static void wifi_start(void)
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     esp_wifi_init(&cfg);
 
+    /*
+     * Day 5-6 adds a 1 kHz control task plus ADC/current telemetry.
+     * Disable Wi-Fi power-save so the ESP8266 does not miss beacons while
+     * motor-control work is active. This keeps the same STA/router behavior
+     * as Day 3-4, but makes the connection more stable for telemetry tests.
+     */
+    esp_wifi_set_storage(WIFI_STORAGE_RAM);
+    esp_wifi_set_ps(WIFI_PS_NONE);
+
     wifi_config_t wifi_cfg;
     memset(&wifi_cfg, 0, sizeof(wifi_cfg));
 
@@ -117,11 +128,13 @@ static void wifi_start(void)
 
     ESP_LOGI(TAG, "connecting to Wi-Fi SSID=%s", WIFI_SSID);
 
+    ESP_LOGI(TAG, "waiting for Wi-Fi connection before opening command socket");
+
     xEventGroupWaitBits(s_wifi_events,
                         WIFI_CONNECTED_BIT,
                         pdFALSE,
                         pdTRUE,
-                        pdMS_TO_TICKS(20000));
+                        portMAX_DELAY);
 }
 
 /*
@@ -169,6 +182,18 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
         control_stop();
         snprintf(resp, resp_len, "OK STOP\n");
     }
+    else if (strcmp(cmd, "CLEAR_FAULT") == 0)
+    {
+        int rc = control_clear_fault();
+        if (rc == 0)
+        {
+            snprintf(resp, resp_len, "OK CLEAR_FAULT\n");
+        }
+        else
+        {
+            snprintf(resp, resp_len, "ERR FAULT_ACTIVE\n");
+        }
+    }
     else if (strcmp(cmd, "STEP_TEST") == 0)
     {
         control_start_step_test();
@@ -200,9 +225,13 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
         {
             snprintf(resp, resp_len, "ERR NOT_ARMED\n");
         }
-        else
+        else if (rc == -2)
         {
             snprintf(resp, resp_len, "ERR RPM_RANGE\n");
+        }
+        else
+        {
+            snprintf(resp, resp_len, "ERR FAULT\n");
         }
     }
     /* STATUS snapshots control_task state for PowerShell logs and grading. */
@@ -212,12 +241,15 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
 
         snprintf(resp,
                  resp_len,
-                 "OK STATUS state=%s cmd=%ld target=%ld actual=%ld duty=%ld error=%ld delta=%ld missed=%lu step=%d\n",
+                 "OK STATUS state=%s cmd=%ld target=%ld actual=%ld duty=%ld current_ma=%ld fault=0x%02x fault_name=%s error=%ld delta=%ld missed=%lu step=%d\n",
                  control_state_name(st.state),
                  (long)st.cmd,
                  (long)st.target,
                  (long)st.actual,
                  (long)st.duty,
+                 (long)st.current_ma,
+                 (unsigned)st.fault_flags,
+                 control_fault_name(st.fault_flags),
                  (long)st.error,
                  (long)st.delta,
                  (unsigned long)st.missed,

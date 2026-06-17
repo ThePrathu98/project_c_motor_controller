@@ -2,6 +2,7 @@ idf_component_register(
     SRCS
         "pid.c"
         "control_task.c"
+        "safety_monitor.c"
 
     INCLUDE_DIRS
         "."

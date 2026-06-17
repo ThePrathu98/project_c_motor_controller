@@ -1,43 +1,74 @@
 #include "esp_log.h"
 
+#include "adc_hal.h"
 #include "command_server.h"
 #include "control_task.h"
 #include "encoder_hal.h"
+#include "led_hal.h"
 #include "motor_hal.h"
+#include "telemetry_server.h"
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 /*
  * app_main.c
  *
- * Top-level system bring-up for Project C Day 3-4.
+ * Top-level system bring-up for Project C.
  *
- * Structural flow:
- *   1. Initialize the DRV8870 PWM motor output layer.
- *   2. Initialize encoder GPIO/interrupt feedback.
- *   3. Start the closed-loop velocity control task.
- *   4. Start the Wi-Fi/TCP command server.
+ * Day 3-4 already had the core motor/encoder/control/command pieces:
+ *   motor HAL -> encoder HAL -> 1 kHz control task -> TCP command server.
  *
- * Keeping app_main() this small is intentional: hardware details stay in the
- * HAL files, control logic stays in control_task.c, and command parsing stays
- * in command_server.c.
+ * Day 5-6 adds:
+ *   - ADC current-sense HAL for DRV8870EVM ISEN -> ESP8266 A0.
+ *   - LED HAL on GPIO2 for visible state/fault feedback.
+ *   - Safety monitor inside the 1 kHz control loop.
+ *   - Binary telemetry TCP server on port 5006.
+ *
+ * Keep this file simple: it should only define the startup order. Hardware
+ * details stay in HAL files, control logic stays in control_task.c, safety
+ * thresholds stay in safety_monitor.c, and sockets stay in comm files.
  */
 
 static const char *TAG = "app_main";
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Project C Day 3-4 full firmware starting");
+    ESP_LOGI(TAG, "Project C Day 5-6 safety + binary telemetry firmware starting");
 
-    /* Configure ESP8266 PWM channels that drive the DRV8870 IN1/IN2 pins. */
+    /*
+     * HAL bring-up.
+     *
+     * These functions configure only their own hardware blocks:
+     *   motor_hal_init()   -> PWM GPIOs for DRV8870 IN1/IN2.
+     *   encoder_hal_init() -> encoder A/B GPIO inputs and interrupt counting.
+     *   adc_hal_init()     -> ESP8266 ADC input used for ISEN current estimate.
+     *   led_hal_init()     -> GPIO2 onboard LED used for state/fault patterns.
+     */
     motor_hal_init();
-
-    /* Configure encoder A/B GPIOs and attach the encoder interrupt handler. */
     encoder_hal_init();
+    adc_hal_init();
+    led_hal_init();
 
-    /* Start the 1 kHz timer/semaphore closed-loop velocity control task. */
-    control_task_start();
-
-    /* Start Wi-Fi station mode and the TCP command server on port 5005. */
+    /*
+     * Start Wi-Fi/command handling before the high-rate control task.
+     *
+     * During testing, STA association was more reliable when the ESP8266 joined
+     * the router first, then started the 1 kHz control/safety work. The command
+     * server itself blocks until it has a valid IP, then opens TCP port 5005.
+     */
     command_server_start();
+
+    ESP_LOGI(TAG, "Waiting 15 s for STA Wi-Fi before starting 1 kHz control task");
+    vTaskDelay(pdMS_TO_TICKS(15000));
+
+    /*
+     * Start real-time control/safety first, then the observer-only telemetry
+     * stream. telemetry_server.c only reads snapshots from control_task.c; it
+     * never directly changes motor state.
+     */
+    control_task_start();
+    telemetry_server_start();
 
     ESP_LOGI(TAG, "System bring-up complete");
 }
