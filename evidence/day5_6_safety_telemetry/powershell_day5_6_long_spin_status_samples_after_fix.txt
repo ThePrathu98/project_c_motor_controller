@@ -1,0 +1,255 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260618023925
+Username: NITISH-PC\pckal
+RunAs User: NITISH-PC\pckal
+Configuration Name: 
+Machine: NITISH-PC (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 25480
+PSVersion: 5.1.26100.8655
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.8655
+BuildVersion: 10.0.26100.8655
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day5_6_safety_telemetry\powershell_day5_6_long_spin_status_samples_after_fix.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $ip = "192.168.1.104"
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $port = 5005
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> function Send-MotorCommand {
+    param([string]$cmd)
+
+    $client = New-Object System.Net.Sockets.TcpClient($ip, $port)
+    $stream = $client.GetStream()
+    $writer = New-Object System.IO.StreamWriter($stream)
+    $reader = New-Object System.IO.StreamReader($stream)
+
+    $writer.AutoFlush = $true
+    $writer.WriteLine($cmd)
+
+    $response = $reader.ReadLine()
+
+    $reader.Close()
+    $writer.Close()
+    $client.Close()
+
+    Write-Host "$cmd -> $response"
+    return $response
+}
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> function Read-MotorStatus {
+    param(
+        [int]$Sample,
+        [double]$Elapsed,
+        [string]$Phase
+    )
+
+    $response = Send-MotorCommand "STATUS"
+
+    $pattern = "state=(\S+) cmd=(-?\d+) target=(-?\d+) actual=(-?\d+) duty=(-?\d+) current_ma=(-?\d+) fault=(0x[0-9A-Fa-f]+) fault_name=(\S+) error=(-?\d+) delta=(-?\d+) missed=(\d+) step=(\d+)"
+
+    if ($response -match $pattern) {
+        return [PSCustomObject]@{
+            sample      = $Sample
+            elapsed_s   = [math]::Round($Elapsed, 1)
+            phase       = $Phase
+            state       = $matches[1]
+            cmd         = [int]$matches[2]
+            target      = [int]$matches[3]
+            actual      = [int]$matches[4]
+            duty        = [int]$matches[5]
+            current_ma  = [int]$matches[6]
+            fault       = $matches[7]
+            fault_name  = $matches[8]
+            error       = [int]$matches[9]
+            delta       = [int]$matches[10]
+            missed      = [int]$matches[11]
+            step        = [int]$matches[12]
+            raw         = $response
+        }
+    }
+
+    return [PSCustomObject]@{
+        sample      = $Sample
+        elapsed_s   = [math]::Round($Elapsed, 1)
+        phase       = $Phase
+        state       = "PARSE_FAIL"
+        cmd         = 0
+        target      = 0
+        actual      = 0
+        duty        = 0
+        current_ma  = 0
+        fault       = "?"
+        fault_name  = "?"
+        error       = 0
+        delta       = 0
+        missed      = 0
+        step        = 0
+        raw         = $response
+    }
+}
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> function Hold-Speed {
+    param(
+        [int]$Rpm,
+        [int]$Seconds,
+        [int]$SampleEverySeconds
+    )
+
+    Write-Host "`n--- Holding $Rpm RPM for $Seconds seconds ---"
+    Send-MotorCommand "SET_SPEED $Rpm"
+
+    $localStart = Get-Date
+    while (((Get-Date) - $localStart).TotalSeconds -lt $Seconds) {
+        Start-Sleep -Seconds $SampleEverySeconds
+
+        $elapsed = ((Get-Date) - $global:TestStart).TotalSeconds
+        $global:SampleNumber++
+
+        $row = Read-MotorStatus -Sample $global:SampleNumber -Elapsed $elapsed -Phase "$Rpm RPM hold"
+        $global:Rows += $row
+
+        if ($row.fault_name -ne "NONE") {
+            Write-Host "FAULT detected during $Rpm RPM hold. Stopping sample loop."
+            break
+        }
+    }
+}
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Write-Host "`n===== DAY 5-6 LONG SPIN STATUS SAMPLE TEST ====="
+
+===== DAY 5-6 LONG SPIN STATUS SAMPLE TEST =====
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Write-Host "Bench supply ON: 6.4 V, 0.5 A."
+Bench supply ON: 6.4 V, 0.5 A.
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Write-Host "Expected: motor spins continuously, actual RPM nonzero, fault_name NONE."
+Expected: motor spins continuously, actual RPM nonzero, fault_name NONE.
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:Rows = @()
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:SampleNumber = 0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:TestStart = Get-Date
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "CLEAR_FAULT"
+CLEAR_FAULT -> OK CLEAR_FAULT
+OK CLEAR_FAULT
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "STATUS"
+STATUS -> OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=31 fault=0x00 fault_name=NONE error=0 delta=0 missed=2971 step=0
+OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=31 fault=0x00 fault_name=NONE error=0 delta=0 missed=2971 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "ARM"
+ARM -> OK ARM
+OK ARM
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "STATUS"
+STATUS -> OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=36 fault=0x00 fault_name=NONE error=0 delta=0 missed=7 step=0
+OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=36 fault=0x00 fault_name=NONE error=0 delta=0 missed=7 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Hold-Speed -Rpm 100 -Seconds 10 -SampleEverySeconds 2
+
+--- Holding 100 RPM for 10 seconds ---
+SET_SPEED 100 -> OK SET_SPEED 100
+OK SET_SPEED 100
+STATUS -> OK STATUS state=RUNNING cmd=100 target=100 actual=183 duty=50 current_ma=141 fault=0x00 fault_name=NONE error=-83 delta=-84 missed=55 step=0
+STATUS -> OK STATUS state=RUNNING cmd=100 target=100 actual=139 duty=50 current_ma=149 fault=0x00 fault_name=NONE error=-39 delta=-64 missed=100 step=0
+STATUS -> OK STATUS state=RUNNING cmd=100 target=100 actual=128 duty=50 current_ma=114 fault=0x00 fault_name=NONE error=-28 delta=-59 missed=143 step=0
+STATUS -> OK STATUS state=RUNNING cmd=100 target=100 actual=126 duty=50 current_ma=142 fault=0x00 fault_name=NONE error=-26 delta=-58 missed=187 step=0
+STATUS -> OK STATUS state=RUNNING cmd=100 target=100 actual=115 duty=50 current_ma=107 fault=0x00 fault_name=NONE error=-15 delta=-53 missed=230 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Hold-Speed -Rpm 300 -Seconds 20 -SampleEverySeconds 2
+
+--- Holding 300 RPM for 20 seconds ---
+SET_SPEED 300 -> OK SET_SPEED 300
+OK SET_SPEED 300
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=233 duty=56 current_ma=160 fault=0x00 fault_name=NONE error=67 delta=-107 missed=283 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=283 duty=56 current_ma=226 fault=0x00 fault_name=NONE error=17 delta=-130 missed=323 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=274 duty=56 current_ma=213 fault=0x00 fault_name=NONE error=26 delta=-126 missed=364 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=277 duty=57 current_ma=135 fault=0x00 fault_name=NONE error=23 delta=-127 missed=409 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=279 duty=57 current_ma=180 fault=0x00 fault_name=NONE error=21 delta=-128 missed=453 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=281 duty=57 current_ma=170 fault=0x00 fault_name=NONE error=19 delta=-129 missed=493 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=288 duty=57 current_ma=121 fault=0x00 fault_name=NONE error=12 delta=-132 missed=536 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=279 duty=58 current_ma=170 fault=0x00 fault_name=NONE error=21 delta=-128 missed=582 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=296 duty=57 current_ma=156 fault=0x00 fault_name=NONE error=4 delta=-136 missed=626 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=283 duty=58 current_ma=207 fault=0x00 fault_name=NONE error=17 delta=-130 missed=667 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Hold-Speed -Rpm 800 -Seconds 20 -SampleEverySeconds 2
+
+--- Holding 800 RPM for 20 seconds ---
+SET_SPEED 800 -> OK SET_SPEED 800
+OK SET_SPEED 800
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=783 duty=71 current_ma=216 fault=0x00 fault_name=NONE error=17 delta=-359 missed=722 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=781 duty=71 current_ma=234 fault=0x00 fault_name=NONE error=19 delta=-358 missed=764 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=781 duty=71 current_ma=251 fault=0x00 fault_name=NONE error=19 delta=-358 missed=805 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=785 duty=71 current_ma=212 fault=0x00 fault_name=NONE error=15 delta=-360 missed=849 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=781 duty=71 current_ma=240 fault=0x00 fault_name=NONE error=19 delta=-358 missed=896 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=778 duty=71 current_ma=266 fault=0x00 fault_name=NONE error=22 delta=-357 missed=939 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=776 duty=71 current_ma=235 fault=0x00 fault_name=NONE error=24 delta=-356 missed=984 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=811 duty=71 current_ma=234 fault=0x00 fault_name=NONE error=-11 delta=-372 missed=1023 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=774 duty=71 current_ma=243 fault=0x00 fault_name=NONE error=26 delta=-355 missed=1069 step=0
+STATUS -> OK STATUS state=RUNNING cmd=800 target=800 actual=763 duty=72 current_ma=266 fault=0x00 fault_name=NONE error=37 delta=-350 missed=1111 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Hold-Speed -Rpm 300 -Seconds 10 -SampleEverySeconds 2
+
+--- Holding 300 RPM for 10 seconds ---
+SET_SPEED 300 -> OK SET_SPEED 300
+OK SET_SPEED 300
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=185 duty=54 current_ma=138 fault=0x00 fault_name=NONE error=115 delta=-85 missed=1168 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=240 duty=54 current_ma=202 fault=0x00 fault_name=NONE error=60 delta=-110 missed=1210 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=259 duty=55 current_ma=148 fault=0x00 fault_name=NONE error=41 delta=-119 missed=1256 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=294 duty=56 current_ma=163 fault=0x00 fault_name=NONE error=6 delta=-135 missed=1304 step=0
+STATUS -> OK STATUS state=RUNNING cmd=300 target=300 actual=237 duty=56 current_ma=796 fault=0x00 fault_name=NONE error=63 delta=-109 missed=1348 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Write-Host "`n--- Stopping motor ---"
+
+--- Stopping motor ---
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "STOP"
+STOP -> OK STOP
+OK STOP
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 1
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:SampleNumber++
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:Rows += Read-MotorStatus -Sample $global:SampleNumber -Elapsed (((Get-Date) - $global:TestStart).TotalSeconds) -Phase "STOP"
+STATUS -> OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=37 fault=0x00 fault_name=NONE error=0 delta=0 missed=1378 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "DISARM"
+DISARM -> OK DISARM
+OK DISARM
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:SampleNumber++
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:Rows += Read-MotorStatus -Sample $global:SampleNumber -Elapsed (((Get-Date) - $global:TestStart).TotalSeconds) -Phase "DISARM"
+STATUS -> OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=34 fault=0x00 fault_name=NONE error=0 delta=0 missed=1393 step=0
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:Rows | Format-Table sample, elapsed_s, phase, state, cmd, target, actual, duty, current_ma, fault_name -AutoSize
+
+sample elapsed_s phase        state   cmd target actual duty current_ma fault_name
+------ --------- -----        -----   --- ------ ------ ---- ---------- ----------
+     1       2.2 100 RPM hold RUNNING 100    100    183   50        141 NONE
+     2       4.3 100 RPM hold RUNNING 100    100    139   50        149 NONE
+     3       6.3 100 RPM hold RUNNING 100    100    128   50        114 NONE
+     4       8.3 100 RPM hold RUNNING 100    100    126   50        142 NONE
+     5      10.4 100 RPM hold RUNNING 100    100    115   50        107 NONE
+     6      12.4 300 RPM hold RUNNING 300    300    233   56        160 NONE
+     7      14.5 300 RPM hold RUNNING 300    300    283   56        226 NONE
+     8      16.5 300 RPM hold RUNNING 300    300    274   56        213 NONE
+     9      18.5 300 RPM hold RUNNING 300    300    277   57        135 NONE
+    10      20.5 300 RPM hold RUNNING 300    300    279   57        180 NONE
+    11      22.6 300 RPM hold RUNNING 300    300    281   57        170 NONE
+    12      24.6 300 RPM hold RUNNING 300    300    288   57        121 NONE
+    13      26.6 300 RPM hold RUNNING 300    300    279   58        170 NONE
+    14      28.7 300 RPM hold RUNNING 300    300    296   57        156 NONE
+    15      30.7 300 RPM hold RUNNING 300    300    283   58        207 NONE
+    16      32.8 800 RPM hold RUNNING 800    800    783   71        216 NONE
+    17      34.8 800 RPM hold RUNNING 800    800    781   71        234 NONE
+    18      36.8 800 RPM hold RUNNING 800    800    781   71        251 NONE
+    19      38.8 800 RPM hold RUNNING 800    800    785   71        212 NONE
+    20      40.9 800 RPM hold RUNNING 800    800    781   71        240 NONE
+    21      42.9 800 RPM hold RUNNING 800    800    778   71        266 NONE
+    22      44.9 800 RPM hold RUNNING 800    800    776   71        235 NONE
+    23      46.9 800 RPM hold RUNNING 800    800    811   71        234 NONE
+    24      48.9 800 RPM hold RUNNING 800    800    774   71        243 NONE
+    25        51 800 RPM hold RUNNING 800    800    763   72        266 NONE
+    26      53.1 300 RPM hold RUNNING 300    300    185   54        138 NONE
+    27      55.1 300 RPM hold RUNNING 300    300    240   54        202 NONE
+    28      57.1 300 RPM hold RUNNING 300    300    259   55        148 NONE
+    29      59.1 300 RPM hold RUNNING 300    300    294   56        163 NONE
+    30      61.2 300 RPM hold RUNNING 300    300    237   56        796 NONE
+    31      62.3 STOP         ARMED     0      0      0    0         37 NONE
+    32      62.4 DISARM       IDLE      0      0      0    0         34 NONE
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $global:Rows | Export-Csv -Path $CsvPath -NoTypeInformation
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Write-Host "`nSaved transcript to: $TranscriptPath"
+
+Saved transcript to: C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day5_6_safety_telemetry\powershell_day5_6_long_spin_status_samples_after_fix.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Write-Host "Saved CSV samples to: $CsvPath"
+Saved CSV samples to: C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day5_6_safety_telemetry\powershell_day5_6_long_spin_status_samples_after_fix.csv
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20260618024030
+**********************
