@@ -39,12 +39,14 @@
  */
 #define OVERCURRENT_TRIP_MA       900
 #define OVERCURRENT_CLEAR_MA      700
-#define OVERCURRENT_TICKS_MS      5
+
+#define OVERCURRENT_TICKS_MS      75
 
 #define STALL_CMD_RPM_MIN         200
 #define STALL_ACTUAL_RPM_MAX      50
 #define STALL_DUTY_MIN_PERCENT    50
-#define STALL_TICKS_MS            500
+
+#define STALL_TICKS_MS            1500
 
 static const char *TAG = "safety_monitor";
 
@@ -151,12 +153,13 @@ uint8_t safety_monitor_get_faults(void)
     return s_faults;
 }
 
+
 int safety_monitor_clear_if_safe(int32_t current_ma)
 {
     /*
-     * Do not clear an overcurrent fault while current is still above the clear
-     * threshold. This adds hysteresis: trip at 900 mA, allow recovery only after
-     * falling below 700 mA.
+     * CLEAR_FAULT should only reset the latched fault when current is already
+     * below the clear threshold. This prevents clearing an overcurrent fault
+     * while the hardware is still in an unsafe/high-current condition.
      */
     if (current_ma > OVERCURRENT_CLEAR_MA)
     {
@@ -168,6 +171,7 @@ int safety_monitor_clear_if_safe(int32_t current_ma)
     s_stall_ticks = 0;
     return 0;
 }
+
 
 const char *safety_monitor_fault_name(uint8_t faults)
 {

@@ -19,51 +19,24 @@
 #include "safety_monitor.h"
 
 /*
- * control_task.c
+ * Closed-loop velocity controller and safety state machine.
  *
- * Closed-loop velocity controller plus safety state machine.
- *
- * Day 3-4 responsibility:
- *   - run the 1 kHz timer/semaphore control loop,
- *   - calculate actual RPM from encoder feedback,
- *   - slew the requested setpoint,
- *   - apply feed-forward + PID trim,
- *   - drive the DRV8870 motor HAL.
- *
- * Day 5-6 additions in this file:
- *   - CONTROL_FAULT state is part of the same state machine as IDLE/ARMED/RUNNING,
- *   - ADC current is sampled and included in STATUS/telemetry,
- *   - safety_monitor_update() is called from the 1 kHz task,
- *   - FAULT latches immediately disable PWM and reset PID memory,
- *   - GPIO2 LED patterns are updated from the same state machine.
- *
- * Important architecture:
- *   The timer ISR only releases a binary semaphore. The ISR does not run PID,
- *   print logs, allocate memory, read sockets, or perform ADC work. The FreeRTOS
- *   task that wakes on the semaphore owns the control/safety flow.
- *
- * The 1 kHz task is the single source of truth for IDLE/ARMED/RUNNING/FAULT.
+ * The hardware timer ISR only releases a binary semaphore. All slower work
+ * (encoder-to-RPM conversion, PID/feed-forward, ADC current, safety checks,
+ * LED state, and PWM updates) runs in this FreeRTOS task. Keeping one task as
+ * the owner of IDLE/ARMED/RUNNING/FAULT makes recovery behavior predictable.
  */
 
 /* 1 kHz ISR -> binary semaphore -> task. ISR does no PID/logging. */
 #define CONTROL_PERIOD_US       1000
 
-/*
- * RPM is calculated every SPEED_SAMPLE_MS instead of every 1 ms.
- * A longer window reduces encoder quantization noise and makes low-speed
- * readings such as 300 RPM more stable.
- */
+/* Longer RPM window reduces encoder quantization noise at 300 RPM. */
 #define SPEED_SAMPLE_MS         250
 
 #define NORMAL_TELEMETRY_MS     1000
 #define STEP_TELEMETRY_MS       100
 
-/*
- * ESP8266 Wi-Fi is sensitive to long/high-frequency ADC work.
- * Keep the 1 kHz control/state-machine tick, but only sample A0 current
- * every 10 ms. Safety logic still runs every 1 ms using the most recent
- * current sample, and telemetry still reports the latest current value.
- */
+/* Current is sampled every 10 ms; safety still runs every 1 ms using the latest value. */
 #define ADC_SAMPLE_MS           10
 
 /* Calibrated encoder scale used for RPM conversion during final testing. */
@@ -77,34 +50,29 @@
 #define DUTY_PER_RPM_NUM        30
 #define DUTY_PER_RPM_DEN        1000
 
-/*
- * One firmware for all Day 3-4 speeds.
- * Low-speed commands need a softer start assist so 300 RPM does not launch,
- * overspeed, and get cut to zero. Mid/high speeds keep the normal kick.
- */
+/* Start assist and hold limits tuned after the TXS0108E input path was fixed. */
 #define LOW_SPEED_RPM_MAX           400
 #define MID_SPEED_RPM_MAX           1000
 
-#define LOW_START_KICK_DUTY         75
-#define LOW_START_KICK_MS           600
+#define LOW_START_KICK_DUTY         66
+#define LOW_START_KICK_MS           400
 
-#define MID_START_KICK_DUTY         90
-#define MID_START_KICK_MS           400
+#define MID_START_KICK_DUTY         75
+#define MID_START_KICK_MS           300
 
-#define NORMAL_START_KICK_DUTY      100
-#define NORMAL_START_KICK_MS        500
+#define NORMAL_START_KICK_DUTY      85
+#define NORMAL_START_KICK_MS        300
 
 #define LOW_HOLD_DUTY_MIN           50
-#define LOW_HOLD_DUTY_MAX           58
+#define LOW_HOLD_DUTY_MAX           62
 
-#define MID_HOLD_DUTY_MIN           60
-#define MID_HOLD_DUTY_MAX           85
+#define MID_HOLD_DUTY_MIN           58
+#define MID_HOLD_DUTY_MAX           78
 
 #define HIGH_HOLD_DUTY_MIN          80
 #define HIGH_HOLD_DUTY_MAX          100
 
 #define REKICK_ZERO_MS              3000
-
 
 #define STEP_BASELINE_MS        5000
 #define STEP_RESPONSE_MS        10000
@@ -135,16 +103,11 @@ static volatile uint32_t s_missed = 0;
 static volatile int32_t s_current_ma = 0;
 static volatile uint8_t s_fault_flags = SAFETY_FAULT_NONE;
 
-
 /* Start-assist state used to overcome static friction when starting from rest. */
 static volatile uint32_t s_start_kick_ms = 0;
 static volatile int32_t s_start_kick_duty = NORMAL_START_KICK_DUTY;
-static volatile uint32_t s_duty_tick = 0;
-
-
 /* Tracks how long commanded motion has produced zero measured speed. */
 static volatile uint32_t s_zero_speed_ms = 0;
-
 
 /* Internal STEP_TEST state for 500 -> 1500 RPM telemetry. */
 static volatile int s_step_active = 0;
@@ -221,7 +184,6 @@ static void update_slew(void)
     }
 }
 
-
 /*
  * Estimate the baseline duty needed to run at a requested speed.
  *
@@ -238,7 +200,6 @@ static int32_t feedforward(int32_t rpm)
 
     return sign * clamp_i32(duty, 0, 100);
 }
-
 
 /*
  * Choose a short startup kick based on requested speed.
@@ -280,13 +241,9 @@ static void stop_now(void)
     s_target = 0;
     s_duty = 0;
 
-
     s_start_kick_ms = 0;
     s_start_kick_duty = NORMAL_START_KICK_DUTY;
     s_zero_speed_ms = 0;
-    s_duty_tick = 0;
-
-
     pid_reset(&s_pid);
     motor_hal_set_duty(0);
 }
@@ -395,19 +352,13 @@ static void run_speed_sample(void)
         s_start_kick_ms = 0;
     }
 
-
     /* Read encoder edges accumulated since the previous speed sample. */
     s_delta = encoder_hal_get_and_reset_delta();
 
     /* Convert encoder delta into signed RPM for feedback control. */
     s_actual = ticks_to_rpm(s_delta);
 
-    /*
-    * If a nonzero speed is commanded but the encoder reports zero for several
-    * consecutive speed samples, the motor is likely stuck below its starting
-    * torque. Re-arm a short kick. This is still Day 3-4 start-assist logic,
-    * not the Day 5-6 STALL fault yet.
-    */
+    /* Re-kick only after sustained zero-speed feedback while RUNNING. */
     if ((s_state == CONTROL_RUNNING) && (s_target > 0) && (s_actual == 0))
     {
         if (s_zero_speed_ms < REKICK_ZERO_MS)
@@ -416,18 +367,15 @@ static void run_speed_sample(void)
         }
         else
         {
-
             arm_start_kick_for_rpm(s_target);
             s_zero_speed_ms = 0;
             pid_reset(&s_pid);
-
         }
     }
     else
     {
         s_zero_speed_ms = 0;
     }
-
 
     if ((s_state == CONTROL_IDLE) || (s_state == CONTROL_FAULT) || ((s_cmd == 0) && (s_target == 0)))
     {
@@ -458,19 +406,13 @@ static void run_speed_sample(void)
                                             (float)s_actual,
                                             ((float)SPEED_SAMPLE_MS / 1000.0f));
 
-
-    int kick_active = ((s_target > 0) &&
-                   (s_start_kick_ms > 0));
-
+    int kick_active = ((s_target > 0) && (s_start_kick_ms > 0));
 
     if (s_target > 0)
     {
         if (kick_active)
         {
-            /*
-            * Startup kick is allowed to exceed the steady-state duty cap briefly.
-            * The cap is for normal PID holding after the motor is already moving.
-            */
+            /* Startup kick can exceed the steady-state hold cap briefly. */
             s_duty = clamp_i32(s_start_kick_duty, 0, 100);
         }
 
@@ -481,11 +423,7 @@ static void run_speed_sample(void)
 
             hold_limits_for_target(s_target, &min_duty, &max_duty);
 
-            /*
-            * Continuous hold mode:
-            * If a positive RPM is commanded, keep applying a small PWM floor.
-            * This avoids burst-stop-burst behavior.
-            */
+            /* Continuous hold mode avoids burst-stop-burst low-speed motion. */
             s_duty = clamp_i32(requested, min_duty, max_duty);
         }
     }
@@ -563,7 +501,6 @@ static void control_task(void *arg)
         normal_log_ms++;
         step_log_ms++;
         adc_sample_ms++;
-
 
         if (adc_sample_ms >= ADC_SAMPLE_MS)
         {
@@ -684,7 +621,7 @@ void control_task_start(void)
     hw_timer_init(timer_isr, NULL);
     hw_timer_alarm_us(CONTROL_PERIOD_US, true);
 
-    ESP_LOGI(TAG, "1 kHz control loop + Day 5-6 safety monitor started");
+    ESP_LOGI(TAG, "1 kHz control loop + safety monitor started");
 }
 
 /* Public command API: enable the controller but keep motor stopped. */
@@ -752,13 +689,10 @@ int control_set_speed(int32_t rpm)
 
     s_step_active = 0;
 
-
     int from_stopped = ((s_cmd == 0) && (s_target == 0));
 
     
     s_cmd = rpm;
-    s_duty_tick = 0;
-
     pid_reset(&s_pid);
     encoder_hal_get_and_reset_delta();
 
@@ -768,11 +702,7 @@ int control_set_speed(int32_t rpm)
 
         if (from_stopped)
         {
-            /*
-            * Use start assist only when starting from rest.
-            * For 1500 -> 800 -> 300 transitions, avoid re-kicking because it causes
-            * overspeed spikes and unstable behavior.
-            */
+            /* Kick only from rest; speed-to-speed changes should not re-launch. */
             arm_start_kick_for_rpm(rpm);
         }
         else
@@ -809,17 +739,12 @@ void control_start_step_test(void)
     s_cmd = 500;
     s_target = 500;
 
-
     arm_start_kick_for_rpm(s_cmd);
-    s_duty_tick = 0;
-
-
     pid_reset(&s_pid);
     encoder_hal_get_and_reset_delta();
 
     ESP_LOGI(TAG, "STEP_TEST 500 -> 1500 started");
 }
-
 
 int control_clear_fault(void)
 {

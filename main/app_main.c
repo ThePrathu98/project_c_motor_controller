@@ -19,7 +19,7 @@
  * Day 3-4 already had the core motor/encoder/control/command pieces:
  *   motor HAL -> encoder HAL -> 1 kHz control task -> TCP command server.
  *
- * Day 5-6 adds:
+ * Later checkpoints add:
  *   - ADC current-sense HAL for DRV8870EVM ISEN -> ESP8266 A0.
  *   - LED HAL on GPIO2 for visible state/fault feedback.
  *   - Safety monitor inside the 1 kHz control loop.
@@ -34,7 +34,7 @@ static const char *TAG = "app_main";
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Project C Day 5-6 safety + binary telemetry firmware starting");
+    ESP_LOGI(TAG, "Project C motor-control firmware starting");
 
     /*
      * HAL bring-up.

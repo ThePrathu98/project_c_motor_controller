@@ -6,7 +6,7 @@
 /*
  * control_task.h
  *
- * Public API for the Day 5-6 velocity controller + safety state machine.
+ * Public API for the velocity controller and safety state machine.
  * Command-server and telemetry-server code call these functions instead of
  * touching motor/encoder/ADC HAL directly.
  */

@@ -9,7 +9,7 @@
 /*
  * adc_hal.c
  *
- * ESP8266 RTOS SDK ADC wrapper for Day 5-6 current telemetry/fault logic.
+ * ESP8266 RTOS SDK ADC wrapper for current telemetry and fault logic.
  *
  * NodeMCU A0 is used as the external ADC input. The project wiring sends the
  * DRV8870EVM ISEN test-point voltage to A0 after multimeter verification.

@@ -7,26 +7,22 @@
 #include "driver/pwm.h"
 
 /*
- * motor_hal.c
+ * DRV8870EVM motor HAL.
  *
- * Hardware abstraction layer for the TI DRV8870EVM.
- *
- * The rest of the project gives this file a signed duty percentage. This file
- * translates that request into ESP8266 PWM updates on IN1/IN2.
+ * The control task sends a signed duty percentage; this file maps it to
+ * ESP8266 PWM channels on IN1/IN2.
  */
 
 /*
- * DRV8870 input pins:
+ * Logic path used in final Day 7-8 wiring:
  *
- *   ESP8266 D5 / GPIO14 -> DRV8870 IN1
- *   ESP8266 D6 / GPIO12 -> DRV8870 IN2
+ *   ESP8266 D5 / GPIO14 -> TXS A1/B1 -> DRV8870 IN1
+ *   ESP8266 D6 / GPIO12 -> TXS A2/B2 -> DRV8870 IN2
  */
 #define MOTOR_IN1_GPIO       14U
 #define MOTOR_IN2_GPIO       12U
 
-/*
- * 50 us period = 20 kHz PWM.
- */
+/* 50 us period = 20 kHz PWM. */
 #define MOTOR_PWM_PERIOD_US  50U
 #define MOTOR_PWM_CHANNELS   2U
 
@@ -49,9 +45,6 @@ static uint32_t s_pwm_duties[MOTOR_PWM_CHANNELS] =
     0,
     0
 };
-
-
-
 
 /*
  * Initialize ESP8266 PWM for both DRV8870 input pins.
@@ -83,7 +76,6 @@ motor_hal_status_t motor_hal_init(void)
         ESP_LOGE(TAG, "pwm_init failed, err=%d", err);
         return MOTOR_HAL_ERR;
     }
-
 
     err = pwm_set_phase(MOTOR_CH_IN1, 0.0f);
     if (err != ESP_OK)
@@ -123,7 +115,6 @@ motor_hal_status_t motor_hal_init(void)
     ESP_LOGI(TAG, "Motor PWM initialized");
     return MOTOR_HAL_OK;
 }
-
 
 /*
  * Apply a signed duty command.

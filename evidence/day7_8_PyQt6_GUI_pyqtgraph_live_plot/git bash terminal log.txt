@@ -1,0 +1,247 @@
+pckal@Nitish-PC MINGW64 ~
+$ cd esp_projects/project_c_motor_controller/
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ git status --short
+
+ M .gitignore
+?? evidence/day7_8_PyQt6_GUI_pyqtgraph_live_plot/
+?? host_gui/
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ export IDF_PATH=/c/esp/ESP8266_RTOS_SDK
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ . $IDF_PATH/export.sh
+
+Adding ESP-IDF tools to PATH...
+Checking if Python packages are up to date...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See https://setuptoolstest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin t1.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+Added the following directories to PATH:
+  /c/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool
+  /c/esp/ESP8266_RTOS_SDK/components/partition_table/
+  /c/Users/pckal/.espressif/python_env/rtos3.4_py3.10_env/Scripts
+  /c/esp/ESP8266_RTOS_SDK/tools
+  C
+  \Users\pckal\esp_projects\project_c_motor_controller\host_gui\.venv/Scripts
+  /c/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool
+  /c/esp/ESP8266_RTOS_SDK/components/partition_table/
+  /c/Users/pckal/.espressif/tools/xtensa-lx106-elf/esp-2020r3-49-gd5524c1-8.4.0/xtensa-lx106-elf/bin
+  /c/Users/pckal/.espressif/tools/cmake/3.13.4/bin
+  /c/Users/pckal/.espressif/tools/mconf/v4.6.0.0-idf-20190628/
+  /c/Users/pckal/.espressif/tools/ninja/1.9.0/
+  /c/Users/pckal/.espressif/tools/idf-exe/1.0.1/
+  /c/Users/pckal/.espressif/tools/ccache/3.7/
+  /c/esp/ESP8266_RTOS_SDK/tools
+  /c/Users/pckal/bin
+  /mingw64/bin
+  /usr/local/bin
+  /usr/bin
+  /bin
+  /mingw64/bin
+  /usr/bin
+  /c/Users/pckal/bin
+  /c/Windows/system32
+  /c/Windows
+  /c/Windows/System32/Wbem
+  /c/Windows/System32/WindowsPowerShell/v1.0
+  /c/Windows/System32/OpenSSH
+  /c/Program
+  Files/dotnet
+  /cmd
+  /c/Program
+  Files/GitExtensions
+  /c/Users/pckal/scoop/apps/python313/current/Scripts
+  /c/Users/pckal/scoop/apps/python313/current
+  /c/Users/pckal/scoop/apps/git/current/bin
+  /c/Users/pckal/scoop/shims
+  /c/Users/pckal/.local/bin
+  /c/Users/pckal/AppData/Local/Microsoft/WindowsApps
+  /c/Users/pckal/AppData/Local/Programs/Microsoft
+  VS
+  Code/bin
+  /usr/bin/vendor_perl
+  /usr/bin/core_perl
+Done! You can now compile ESP8266-RTOS-SDK projects.
+Go to the project directory and run:
+
+  make
+
+(.venv)
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ idf.py build
+
+Checking Python dependencies...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See https://setuptools
+test/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin t
+1.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+C:\esp\ESP8266_RTOS_SDK\tools\idf.py:658: DeprecationWarning: 'MultiCommand' is deprecated and will be removed in Click 9.0. Use 'Group'
+  class CLI(click.MultiCommand):
+Executing action: all (aliases: build)
+Running ninja in directory c:\users\pckal\esp_projects\project_c_motor_controller\build
+Executing "ninja all"...
+[1/3] Performing build step for 'bootloader'
+ninja: no work to do.
+
+Project build complete. To flash, run this command:
+..\..\..\..\esp\ESP8266_RTOS_SDK\components\esptool_py\esptool\esptool.py -p (PORT) -b 460800 --after hard_reset write_flash --flash_mode
+ize 2MB --flash_freq 40m 0x0 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\project_c_mot
+bin
+or run 'idf.py -p (PORT) flash'
+(.venv)
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+
+
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ idf.py -p COM5 flash monitor
+Checking Python dependencies...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_res
+ources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+C:\esp\ESP8266_RTOS_SDK\tools\idf.py:658: DeprecationWarning: 'MultiCommand' is deprecated and will be removed in Click 9.0. Use 'Group' instead.
+  class CLI(click.MultiCommand):
+Adding flash's dependency "all" to list of actions
+Executing action: all (aliases: build)
+Running ninja in directory c:\users\pckal\esp_projects\project_c_motor_controller\build
+Executing "ninja all"...
+[1/3] Performing build step for 'bootloader'
+ninja: no work to do.
+Executing action: flash
+Running esptool.py in directory c:\users\pckal\esp_projects\project_c_motor_controller\build
+Executing "C:\Users\pckal\.espressif\python_env\rtos3.4_py3.10_env\Scripts\python.exe C:/esp/ESP8266_RTOS_SDK\components/esptool_py/esptool/esptool.py -p COM5 -b 4
+60800 --after hard_reset write_flash @flash_project_args"...
+esptool.py -p COM5 -b 460800 --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x8000 partition_table/partition-table.bin 0x0 bootl
+oader/bootloader.bin 0x10000 project_c_motor_controller.bin
+esptool.py v2.4.0
+Connecting....
+Detecting chip type... ESP8266
+Chip is ESP8266EX
+Features: WiFi
+MAC: 34:5f:45:67:9b:df
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Compressed 3072 bytes to 83...
+Wrote 3072 bytes (83 compressed) at 0x00008000 in 0.0 seconds (effective 2573.1 kbit/s)...
+Hash of data verified.
+Compressed 9968 bytes to 6704...
+Wrote 9968 bytes (6704 compressed) at 0x00000000 in 0.2 seconds (effective 508.0 kbit/s)...
+Hash of data verified.
+Compressed 454768 bytes to 292303...
+Wrote 454768 bytes (292303 compressed) at 0x00010000 in 7.0 seconds (effective 523.2 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+Executing action: monitor
+Running idf_monitor in directory c:\users\pckal\esp_projects\project_c_motor_controller
+Executing "winpty C:\Users\pckal\.espressif\python_env\rtos3.4_py3.10_env\Scripts\python.exe C:/esp/ESP8266_RTOS_SDK\tools/idf_monitor.py -p COM5 -b 74880 c:\users
+\pckal\esp_projects\project_c_motor_controller\build\project_c_motor_controller.elf -m 'C:\Users\pckal\.espressif\python_env\rtos3.4_py3.10_env\Scripts\python.exe'
+ 'C:/esp/ESP8266_RTOS_SDK/tools/idf.py' '-p' 'COM5'"...
+C:\esp\ESP8266_RTOS_SDK\tools\idf_monitor.py:322: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+  if StrictVersion(serial.VERSION) < StrictVersion('3.3.0'):
+--- idf_monitor on COM5 74880 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+
+ ets Jan  8 2013,rst cause:2, boot mode:(3,6)
+
+load 0x40100000, len 6720, room 16
+tail 0
+chksum 0x6f
+load 0x3ffe8008, len 24, room 8
+tail 0
+chksum 0xe6
+load 0x3ffe8020, len 3184, room 8
+tail 8
+chksum 0xf4
+csum 0xf4
+I (42) boot: ESP-IDF v3.4 2nd stage bootloader
+I (42) boot: compile time 00:20:47
+I (42) qio_mode: Enabling default flash chip QIO
+I (48) boot: SPI Speed      : 40MHz
+I (54) boot: SPI Mode       : QIO
+I (60) boot: SPI Flash Size : 2MB
+I (66) boot: Partition Table:
+I (72) boot: ## Label            Usage          Type ST Offset   Length
+I (83) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (94) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (105) boot:  2 factory          factory app      00 00 00010000 000f0000
+I (117) boot: End of partition table
+I (123) esp_image: segment 0: paddr=0x00010010 vaddr=0x40210010 size=0x59320 (365344) map
+0x40210010: _stext at ??:?
+
+I (137) esp_image: segment 1: paddr=0x00069338 vaddr=0x40269330 size=0x0fd30 ( 64816) map
+I (150) esp_image: segment 2: paddr=0x00079070 vaddr=0x3ffe8000 size=0x0060c (  1548) load
+I (164) esp_image: segment 3: paddr=0x00079684 vaddr=0x40100000 size=0x00080 (   128) load
+I (177) esp_image: segment 4: paddr=0x0007970c vaddr=0x40100080 size=0x05940 ( 22848) load
+I (191) boot: Loaded app from partition at offset 0x10000
+I (220) app_main: Project C motor-control firmware starting
+I (222) motor_hal: Initializing motor PWM
+I (222) motor_hal: IN1 GPIO=14, IN2 GPIO=12, PWM period=50 us
+I (231) gpio: GPIO[12]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (245) gpio: GPIO[14]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (260) pwm: --- PWM v3.4
+
+I (265) motor_hal: Motor PWM initialized
+I (272) gpio: GPIO[4]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
+I (286) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
+I (300) encoder_hal: Encoder A-edge counting enabled: A=GPIO5, B=GPIO4
+I (311) adc_hal: ADC current estimate enabled: A0 <- DRV8870EVM ISEN, full_scale=3300 mV, Rsense=150 mohm
+I (327) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (341) led_hal: GPIO2 onboard LED initialized active-low
+I (352) system_api: Base MAC address is not set, read default base MAC address from EFUSE
+I (365) system_api: Base MAC address is not set, read default base MAC address from EFUSE
+phy_version: 1163.0, 665d56c, Jun 24 2020, 10:00:08, RTOS new
+I (442) phy_init: phy ver: 1163_0
+I (456) wifi:pm stop
+I (461) command_server: connecting to Wi-Fi SSID=NETGEAR38_EXT
+I (463) command_server: waiting for Wi-Fi connection before opening command socket
+I (469) app_main: Waiting 15 s for STA Wi-Fi before starting 1 kHz control task
+I (583) wifi:state: 0 -> 2 (b0)
+I (588) wifi:state: 2 -> 3 (0)
+I (590) wifi:state: 3 -> 5 (10)
+I (609) wifi:connected with NETGEAR38_EXT, aid = 3, channel 9, HT20, bssid = 78:20:51:95:de:c4
+I (1344) tcpip_adapter: sta ip: 192.168.1.104, mask: 255.255.255.0, gw: 192.168.1.1
+I (1347) command_server: Wi-Fi connected, IP=192.168.1.104
+I (1354) command_server: TCP command server listening on port 5005
+I (15476) control_task: 1 kHz control loop + safety monitor started
+I (15481) telemetry_server: binary telemetry listening on port 5006
+I (15484) app_main: System bring-up complete
+I (16476) control_task: pid_telemetry t_ms=1000 state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=44 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 enc_a=1
+ enc_b=0
+I (17486) control_task: pid_telemetry t_ms=2000 state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=48 fault=0x00 fault_name=NONE error=0 delta=0 missed=10 enc_a=
+1 enc_b=0
+I (18495) control_task: pid_telemetry t_ms=3000 state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 fault=0x00 fault_name=NONE error=0 delta=0 missed=20 enc_a=
+1 enc_b=0
+I (19506) control_task: pid_telemetry t_ms=4000 state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=48 fault=0x00 fault_name=NONE error=0 delta=0 missed=30 enc_a=
+1 enc_b=0
+I (20515) control_task: pid_telemetry t_ms=5000 state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=46 fault=0x00 fault_name=NONE error=0 delta=0 missed=40 enc_a=
+1 enc_b=0
+I (21525) control_task: pid_telemetry t_ms=6000 state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=43 fault=0x00 fault_name=NONE error=0 delta=0 missed=50 enc_a=
+1 enc_b=0
+
+Done
+(.venv)
+
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ py -3 -m venv host_gui/.venv
+(.venv)
+
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ source host_gui/.venv/Scripts/activate
+(.venv)
+
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (main)
+$ python host_gui/project_c_motor_gui.py --host 192.168.1.104

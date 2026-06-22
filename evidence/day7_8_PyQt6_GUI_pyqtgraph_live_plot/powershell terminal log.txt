@@ -1,0 +1,59 @@
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $ip="192.168.1.104"
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Test-NetConnection $ip -Port 5005
+
+
+ComputerName     : 192.168.1.104
+RemoteAddress    : 192.168.1.104
+RemotePort       : 5005
+InterfaceAlias   : Wi-Fi 2
+SourceAddress    : 192.168.1.102
+TcpTestSucceeded : True
+
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Test-NetConnection $ip -Port 5006
+
+
+ComputerName     : 192.168.1.104
+RemoteAddress    : 192.168.1.104
+RemotePort       : 5006
+InterfaceAlias   : Wi-Fi 2
+SourceAddress    : 192.168.1.102
+TcpTestSucceeded : True
+
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> function Send-MotorCommand($cmd) {
+>>     $ip="192.168.1.104"
+>>     $c=New-Object Net.Sockets.TcpClient($ip,5005)
+>>     $s=$c.GetStream()
+>>     $b=[Text.Encoding]::ASCII.GetBytes($cmd + "`n")
+>>     $s.Write($b,0,$b.Length)
+>>     $r=New-Object byte[] 512
+>>     $n=$s.Read($r,0,$r.Length)
+>>     [Text.Encoding]::ASCII.GetString($r,0,$n)
+>>     $c.Close()
+>> }
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCommand "STOP"
+OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>    Send-MotorCommand "CLEAR_FAULT"
+OK CLEAR_FAULT
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>    Send-MotorCommand "DISARM"
+OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>    Send-MotorCommand "STATUS"
+OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=43 fault=0x00 fault_name=NONE error=0 delta=0 missed=25093 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+
+
+
+Send-MotorCommand "STOP"
+Send-MotorCommand "CLEAR_FAULT"
+Send-MotorCommand "DISARM"
+Send-MotorCommand "STATUS"

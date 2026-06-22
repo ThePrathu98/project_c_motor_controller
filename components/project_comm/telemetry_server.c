@@ -18,7 +18,7 @@
  *
  * Binary telemetry stream for host-side tools.
  *
- * Day 3-4 used human-readable ESP_LOGI and text STATUS replies. Day 5-6 adds a
+ * Day 3-4 used human-readable ESP_LOGI and text STATUS replies. The GUI uses this
  * separate binary stream so the PC can receive fixed-size samples at 100 Hz
  * without parsing long text strings.
  *
@@ -154,8 +154,8 @@ static void telemetry_task(void *arg)
         /*
          * Accept one telemetry client at a time. When the PC script exits or
          * Wi-Fi drops, send() fails, we close the client, and accept() waits for
-         * the next connection. This is the manual reconnect path verified in
-         * the Day 5-6 evidence logs.
+         * the next connection. This is the manual reconnect path used by
+         * the Day 7-8 GUI reconnect test.
          */
         int client_fd = accept(listen_fd, NULL, NULL);
         if (client_fd < 0)

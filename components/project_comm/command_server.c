@@ -24,7 +24,7 @@
 /*
  * command_server.c
  *
- * Wi-Fi + lwIP/BSD socket command interface for Day 5-6.
+ * Wi-Fi + lwIP/BSD socket command interface used by PowerShell and the Day 7-8 GUI.
  *
  * Structural flow:
  *   1. Start ESP8266 Wi-Fi in station mode.
@@ -103,7 +103,7 @@ static void wifi_start(void)
     esp_wifi_init(&cfg);
 
     /*
-     * Day 5-6 adds a 1 kHz control task plus ADC/current telemetry.
+     * The firmware runs a 1 kHz control task plus ADC/current telemetry.
      * Disable Wi-Fi power-save so the ESP8266 does not miss beacons while
      * motor-control work is active. This keeps the same STA/router behavior
      * as Day 3-4, but makes the connection more stable for telemetry tests.
