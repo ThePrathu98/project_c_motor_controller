@@ -1,0 +1,38 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260623220926
+Username: NITISH-PC\pckal
+RunAs User: NITISH-PC\pckal
+Configuration Name: 
+Machine: NITISH-PC (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 20312
+PSVersion: 5.1.26100.8655
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.8655
+BuildVersion: 10.0.26100.8655
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\evidence\day10_final_demo\day10_part1_setup_baseline_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=57 peak_current_ma=57 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=67168 heap_now=61164 heap_delta=6004 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Process -FilePath ".\host_gui\.venv\Scripts\python.exe" -ArgumentList ".\host_gui\project_c_motor_gui.py --host 192.168.1.105"
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20260623221223
+**********************

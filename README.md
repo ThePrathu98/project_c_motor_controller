@@ -2,9 +2,25 @@
 
 ESP8266 RTOS SDK v3.4 firmware for a closed-loop brushed DC motor controller using a DRV8870EVM H-bridge, Pololu 25D 6 V encoder motor, TCP commands, binary telemetry, safety fault handling, and a PyQt6/pyqtgraph host GUI.
 
-Current checkpoint: **Day 9 complete**. The controller has PID tuning notes, current logging, heap/status logging, missed-deadline logging, Wi-Fi reconnect count logging, deliberate STALL proof, and a completed 10-minute soak run.
-
 ## Current status
+
+Project C is complete through Day 10 final review preparation. The firmware builds with ESP8266 RTOS SDK 
+v3.4, runs a 1 kHz closed-loop motor-control task, accepts Wi-Fi TCP commands on port 5005, 
+streams binary telemetry to the PyQt6 GUI on port 5006, detects STALL faults, supports CLEAR_FAULT 
+recovery, and has Day 9 PID/soak evidence committed.
+
+Final verified results:
+- Final PID gains: Kp=0.0025, Ki=0.004, Kd=0.000, Kaw=0.200.
+- Bench supply: 6.4 V, 1.0 A current limit.
+- Official soak completed through 15 cycles of 500/1500 RPM.
+- Final 500 RPM section: approximately 488 RPM.
+- Final 1500 RPM section: approximately 1514 RPM.
+- Peak current during soak: approximately 449 mA.
+- Final missed control deadlines: 0.
+- Final Wi-Fi reconnect count: 0.
+- Final state after STOP/DISARM: IDLE, fault=NONE.
+- STALL fault verified using a VM-off no-motion test, followed by CLEAR_FAULT, ARM, and speed-command recovery.
+
 
 | Area | Status |
 |---|---|
@@ -16,9 +32,9 @@ Current checkpoint: **Day 9 complete**. The controller has PID tuning notes, cur
 | Safety/fault handling | STALL/OVERCURRENT software monitor, latched FAULT state, CLEAR_FAULT recovery |
 | Evidence folders | `evidence/day9_pid_tuning_soak/` plus earlier day evidence |
 
-## Hardware setup
+## Hardware setup and wiring
 
-### Power and motor path
+### Power and motor path wiring
 
 | Signal | Connection |
 |---|---|
@@ -35,7 +51,7 @@ Bench supply: 6.4 V
 Current limit: 1.0 A
 ```
 
-### ESP8266 and DRV8870 input path
+### ESP8266 and DRV8870 input path wiring
 
 Final Day 9 testing used direct ESP8266 GPIO-to-DRV8870 input wiring. No external logic level shifter is required in the final wiring used for the Day 9 evidence.
 
@@ -45,7 +61,7 @@ Final Day 9 testing used direct ESP8266 GPIO-to-DRV8870 input wiring. No externa
 | ESP8266 `D6 / GPIO12` | DRV8870EVM `IN2` |
 | ESP8266 `GND` | DRV8870EVM `GND` / common ground |
 
-### Encoder feedback
+### Encoder feedback wiring
 
 | Motor encoder wire | Connection |
 |---|---|
@@ -54,7 +70,7 @@ Final Day 9 testing used direct ESP8266 GPIO-to-DRV8870 input wiring. No externa
 | Yellow / Encoder A | ESP8266 `D1 / GPIO5` |
 | White / Encoder B | ESP8266 `D2 / GPIO4` |
 
-### Saleae Logic Pro 8 channels
+### Saleae Logic Pro 8 channels wiring
 
 | Saleae channel | Probe point |
 |---|---|
@@ -207,14 +223,29 @@ Day 9 evidence showed:
 See:
 
 ```text
-docs/day9_tuning_notes.md
-docs/day9_measurements.md
-evidence/day9_pid_tuning_soak/
+docs/day10_tuning_notes.md
+docs/day10_measurements.md
+evidence/day9_10_pid_tuning_soak/
 ```
 
-## Known limitations before final Day 10 review
+## Final review files
 
-- The controller is tuned for this specific bench setup, DRV8870EVM, wiring, supply voltage, and encoder scale.
-- The current estimate is derived from the DRV8870EVM ISEN test pad and is used as a logged estimate, not a calibrated laboratory current measurement.
-- nFAULT is not wired as a direct ESP8266 GPIO input on this rig; STALL and OVERCURRENT are handled by software safety logic using encoder/current data.
-- The host GUI is a bench demo tool, not a production safety interface.
+- `README.md` — wiring, build/flash steps, GUI launch, safety warnings, gain values, and soak numbers.
+- `safety_design.md` — fault triggers, control response, and recovery rules.
+- `LIMITATIONS.md` — known limitations of the bench rig.
+- `docs/day9_tuning_notes.md` — Day 9 PID tuning and soak evidence notes.
+- `docs/day9_measurements.md` — Day 9 measured values.
+- `docs/measurements_day10_final.md` — final review measurement summary.
+- `docs/tuning_notes_day10_final.md` — final gain summary and tuning conclusion.
+- `evidence/day9_pid_tuning_soak/` — logs, GUI screenshots, Saleae screenshots, and soak evidence.
+
+## Final release
+
+The final review release is tagged as `v1.0` after all Day 10 documentation is committed.
+
+Tag command:
+
+```bash
+git tag -a v1.0 -m "Project C final review release"
+git push origin v1.0
+```
