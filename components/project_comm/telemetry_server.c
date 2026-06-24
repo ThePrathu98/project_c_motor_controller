@@ -14,40 +14,21 @@
 #include "control_task.h"
 
 /*
- * telemetry_server.c
+ * Binary telemetry stream on TCP port 5006.
  *
- * Binary telemetry stream for host-side tools.
+ * The GUI receives fixed 20-byte little-endian frames at 25 Hz. A sequence
+ * number is included so the host can detect packet gaps after reconnects.
  *
- * Day 3-4 used human-readable ESP_LOGI and text STATUS replies. The GUI uses this
- * separate binary stream so the PC can receive fixed-size samples at 100 Hz
- * without parsing long text strings.
- *
- * TCP port: 5006
- * Rate:     100 Hz, because TELEMETRY_PERIOD_MS = 10
- * Frame:    fixed 20-byte little-endian uint8_t buffer
- *
- * Host Python unpack format:
- *   <IhhhhBBHI
- *
- * Frame layout:
- *   byte  0..3   uint32_t sequence number
- *   byte  4..5   int16_t target RPM
- *   byte  6..7   int16_t actual RPM
- *   byte  8..9   int16_t duty permille, e.g. 710 means 71.0 %
- *   byte 10..11  int16_t current in mA
- *   byte 12      uint8_t state enum
- *   byte 13      uint8_t fault flags
- *   byte 14..15  uint16_t missed control-deadline counter, low 16 bits
- *   byte 16..19  uint32_t uptime/control tick in ms
- *
- * The sequence number lets the host detect dropped frames or reconnect gaps.
- * The firmware keeps the frame as a fixed uint8_t buffer; no dynamic strings
- * are allocated in this telemetry path.
+ * Frame format used by Python: <IhhhhBBHI
+ *   seq, target_rpm, actual_rpm, duty_permille, current_mA,
+ *   state, fault_flags, missed_low16, uptime_ms
  */
 
-#define TELEMETRY_PORT      5006
-#define TELEMETRY_PERIOD_MS 10
-#define TELEMETRY_FRAME_LEN 20
+#define TELEMETRY_PORT          5006
+
+#define TELEMETRY_PERIOD_MS     40
+
+#define TELEMETRY_FRAME_LEN     20
 
 static const char *TAG = "telemetry_server";
 
@@ -59,10 +40,7 @@ static void put_u16_le(uint8_t *buf, uint16_t v)
 
 static void put_i16_le(uint8_t *buf, int16_t v)
 {
-    /*
-     * Signed values are stored using the same two-byte little-endian layout.
-     * Casting to uint16_t preserves the two's-complement bit pattern.
-     */
+    /* Preserve the two's-complement bit pattern when packing signed values. */
     put_u16_le(buf, (uint16_t)v);
 }
 
@@ -83,11 +61,7 @@ static int16_t clamp_i16(int32_t v)
 
 static void build_frame(uint8_t frame[TELEMETRY_FRAME_LEN], uint32_t seq)
 {
-    /*
-     * control_get_status() returns a snapshot of the control task's current
-     * variables. telemetry_server.c observes these values only; it does not
-     * command speed, clear faults, or touch PWM.
-     */
+    /* Observer only: telemetry reads a snapshot and never commands the motor. */
     control_status_t st = control_get_status();
 
     memset(frame, 0, TELEMETRY_FRAME_LEN);
@@ -151,12 +125,7 @@ static void telemetry_task(void *arg)
 
     while (1)
     {
-        /*
-         * Accept one telemetry client at a time. When the PC script exits or
-         * Wi-Fi drops, send() fails, we close the client, and accept() waits for
-         * the next connection. This is the manual reconnect path used by
-         * the Day 7-8 GUI reconnect test.
-         */
+        /* One client at a time; a failed send drops back to accept(). */
         int client_fd = accept(listen_fd, NULL, NULL);
         if (client_fd < 0)
         {
@@ -178,11 +147,7 @@ static void telemetry_task(void *arg)
                 break;
             }
 
-            /*
-             * vTaskDelayUntil() keeps a fixed 10 ms cadence relative to the
-             * previous wake time, which is better for stable sample timing than
-             * delaying 10 ms after the send work finishes.
-             */
+            /* Fixed 40 ms cadence: delay relative to the previous wake time. */
             vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(TELEMETRY_PERIOD_MS));
         }
 

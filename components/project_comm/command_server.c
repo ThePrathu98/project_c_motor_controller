@@ -22,21 +22,11 @@
 #include "wifi_secrets.h"
 
 /*
- * command_server.c
+ * Text command interface on TCP port 5005.
  *
- * Wi-Fi + lwIP/BSD socket command interface used by PowerShell and the Day 7-8 GUI.
- *
- * Structural flow:
- *   1. Start ESP8266 Wi-Fi in station mode.
- *   2. Wait until the board receives an IP address.
- *   3. Open a TCP server socket on COMMAND_PORT / 5005.
- *   4. Accept one client connection at a time.
- *   5. Parse one line command and call the control_task public API.
- *   6. Send a short text response back to the PC client.
- *
- * The command server never touches PWM or encoder registers directly. It only
- * calls functions from control_task.c. That keeps communication separate from
- * real-time motor control.
+ * The socket task accepts one short command per connection and calls the public
+ * control_task API. Keeping this layer separate from PWM/encoder code keeps
+ * network handling out of the real-time control path.
  */
 
 #define COMMAND_PORT        5005
@@ -45,14 +35,9 @@
 
 static const char *TAG = "command_server";
 static EventGroupHandle_t s_wifi_events;
+static volatile uint32_t s_wifi_reconnect_count = 0;
 
-/*
- * ESP-IDF Wi-Fi event callback.
- *
- * The event loop calls this function from the Wi-Fi system context whenever
- * station mode starts, gets an IP, or disconnects. We use an event-group bit
- * to tell wifi_start() when the board is ready to accept TCP connections.
- */
+/* Wi-Fi event callback: connect, mark GOT_IP, and count reconnects. */
 static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     (void)ctx;
@@ -71,9 +56,11 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
             break;
 
         case SYSTEM_EVENT_STA_DISCONNECTED:
+            s_wifi_reconnect_count++;
             ESP_LOGW(TAG,
-                     "Wi-Fi disconnected reason=%d; reconnecting",
-                     event->event_info.disconnected.reason);
+                     "Wi-Fi disconnected reason=%d; reconnecting count=%lu",
+                     event->event_info.disconnected.reason,
+                     (unsigned long)s_wifi_reconnect_count);
             xEventGroupClearBits(s_wifi_events, WIFI_CONNECTED_BIT);
             esp_wifi_connect();
             break;
@@ -85,12 +72,7 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
     return ESP_OK;
 }
 
-/*
- * Bring up Wi-Fi station mode and block until connected.
- *
- * NVS is initialized because the ESP8266 Wi-Fi stack stores RF/Wi-Fi data
- * there. tcpip_adapter_init() starts the network stack used by lwIP sockets.
- */
+/* Bring up STA mode and block until the ESP8266 has an IP address. */
 static void wifi_start(void)
 {
     s_wifi_events = xEventGroupCreate();
@@ -102,12 +84,7 @@ static void wifi_start(void)
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     esp_wifi_init(&cfg);
 
-    /*
-     * The firmware runs a 1 kHz control task plus ADC/current telemetry.
-     * Disable Wi-Fi power-save so the ESP8266 does not miss beacons while
-     * motor-control work is active. This keeps the same STA/router behavior
-     * as Day 3-4, but makes the connection more stable for telemetry tests.
-     */
+    /* Keep STA latency predictable while the 1 kHz control task is running. */
     esp_wifi_set_storage(WIFI_STORAGE_RAM);
     esp_wifi_set_ps(WIFI_PS_NONE);
 
@@ -137,11 +114,7 @@ static void wifi_start(void)
                         portMAX_DELAY);
 }
 
-/*
- * Remove newline, carriage return, spaces, and tabs from the end of a received
- * command. PowerShell/Python sends commands with a trailing '\n', so trimming
- * lets strcmp()/strncmp() compare the command text cleanly.
- */
+/* Strip line endings and trailing whitespace before command parsing. */
 static void trim(char *s)
 {
     size_t n = strlen(s);
@@ -157,16 +130,10 @@ static void trim(char *s)
     }
 }
 
-/*
- * Convert a text command into a control_task API call.
- *
- * resp is filled with a short line-oriented response because the PowerShell
- * client expects one response per TCP connection. snprintf() is used everywhere
- * so the response buffer cannot overflow.
- */
+/* Parse one text command and format one line of response text. */
 static void handle_command(const char *cmd, char *resp, size_t resp_len)
 {
-    /* ARM enables later SET_SPEED commands but does not spin the motor yet. */
+    /* ARM moves to ARMED; the motor stays stopped until SET_SPEED. */
     if (strcmp(cmd, "ARM") == 0)
     {
         control_arm();
@@ -234,25 +201,31 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
             snprintf(resp, resp_len, "ERR FAULT\n");
         }
     }
-    /* STATUS snapshots control_task state for PowerShell logs and grading. */
+    /* STATUS is the main text evidence path for PowerShell logs. */
     else if (strcmp(cmd, "STATUS") == 0)
     {
         control_status_t st = control_get_status();
 
         snprintf(resp,
                  resp_len,
-                 "OK STATUS state=%s cmd=%ld target=%ld actual=%ld duty=%ld current_ma=%ld fault=0x%02x fault_name=%s error=%ld delta=%ld missed=%lu step=%d\n",
+                 "OK STATUS state=%s cmd=%ld target=%ld actual=%ld duty=%ld current_ma=%ld peak_current_ma=%ld pid_i_x1000=%ld fault=0x%02x fault_name=%s error=%ld delta=%ld missed=%lu heap_start=%lu heap_now=%lu heap_delta=%ld wifi_reconnects=%lu step=%d\n",
                  control_state_name(st.state),
                  (long)st.cmd,
                  (long)st.target,
                  (long)st.actual,
                  (long)st.duty,
                  (long)st.current_ma,
+                 (long)st.peak_current_ma,
+                 (long)st.pid_i_x1000,
                  (unsigned)st.fault_flags,
                  control_fault_name(st.fault_flags),
                  (long)st.error,
                  (long)st.delta,
                  (unsigned long)st.missed,
+                 (unsigned long)st.heap_start,
+                 (unsigned long)st.heap_now,
+                 (long)st.heap_delta,
+                 (unsigned long)command_server_get_wifi_reconnect_count(),
                  st.step_active);
     }
     else
@@ -261,13 +234,7 @@ static void handle_command(const char *cmd, char *resp, size_t resp_len)
     }
 }
 
-/*
- * FreeRTOS task that owns the TCP server socket.
- *
- * It accepts a connection, receives one command, responds, then closes the
- * connection. The simple one-command-per-connection model makes the PC-side
- * Python/PowerShell scripts easy to write and debug.
- */
+/* TCP server task: accept, receive one command, respond, close. */
 static void server_task(void *arg)
 {
     (void)arg;
@@ -333,7 +300,7 @@ static void server_task(void *arg)
 
             ESP_LOGI(TAG, "RX: %s", rx);
 
-            char resp[192];
+            char resp[512];
             handle_command(rx, resp, sizeof(resp));
 
             send(client_fd, resp, strlen(resp), 0);
@@ -341,6 +308,11 @@ static void server_task(void *arg)
 
         close(client_fd);
     }
+}
+
+uint32_t command_server_get_wifi_reconnect_count(void)
+{
+    return s_wifi_reconnect_count;
 }
 
 /* Public entry point called from app_main(). */

@@ -9,12 +9,7 @@
  * Public HAL interface for the DRV8870 motor driver.
  *
  * The control task only deals with signed duty percentage. This HAL hides the
- * ESP8266 PWM driver calls and the DRV8870 IN1/IN2 direction mapping.
- *
- * HAL rule:
- *   Higher-level code should call motor_hal_set_duty().
- *   Higher-level code should not directly call pwm_set_duty(),
- *   know GPIO numbers, or know DRV8870 IN1/IN2 implementation details.
+ * ESP8266 PWM calls and the DRV8870 IN1/IN2 direction mapping.
  */
 
 #ifdef __cplusplus

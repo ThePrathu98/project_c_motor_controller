@@ -14,10 +14,10 @@
  */
 
 /*
- * Logic path used in final Day 7-8 wiring:
+ * Final Day 9 wiring:
  *
- *   ESP8266 D5 / GPIO14 -> TXS A1/B1 -> DRV8870 IN1
- *   ESP8266 D6 / GPIO12 -> TXS A2/B2 -> DRV8870 IN2
+ *   ESP8266 D5 / GPIO14 -> DRV8870 IN1
+ *   ESP8266 D6 / GPIO12 -> DRV8870 IN2
  */
 #define MOTOR_IN1_GPIO       14U
 #define MOTOR_IN2_GPIO       12U
@@ -142,16 +142,7 @@ motor_hal_status_t motor_hal_set_duty(int32_t duty_percent)
 
     if (clamped > 0)
     {
-        /*
-         * Forward drive for DRV8870:
-         *
-         * This matches the standalone test that worked:
-         *   IN1 = PWM / HIGH
-         *   IN2 = LOW
-         *
-         * Do not inverse-PWM IN2 here. Holding IN2 low gives the driver
-         * a clean forward command instead of mixing drive/brake.
-         */
+        /* Forward: PWM on IN1, IN2 low. */
         err = pwm_set_duty(MOTOR_CH_IN1, duty_count);
         if (err != ESP_OK) return MOTOR_HAL_ERR;
 
@@ -160,11 +151,7 @@ motor_hal_status_t motor_hal_set_duty(int32_t duty_percent)
     }
     else if (clamped < 0)
     {
-        /*
-         * Reverse drive:
-         *   IN1 = LOW
-         *   IN2 = PWM / HIGH
-         */
+        /* Reverse: IN1 low, PWM on IN2. */
         err = pwm_set_duty(MOTOR_CH_IN1, 0);
         if (err != ESP_OK) return MOTOR_HAL_ERR;
 
@@ -173,11 +160,7 @@ motor_hal_status_t motor_hal_set_duty(int32_t duty_percent)
     }
     else
     {
-        /*
-         * Stop / coast:
-         *   IN1 = LOW
-         *   IN2 = LOW
-         */
+        /* Stop/coast: both driver inputs low. */
         err = pwm_set_duty(MOTOR_CH_IN1, 0);
         if (err != ESP_OK) return MOTOR_HAL_ERR;
 

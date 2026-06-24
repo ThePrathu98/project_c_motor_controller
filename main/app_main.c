@@ -16,18 +16,8 @@
  *
  * Top-level system bring-up for Project C.
  *
- * Day 3-4 already had the core motor/encoder/control/command pieces:
- *   motor HAL -> encoder HAL -> 1 kHz control task -> TCP command server.
- *
- * Later checkpoints add:
- *   - ADC current-sense HAL for DRV8870EVM ISEN -> ESP8266 A0.
- *   - LED HAL on GPIO2 for visible state/fault feedback.
- *   - Safety monitor inside the 1 kHz control loop.
- *   - Binary telemetry TCP server on port 5006.
- *
- * Keep this file simple: it should only define the startup order. Hardware
- * details stay in HAL files, control logic stays in control_task.c, safety
- * thresholds stay in safety_monitor.c, and sockets stay in comm files.
+ * Startup order only. Hardware setup stays in HAL files, control/safety logic
+ * stays in project_control, and TCP sockets stay in project_comm.
  */
 
 static const char *TAG = "app_main";

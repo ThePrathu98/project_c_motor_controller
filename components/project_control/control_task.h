@@ -29,9 +29,14 @@ typedef struct
     int32_t error;          /* target - actual. */
     int32_t delta;          /* Encoder count delta from last sample. */
     int32_t current_ma;     /* DRV8870EVM ISEN-derived current estimate. */
+    int32_t peak_current_ma;/* Highest current observed since ARM/start. */
+    int32_t pid_i_x1000;    /* PID integrator term * 1000 for anti-windup proof. */
     uint8_t fault_flags;    /* SAFETY_FAULT_* bitmask. */
     uint32_t ticks;         /* 1 ms control-task tick count / uptime_ms. */
     uint32_t missed;        /* Missed semaphore/timer events counter. */
+    uint32_t heap_start;    /* Free heap at ARM/start, bytes. */
+    uint32_t heap_now;      /* Current free heap, bytes. */
+    int32_t heap_delta;     /* heap_start - heap_now; target near zero. */
     int step_active;        /* Nonzero when internal STEP_TEST is active. */
 } control_status_t;
 

@@ -1,20 +1,11 @@
 #include "pid.h"
 
 /*
- * pid.c
- *
- * Pure C PID implementation used by control_task.c.
- *
- * The PID output is not the full motor duty. In the final Day 3-4 tuning,
- * feed-forward supplies the approximate duty and PID returns a small trim.
+ * Pure C PID helper used as a trim around feed-forward motor duty.
+ * The controller stores its own integrator and previous-error state in the struct.
  */
 
-/*
- * Local helper.
- *
- * static:
- *   File-local function. Other files cannot call this directly.
- */
+/* File-local clamp helper for output limiting. */
 static float clamp_float(float value, float min_value, float max_value)
 {
     if (value > max_value)
@@ -38,10 +29,7 @@ void pid_init(pid_controller_t *pid,
               float out_min,
               float out_max)
 {
-    /*
-     * pid is a pointer. The caller owns the actual struct memory.
-     * We use pid->field syntax to write into that struct.
-     */
+    /* Caller owns the struct; this function only initializes its fields. */
     pid->kp = kp;
     pid->ki = ki;
     pid->kd = kd;
@@ -65,18 +53,10 @@ void pid_reset(pid_controller_t *pid)
     pid->initialized = 0;
 }
 
-/*
- * Execute one PID sample.
- *
- * Inputs use floating point because gains and dt are fractional. The caller
- * converts the returned correction back to integer duty percent.
- */
+/* Run one PID sample and return a clamped duty correction. */
 float pid_update(pid_controller_t *pid, float setpoint, float measurement, float dt_sec)
 {
-    /*
-     * error:
-     *   Positive error means actual speed is below target speed.
-     */
+    /* Positive error means actual speed is below target speed. */
     float error = setpoint - measurement;
 
     /*
@@ -94,18 +74,13 @@ float pid_update(pid_controller_t *pid, float setpoint, float measurement, float
         pid->initialized = 1;
     }
 
-    /*
-     * Unsaturated PID output before clamp.
-     */
+    /* PID output before clamp. */
     float unsat_output =
         (pid->kp * error) +
         pid->integrator +
         (pid->kd * derivative);
 
-    /*
-     * Saturated output.
-     * This prevents commanding impossible duty corrections.
-     */
+    /* Clamp correction to the duty-trim range passed to pid_init(). */
     float sat_output = clamp_float(unsat_output, pid->out_min, pid->out_max);
 
     /*
@@ -122,4 +97,14 @@ float pid_update(pid_controller_t *pid, float setpoint, float measurement, float
     pid->prev_error = error;
 
     return sat_output;
+}
+
+float pid_get_integrator(const pid_controller_t *pid)
+{
+    if (pid == 0)
+    {
+        return 0.0f;
+    }
+
+    return pid->integrator;
 }

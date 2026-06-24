@@ -10,7 +10,7 @@
 | Command socket | TCP port 5005 |
 | Telemetry socket | TCP port 5006 |
 | Telemetry frame | 20 bytes at 100 Hz |
-| Final ESP IP | 192.168.1.104 during latest rerun; use the IP printed in Git Bash monitor |
+| Final ESP IP | 192.168.1.105 during latest rerun; use the IP printed in Git Bash monitor |
 
 ## Power and Safety Order
 

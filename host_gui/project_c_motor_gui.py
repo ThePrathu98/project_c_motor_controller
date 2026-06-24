@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Project C Day 7-8 host GUI.
+Project C host GUI.
 
 PyQt6 + pyqtgraph operator panel for the ESP8266 motor controller.
 The GUI intentionally keeps command traffic and telemetry traffic separate:
@@ -38,7 +38,7 @@ CMD_PORT = 5005
 TEL_PORT = 5006
 FRAME = struct.Struct("<IhhhhBBHI")  # seq,target,actual,duty,current,state,fault,missed,uptime
 PLOT_SECONDS = 30.0          # rolling plot window shown on both graphs
-RECONNECT_SECONDS = 10.0       # Day 7-8 brief asks for 10 s retry
+RECONNECT_SECONDS = 10.0       # retry delay after telemetry disconnect
 
 STATE = {0: "IDLE", 1: "ARMED", 2: "RUNNING", 3: "FAULT"}
 STATE_COLOR = {0: "#777777", 1: "#8e44ad", 2: "#27ae60", 3: "#c0392b"}
@@ -122,7 +122,7 @@ class TelemetryThread(QThread):
 class MainWindow(QMainWindow):
     def __init__(self, host: str):
         super().__init__()
-        self.setWindowTitle("Project C Motor Controller - Day 7-8 GUI")
+        self.setWindowTitle("Project C Motor Controller GUI")
         self.samples = deque(maxlen=5000)
         self.last_seq = None
         self.gaps = 0
@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
         self._build_ui(host)
         self._start_telemetry(host)
 
-        # Draw at ~30 Hz. Telemetry arrives at 100 Hz; plotting every frame is wasted work.
+        # Draw at ~30 Hz. Telemetry arrives at 25 Hz; this keeps UI refresh smooth.
         self.plot_timer = QTimer(self)
         self.plot_timer.timeout.connect(self._refresh_plot)
         self.plot_timer.start(33)
@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
         cmd.addWidget(send_speed)
         layout.addWidget(cmd_box, 1, 0, 1, 3)
 
-        # Day 7-8 plots: target+actual RPM together, current below.
+        # Live plots: target/actual RPM together, current below.
         self.rpm_plot = pg.PlotWidget(title="Target RPM and Actual RPM")
         self.rpm_plot.addLegend()
         self.rpm_plot.showGrid(x=True, y=True)
@@ -295,8 +295,8 @@ class MainWindow(QMainWindow):
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Project C Day 7-8 GUI")
-    parser.add_argument("--host", default="192.168.1.104", help="ESP8266 IP address printed in idf.py monitor")
+    parser = argparse.ArgumentParser(description="Project C Motor Controller GUI")
+    parser.add_argument("--host", default="192.168.1.105", help="ESP8266 IP address printed in idf.py monitor")
     args = parser.parse_args()
 
     app = QApplication(sys.argv)

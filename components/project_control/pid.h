@@ -6,59 +6,34 @@
  *
  * Pure C PID controller interface.
  *
- * This file contains no ESP8266-specific APIs, so the controller logic remains
- * portable ANSI C and easy to unit-test or reuse.
+ * This file contains no ESP8266-specific APIs, so the controller math stays
+ * portable and separate from hardware code.
  *
  * Important naming note:
  *   Do NOT name this type pid_t.
  *   pid_t is already a standard system typedef for process IDs.
- *   We use pid_controller_t to avoid conflict with ESP8266 SDK headers.
+ *   Used pid_controller_t to avoid conflict with ESP8266 SDK headers.
  */
 
 typedef struct
 {
-    /*
-     * PID gains:
-     *   kp: proportional gain
-     *   ki: integral gain
-     *   kd: derivative gain
-     *   kaw: anti-windup back-calculation gain
-     */
+    /* PID gains; kaw is the back-calculation anti-windup gain. */
     float kp;
     float ki;
     float kd;
     float kaw;
 
-    /*
-     * Output clamp.
-     * For this project, output is a motor duty correction in percent.
-     */
+    /* Output clamp for the duty correction returned by pid_update(). */
     float out_min;
     float out_max;
 
-    /*
-     * Internal state.
-     * These are kept inside the struct so each PID instance owns its memory.
-     * The controller must be reset before a new independent run if old integral
-     * history should not carry over.
-     */
+    /* Internal state reset before a new independent motor command. */
     float integrator;
     float prev_error;
     int initialized;
 } pid_controller_t;
 
-/*
- * Initialize PID object.
- *
- * pid:
- *   Pointer to PID object owned by caller.
- *
- * kp/ki/kd/kaw:
- *   Tuning gains.
- *
- * out_min/out_max:
- *   Clamp range for controller output.
- */
+/* Initialize gains, output limits, and internal state. */
 void pid_init(pid_controller_t  *pid,
               float kp,
               float ki,
@@ -73,18 +48,14 @@ void pid_init(pid_controller_t  *pid,
  */
 void pid_reset(pid_controller_t  *pid);
 
-/*
- * Run one PID update.
- *
- * setpoint:
- *   Desired RPM.
- *
- * measurement:
- *   Actual RPM.
- *
- * dt_sec:
- *   Control update period in seconds.
- */
+/* Run one update using desired RPM, measured RPM, and sample period in seconds. */
 float pid_update(pid_controller_t  *pid, float setpoint, float measurement, float dt_sec);
+
+
+/*
+ * Return the current integrator term.
+ * Day 9 uses this in STATUS/logs to prove anti-windup during a deliberate stall.
+ */
+float pid_get_integrator(const pid_controller_t *pid);
 
 #endif

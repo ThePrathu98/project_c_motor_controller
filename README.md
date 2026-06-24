@@ -1,20 +1,20 @@
 # Project C Motor Controller
 
-ESP8266 RTOS SDK v3.4 firmware for a closed-loop brushed DC motor controller with safety state machine, binary telemetry, and a PyQt6/pyqtgraph live GUI.
+ESP8266 RTOS SDK v3.4 firmware for a closed-loop brushed DC motor controller using a DRV8870EVM H-bridge, Pololu 25D 6 V encoder motor, TCP commands, binary telemetry, safety fault handling, and a PyQt6/pyqtgraph host GUI.
 
-This checkpoint focuses on **Days 7-8: PyQt6 GUI + pyqtgraph live plot**. The GUI controls the system from one host window, receives binary telemetry on a background thread, plots target/actual RPM and current, shows colored state/fault status, logs the last 10 events, and reconnects after telemetry socket drops.
+Current checkpoint: **Day 9 complete**. The controller has PID tuning notes, current logging, heap/status logging, missed-deadline logging, Wi-Fi reconnect count logging, deliberate STALL proof, and a completed 10-minute soak run.
 
-## Current checkpoint status
+## Current status
 
 | Area | Status |
 |---|---|
-| Firmware build | ESP8266 RTOS SDK v3.4, pure C, `idf.py build` project |
+| Firmware build | ESP8266 RTOS SDK v3.4, pure C, `idf.py build` |
 | Command socket | TCP text commands on port `5005` |
 | Telemetry socket | 20-byte binary frames on port `5006` |
 | GUI | `host_gui/project_c_motor_gui.py` using PyQt6 + pyqtgraph |
-| Day 7-8 demo speeds | 300, 500, 800 RPM shown from GUI |
-| Safety/fault display | STALL/OVERCURRENT faults shown in red GUI state block and history list |
-| Evidence folder | `evidence/day7_8_PyQt6_GUI_pyqtgraph_live_plot/` |
+| Final Day 9 speeds | 500 RPM, 800 RPM recovery, 1500 RPM soak/step evidence |
+| Safety/fault handling | STALL/OVERCURRENT software monitor, latched FAULT state, CLEAR_FAULT recovery |
+| Evidence folders | `evidence/day9_pid_tuning_soak/` plus earlier day evidence |
 
 ## Hardware setup
 
@@ -28,27 +28,22 @@ This checkpoint focuses on **Days 7-8: PyQt6 GUI + pyqtgraph live plot**. The GU
 | ESP8266 GND | DRV8870EVM `GND` / common ground |
 | ESP8266 A0 | DRV8870EVM `ISEN` silver pad |
 
-Normal demo setting:
+Normal Day 9 setting:
 
 ```text
 Bench supply: 6.4 V
 Current limit: 1.0 A
 ```
 
-### ESP8266, TXS0108E, and DRV8870 inputs
+### ESP8266 and DRV8870 input path
 
-The ESP8266 outputs 3.3 V logic. In final Day 7-8 testing, a TXS0108E level shifter made the DRV8870 input path reliable.
+Final Day 9 testing used direct ESP8266 GPIO-to-DRV8870 input wiring. No external logic level shifter is required in the final wiring used for the Day 9 evidence.
 
 | Signal | Connection |
 |---|---|
-| TXS `VA` | ESP8266 `3V3` |
-| TXS `OE` | ESP8266 `3V3` |
-| TXS `GND` | Common ground / DRV8870 GND |
-| TXS `VB` | DRV8870EVM `V5P0` |
-| ESP8266 `D5 / GPIO14` | TXS `A1` |
-| TXS `B1` | DRV8870EVM `IN1` |
-| ESP8266 `D6 / GPIO12` | TXS `A2` |
-| TXS `B2` | DRV8870EVM `IN2` |
+| ESP8266 `D5 / GPIO14` | DRV8870EVM `IN1` |
+| ESP8266 `D6 / GPIO12` | DRV8870EVM `IN2` |
+| ESP8266 `GND` | DRV8870EVM `GND` / common ground |
 
 ### Encoder feedback
 
@@ -59,26 +54,27 @@ The ESP8266 outputs 3.3 V logic. In final Day 7-8 testing, a TXS0108E level shif
 | Yellow / Encoder A | ESP8266 `D1 / GPIO5` |
 | White / Encoder B | ESP8266 `D2 / GPIO4` |
 
-### Saleae logic analyzer channels
+### Saleae Logic Pro 8 channels
 
 | Saleae channel | Probe point |
 |---|---|
-| D0 | DRV8870 `IN1` / TXS `B1` side |
-| D1 | DRV8870 `IN2` / TXS `B2` side |
+| D0 | DRV8870 `IN1` / ESP8266 GPIO14 |
+| D1 | DRV8870 `IN2` / ESP8266 GPIO12 |
 | D2 | Encoder A / ESP8266 GPIO5 |
 | D3 | Encoder B / ESP8266 GPIO4 |
+| A4 | DRV8870EVM `ISEN` silver pad |
 | GND | Common ground |
 
 ## Firmware architecture
 
 | Folder | Role |
 |---|---|
-| `main/app_main.c` | startup order and system bring-up |
+| `main/app_main.c` | Startup order and system bring-up |
 | `components/project_hal/` | GPIO, PWM, encoder, ADC, LED hardware wrappers |
-| `components/project_control/` | 1 kHz control loop, PID, safety monitor, state machine |
+| `components/project_control/` | 1 kHz control loop, feed-forward + PI trim, safety monitor, state machine |
 | `components/project_comm/` | Wi-Fi, command socket, binary telemetry socket |
-| `host_gui/` | PyQt6 GUI and Python dependencies |
-| `docs/` | day-by-day implementation notes and measurements |
+| `host_gui/` | PyQt6 GUI and Python dependencies list |
+| `docs/` | Day notes, measurements, and final documentation |
 
 ## Build, flash, and monitor
 
@@ -102,9 +98,9 @@ binary telemetry listening on port 5006
 System bring-up complete
 ```
 
-Use the IP printed by the monitor in the GUI. The latest bench runs used `192.168.1.104`.
+Use the IP printed by the monitor in PowerShell and in the GUI. The Day 9 bench run used `192.168.1.105`.
 
-## Run the Day 7-8 GUI
+## Run the GUI
 
 Create the Python environment once:
 
@@ -119,13 +115,13 @@ python -m pip install -r host_gui\requirements.txt
 Start the GUI:
 
 ```powershell
-python host_gui\project_c_motor_gui.py --host 192.168.1.104
+.\host_gui\.venv\Scripts\python.exe .\host_gui\project_c_motor_gui.py --host 192.168.1.105
 ```
 
 PowerShell socket checks:
 
 ```powershell
-$ip="192.168.1.104"
+$ip="192.168.1.105"
 Test-NetConnection $ip -Port 5005
 Test-NetConnection $ip -Port 5006
 ```
@@ -139,75 +135,86 @@ TcpTestSucceeded : True
 Optional command helper:
 
 ```powershell
-function Send-MotorCommand($cmd) {
-    $ip="192.168.1.104"
-    $c=New-Object Net.Sockets.TcpClient($ip,5005)
-    $s=$c.GetStream()
-    $b=[Text.Encoding]::ASCII.GetBytes($cmd + "`n")
-    $s.Write($b,0,$b.Length)
-    $r=New-Object byte[] 512
-    $n=$s.Read($r,0,$r.Length)
-    [Text.Encoding]::ASCII.GetString($r,0,$n)
-    $c.Close()
+function Send-MotorCmd {
+    param([string]$Cmd)
+    $client = New-Object System.Net.Sockets.TcpClient
+    $client.Connect($ip, 5005)
+    $stream = $client.GetStream()
+    $writer = New-Object System.IO.StreamWriter($stream)
+    $writer.AutoFlush = $true
+    $reader = New-Object System.IO.StreamReader($stream)
+    $writer.WriteLine($Cmd)
+    $reply = $reader.ReadLine()
+    $reader.Close(); $writer.Close(); $client.Close()
+    Write-Host "CMD: $Cmd"
+    Write-Host "RSP: $reply"
+    Write-Host ""
 }
 ```
 
-## Day 7-8 GUI demo sequence
+## Useful command sequence
 
 Start from a safe state:
 
 ```text
-STOP -> CLEAR_FAULT -> DISARM -> STATUS
+STOP -> DISARM -> STATUS
 ```
 
-Main GUI run:
+Step response:
 
 ```text
-START / ARM
-SET_SPEED 300
-SET_SPEED 500
-SET_SPEED 800
-STOP
-DISARM
+ARM -> STEP_TEST -> STATUS after completion
 ```
 
-Fault/recovery proof:
+Manual speed run:
 
 ```text
-START / ARM
-SET_SPEED 300
-create safe no-motion condition or controlled load
-observe red FAULT block and history event
-CLEAR_FAULT
-DISARM
-STATUS
+ARM -> SET_SPEED 500 -> SET_SPEED 1500 -> STOP -> DISARM -> STATUS
 ```
 
-Do not stop the spinning shaft with fingers. For a safe stall-style demo, remove motor VM/output briefly or use a controlled, low-energy method.
+Safe stall proof used for Day 9:
 
-## Day 7-8 evidence files
+```text
+ARM -> SET_SPEED 500
+turn bench supply output OFF long enough to trigger STALL
+turn bench supply output ON
+CLEAR_FAULT -> ARM -> SET_SPEED 800 -> STOP -> DISARM -> STATUS
+```
 
-| Evidence | Purpose |
-|---|---|
-| `GUI_300rpm_1_working.png`, `GUI_300rpm_2_working.png` | actual RPM near 300 RPM after start/settling |
-| `GUI_500rpm_working.png` | mixed-use speed change to 500 RPM |
-| `GUI_800rpm_working.png` | mixed-use speed change to 800 RPM |
-| `GUI_1500rpm_working.png` | high-speed run evidence, with tuning limitations noted |
-| `GUI_stall.png` | red FAULT state and history list proof |
-| `Saleae_logic_300rpm_working.png`, `Saleae_logic_800rpm_working.png`, `Saleae_logic_1500rpm_working.png` | driver input and encoder activity proof |
-| `Motor_control_PyQt6_GUI_connection.png` | hardware/GUI connection evidence |
-| `TXS0108E-8-Channel_logic_level_shifter.png` | final level shifter hardware evidence |
+Do not hard-pinch the spinning shaft with fingers. For a repeatable stall/no-motion proof, use the bench supply output control or current limit so the motor energy stays low.
+
+## Day 9 result summary
+
+Final PI trim values:
+
+```text
+Kp  = 0.0025
+Ki  = 0.004
+Kd  = 0.000
+Kaw = 0.200
+PID trim clamp = -10% to +10% duty
+```
+
+Day 9 evidence showed:
+
+- 500 -> 1500 RPM step-response evidence from `STEP_TEST` and GUI/Saleae captures.
+- STALL fault latched during VM-off no-motion test.
+- `pid_i_x1000=0` during FAULT, proving the integrator did not ramp while faulted.
+- CLEAR_FAULT, ARM, and 800 RPM recovery worked after the stall test.
+- Official soak reached cycle 15/15 and ended in IDLE with `fault_name=NONE`, `missed=0`, and `wifi_reconnects=0`.
+- Peak current during the official soak was about 449 mA.
 
 See:
 
 ```text
-docs/day7_8_details.md
-docs/day7_8_measurements.md
+docs/day9_tuning_notes.md
+docs/day9_measurements.md
+evidence/day9_pid_tuning_soak/
 ```
 
-## Known limitations before Day 9-10
+## Known limitations before final Day 10 review
 
-- The GUI checkpoint is complete enough for the Day 7-8 demo, but PID tuning is not final.
-- 300/500/800 RPM are the cleanest demonstrated GUI speeds.
-- 1500 RPM runs, but overshoot/ripple still needs Day 9 tuning.
-- Sequence gaps are tracked within one continuous telemetry connection; reconnect events are logged separately.
+- The controller is tuned for this specific bench setup, DRV8870EVM, wiring, supply voltage, and encoder scale.
+- The current estimate is derived from the DRV8870EVM ISEN test pad and is used as a logged estimate, not a calibrated laboratory current measurement.
+- nFAULT is not wired as a direct ESP8266 GPIO input on this rig; STALL and OVERCURRENT are handled by software safety logic using encoder/current data.
+- The host GUI is a bench demo tool, not a production safety interface.

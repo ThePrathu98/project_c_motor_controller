@@ -23,20 +23,12 @@
  *     SAFETY_FAULT_STALL.
  *
  * DRV8870EVM note:
- *   The specific EVM used here exposed a usable ISEN current-sense test pad.
- *   A direct nFAULT GPIO path was not available in the same way as the project
- *   brief describes for newer DRV887x-style boards. Therefore this firmware
- *   implements current-derived OVERCURRENT and encoder-derived STALL in the
- *   software safety monitor, and documents nFAULT as a hardware limitation.
+ *   This build uses the ISEN test pad for current estimate and the encoder for
+ *   stall detection. The nFAULT pin is documented as a hardware limitation for
+ *   this bench setup.
  */
 
-/*
- * Final firmware thresholds.
- *
- * During bench validation, OVERCURRENT was temporarily reduced to prove the
- * fault path safely at no-load current levels. Before committing, the final
- * restored firmware was rebuilt from fullclean and verified with these values.
- */
+/* Final safety thresholds used for the Day 9 soak and fault-recovery tests. */
 #define OVERCURRENT_TRIP_MA       900
 #define OVERCURRENT_CLEAR_MA      700
 

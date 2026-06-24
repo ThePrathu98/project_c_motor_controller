@@ -7,6 +7,8 @@
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 
+#include "esp_system.h"
+
 #include "driver/hw_timer.h"
 #include "esp_attr.h"
 #include "esp_log.h"
@@ -21,25 +23,34 @@
 /*
  * Closed-loop velocity controller and safety state machine.
  *
- * The hardware timer ISR only releases a binary semaphore. All slower work
+ * The hardware timer ISR only releases a counting semaphore. All slower work
  * (encoder-to-RPM conversion, PID/feed-forward, ADC current, safety checks,
  * LED state, and PWM updates) runs in this FreeRTOS task. Keeping one task as
  * the owner of IDLE/ARMED/RUNNING/FAULT makes recovery behavior predictable.
  */
 
-/* 1 kHz ISR -> binary semaphore -> task. ISR does no PID/logging. */
+/* 1 kHz ISR -> counting semaphore -> task. ISR does no PID/logging. */
 #define CONTROL_PERIOD_US       1000
 
-/* Longer RPM window reduces encoder quantization noise at 300 RPM. */
+/*
+ * Small backlog absorbs brief ESP8266 Wi-Fi/RTOS jitter.
+ * missed increments only if this queue overflows, meaning true sustained overload.
+ */
+#define CONTROL_SEM_DEPTH       8
+
+/* Longer RPM window reduces encoder quantization noise at low speed. */
 #define SPEED_SAMPLE_MS         250
 
-#define NORMAL_TELEMETRY_MS     1000
+/* Set nonzero only when serial PID logs are needed during tuning. */
+#define NORMAL_TELEMETRY_MS     0
+
 #define STEP_TELEMETRY_MS       100
 
-/* Current is sampled every 10 ms; safety still runs every 1 ms using the latest value. */
-#define ADC_SAMPLE_MS           10
+/* ADC and LED run below 1 kHz; safety uses the latest sampled current. */
+#define ADC_SAMPLE_MS           50
+#define LED_UPDATE_MS           50
 
-/* Calibrated encoder scale used for RPM conversion during final testing. */
+/* Calibrated encoder scale used for RPM conversion on this bench setup. */
 #define ENCODER_TICKS_PER_REV   110
 
 /* Slew limit: target changes by 2 RPM per 1 ms control tick, about 500 ms per 1000 RPM step. */
@@ -50,7 +61,7 @@
 #define DUTY_PER_RPM_NUM        30
 #define DUTY_PER_RPM_DEN        1000
 
-/* Start assist and hold limits tuned after the TXS0108E input path was fixed. */
+/* Start-assist and hold limits tuned for continuous 300-1500 RPM motion. */
 #define LOW_SPEED_RPM_MAX           400
 #define MID_SPEED_RPM_MAX           1000
 
@@ -79,7 +90,7 @@
 
 static const char *TAG = "control_task";
 
-/* Semaphore released by timer_isr() and consumed by control_task(). */
+/* Counting semaphore released by timer_isr() and consumed by control_task(). */
 static SemaphoreHandle_t s_sem;
 
 /* Single PID instance used as a trim around feed-forward duty. */
@@ -88,9 +99,8 @@ static pid_controller_t s_pid;
 /*
  * Shared controller state.
  *
- * volatile is used because several values are touched from command-server task,
- * control task, and/or timer ISR context. It prevents the compiler from
- * caching these values in a way that would hide updates between contexts.
+ * volatile is used for variables touched by more than one task or ISR context;
+ * the control task remains the only place that writes PWM duty.
  */
 static volatile control_state_t s_state = CONTROL_IDLE;
 static volatile int32_t s_cmd = 0;
@@ -101,6 +111,9 @@ static volatile int32_t s_delta = 0;
 static volatile uint32_t s_ticks = 0;
 static volatile uint32_t s_missed = 0;
 static volatile int32_t s_current_ma = 0;
+static volatile int32_t s_peak_current_ma = 0;
+static volatile uint32_t s_heap_start = 0;
+static volatile uint32_t s_heap_now = 0;
 static volatile uint8_t s_fault_flags = SAFETY_FAULT_NONE;
 
 /* Start-assist state used to overcome static friction when starting from rest. */
@@ -125,6 +138,20 @@ static int32_t clamp_i32(int32_t v, int32_t lo, int32_t hi)
 static int32_t abs_i32(int32_t v)
 {
     return (v < 0) ? -v : v;
+}
+
+/*
+ * Free heap snapshot used by STATUS during soak testing.
+ * heap_delta = heap_start - heap_now; near zero means no steady heap loss.
+ */
+static void update_heap_snapshot(void)
+{
+    s_heap_now = (uint32_t)esp_get_free_heap_size();
+
+    if (s_heap_start == 0)
+    {
+        s_heap_start = s_heap_now;
+    }
 }
 
 /* Forward declaration because run_speed_sample() uses this helper before its definition. */
@@ -310,11 +337,8 @@ static void update_step_test(void)
 /*
  * 1 kHz hardware timer ISR.
  *
- * IRAM_ATTR places the ISR in instruction RAM, which is standard practice for
- * interrupt handlers on ESP8266/ESP-IDF style platforms.
- *
- * The ISR only releases a semaphore and optionally requests a context switch.
- * It does not run PID or log messages.
+ * IRAM_ATTR keeps the ISR callable from instruction RAM. The ISR only releases
+ * one semaphore token; all PID, ADC, safety, and logging work stays in task context.
  */
 static void IRAM_ATTR timer_isr(void *arg)
 {
@@ -444,8 +468,10 @@ static void run_speed_sample(void)
 /* Human-readable telemetry used by Git Bash serial logging. */
 static void log_status(void)
 {
+    update_heap_snapshot();
+
     ESP_LOGI(TAG,
-             "pid_telemetry t_ms=%lu state=%s cmd=%ld target=%ld actual=%ld duty=%ld current_ma=%ld fault=0x%02x fault_name=%s error=%ld delta=%ld missed=%lu enc_a=%d enc_b=%d",
+             "pid_telemetry t_ms=%lu state=%s cmd=%ld target=%ld actual=%ld duty=%ld current_ma=%ld peak_current_ma=%ld pid_i_x1000=%ld fault=0x%02x fault_name=%s error=%ld delta=%ld missed=%lu heap_start=%lu heap_now=%lu heap_delta=%ld enc_a=%d enc_b=%d",
              (unsigned long)s_ticks,
              control_state_name(s_state),
              (long)s_cmd,
@@ -453,11 +479,16 @@ static void log_status(void)
              (long)s_actual,
              (long)s_duty,
              (long)s_current_ma,
+             (long)s_peak_current_ma,
+             (long)(pid_get_integrator(&s_pid) * 1000.0f),
              (unsigned)s_fault_flags,
              safety_monitor_fault_name(s_fault_flags),
              (long)(s_target - s_actual),
              (long)s_delta,
              (unsigned long)s_missed,
+             (unsigned long)s_heap_start,
+             (unsigned long)s_heap_now,
+             (long)((int32_t)s_heap_start - (int32_t)s_heap_now),
              encoder_hal_read_a(),
              encoder_hal_read_b());
 }
@@ -477,9 +508,8 @@ static void log_step_csv(void)
 /*
  * FreeRTOS control task.
  *
- * This task is the real control loop. It blocks on the binary semaphore until
- * timer_isr() wakes it, then updates timing counters and performs scheduled
- * work at 1 ms, SPEED_SAMPLE_MS, and telemetry intervals.
+ * This task owns the control loop. It drains one timer token per iteration,
+ * updates the state machine, and runs lower-rate work using simple counters.
  */
 static void control_task(void *arg)
 {
@@ -489,6 +519,8 @@ static void control_task(void *arg)
     uint32_t normal_log_ms = 0;
     uint32_t step_log_ms = 0;
     uint32_t adc_sample_ms = 0;
+
+    uint32_t led_ms = 0;
 
     encoder_hal_get_and_reset_delta();
 
@@ -501,11 +533,18 @@ static void control_task(void *arg)
         normal_log_ms++;
         step_log_ms++;
         adc_sample_ms++;
+        led_ms++;
+
 
         if (adc_sample_ms >= ADC_SAMPLE_MS)
         {
             adc_sample_ms = 0;
             s_current_ma = adc_hal_read_current_ma();
+
+            if (s_current_ma > s_peak_current_ma)
+            {
+                s_peak_current_ma = s_current_ma;
+            }
         }
         
 
@@ -559,23 +598,33 @@ static void control_task(void *arg)
          * This gives a hardware-visible state indication even when the host
          * terminal or GUI is not connected.
          */
-        switch (s_state)
+
+        if (led_ms >= LED_UPDATE_MS)
         {
-            case CONTROL_IDLE:
-                led_hal_update(LED_HAL_OFF, s_ticks);
-                break;
-            case CONTROL_ARMED:
-                led_hal_update(LED_HAL_SLOW_BLINK, s_ticks);
-                break;
-            case CONTROL_RUNNING:
-                led_hal_update(LED_HAL_SOLID, s_ticks);
-                break;
-            case CONTROL_FAULT:
-                led_hal_update(LED_HAL_FAST_BLINK, s_ticks);
-                break;
-            default:
-                led_hal_update(LED_HAL_OFF, s_ticks);
-                break;
+            led_ms = 0;
+
+            switch (s_state)
+            {
+                case CONTROL_IDLE:
+                    led_hal_update(LED_HAL_OFF, s_ticks);
+                    break;
+
+                case CONTROL_ARMED:
+                    led_hal_update(LED_HAL_SLOW_BLINK, s_ticks);
+                    break;
+
+                case CONTROL_RUNNING:
+                    led_hal_update(LED_HAL_SOLID, s_ticks);
+                    break;
+
+                case CONTROL_FAULT:
+                    led_hal_update(LED_HAL_FAST_BLINK, s_ticks);
+                    break;
+
+                default:
+                    led_hal_update(LED_HAL_OFF, s_ticks);
+                    break;
+            }
         }
 
         if (speed_ms >= SPEED_SAMPLE_MS)
@@ -584,11 +633,14 @@ static void control_task(void *arg)
             run_speed_sample();
         }
 
+
+        #if NORMAL_TELEMETRY_MS > 0
         if (normal_log_ms >= NORMAL_TELEMETRY_MS)
         {
             normal_log_ms = 0;
             log_status();
         }
+        #endif
 
         if (s_step_active && (step_log_ms >= STEP_TELEMETRY_MS))
         {
@@ -604,19 +656,25 @@ static void control_task(void *arg)
  */
 void control_task_start(void)
 {
-    s_sem = xSemaphoreCreateBinary();
+    s_sem = xSemaphoreCreateCounting(CONTROL_SEM_DEPTH, 0);
+
     if (s_sem == NULL)
     {
-        ESP_LOGE(TAG, "xSemaphoreCreateBinary failed");
+        ESP_LOGE(TAG, "xSemaphoreCreateCounting failed");
         return;
     }
 
-    /* PI controller: no derivative because encoder RPM is quantized. */
-    pid_init(&s_pid, 0.004f, 0.010f, 0.000f, 0.200f, -10.0f, 10.0f);
+    /*
+     * Final Day 9 PI trim around feed-forward duty.
+     * Kp was backed off from the overshooting 0.004 test point; Ki removes most
+     * steady-state error. Kd stays zero because the encoder RPM estimate is quantized.
+     */
+    pid_init(&s_pid, 0.0025f, 0.004f, 0.000f, 0.200f, -10.0f, 10.0f);
 
+    update_heap_snapshot();
     safety_monitor_init();
 
-    xTaskCreate(control_task, "control_task", 4096, NULL, 6, NULL);
+    xTaskCreate(control_task, "control_task", 4096, NULL, 8, NULL);
 
     hw_timer_init(timer_isr, NULL);
     hw_timer_alarm_us(CONTROL_PERIOD_US, true);
@@ -636,7 +694,17 @@ void control_arm(void)
     s_state = CONTROL_ARMED;
     s_step_active = 0;
     stop_now();
+
+    /*
+     * Day 9 soak counters start fresh at ARM so STATUS after the 10-minute run
+     * gives direct evidence for missed deadlines, peak current, and heap delta.
+     */
     s_missed = 0;
+    s_peak_current_ma = 0;
+
+    s_heap_start = (uint32_t)esp_get_free_heap_size();
+    s_heap_now = s_heap_start;
+
     ESP_LOGI(TAG, "ARM");
 }
 
@@ -691,7 +759,6 @@ int control_set_speed(int32_t rpm)
 
     int from_stopped = ((s_cmd == 0) && (s_target == 0));
 
-    
     s_cmd = rpm;
     pid_reset(&s_pid);
     encoder_hal_get_and_reset_delta();
@@ -709,7 +776,6 @@ int control_set_speed(int32_t rpm)
         {
             s_start_kick_ms = 0;
         }
-
     }
     else
     {
@@ -780,6 +846,8 @@ control_status_t control_get_status(void)
 {
     control_status_t st;
 
+    update_heap_snapshot();
+
     st.state = s_state;
     st.cmd = s_cmd;
     st.target = s_target;
@@ -788,9 +856,14 @@ control_status_t control_get_status(void)
     st.error = s_target - s_actual;
     st.delta = s_delta;
     st.current_ma = s_current_ma;
+    st.peak_current_ma = s_peak_current_ma;
+    st.pid_i_x1000 = (int32_t)(pid_get_integrator(&s_pid) * 1000.0f);
     st.fault_flags = s_fault_flags;
     st.ticks = s_ticks;
     st.missed = s_missed;
+    st.heap_start = s_heap_start;
+    st.heap_now = s_heap_now;
+    st.heap_delta = (int32_t)s_heap_start - (int32_t)s_heap_now;
     st.step_active = s_step_active;
 
     return st;
@@ -799,7 +872,7 @@ control_status_t control_get_status(void)
 /*
  * Select continuous hold-duty limits by speed range.
  *
- * These limits were tuned to prevent low-speed stalling and high-speed runaway.
+ * These limits are tuned to prevent low-speed stalling and high-speed runaway.
  * They are the key reason the final motor behavior became continuous instead
  * of burst-stop-burst.
  */

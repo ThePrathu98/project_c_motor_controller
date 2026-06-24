@@ -1,0 +1,643 @@
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> cd C:\Users\pckal\esp_projects\project_c_motor_controller
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> New-Item -ItemType Directory -Force .\evidence\day9_pid_tuning_soak
+
+
+    Directory: C:\Users\pckal\esp_projects\project_c_motor_controller\evidence
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         6/23/2026   4:17 PM                day9_pid_tuning_soak
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> try { Stop-Transcript | Out-Null } catch {}
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> $ip = "192.168.1.105"
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Test-NetConnection $ip -Port 5005
+
+
+ComputerName     : 192.168.1.105
+RemoteAddress    : 192.168.1.105
+RemotePort       : 5005
+InterfaceAlias   : Wi-Fi 2
+SourceAddress    : 192.168.1.102
+TcpTestSucceeded : True
+
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Test-NetConnection $ip -Port 5006
+
+
+ComputerName     : 192.168.1.105
+RemoteAddress    : 192.168.1.105
+RemotePort       : 5006
+InterfaceAlias   : Wi-Fi 2
+SourceAddress    : 192.168.1.102
+TcpTestSucceeded : True
+
+
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> function Send-MotorCmd {
+>>     param([string]$Cmd)
+>>
+>>     $client = New-Object System.Net.Sockets.TcpClient
+>>     $client.Connect($ip, 5005)
+>>
+>>     $stream = $client.GetStream()
+>>     $writer = New-Object System.IO.StreamWriter($stream)
+>>     $writer.AutoFlush = $true
+>>     $reader = New-Object System.IO.StreamReader($stream)
+>>
+>>     $writer.WriteLine($Cmd)
+>>     $reply = $reader.ReadLine()
+>>
+>>     $reader.Close()
+>>     $writer.Close()
+>>     $client.Close()
+>>
+>>     Write-Host "CMD: $Cmd"
+>>     Write-Host "RSP: $reply"
+>>     Write-Host ""
+>> }
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Process -FilePath ".\host_gui\.venv\Scripts\python.exe" -ArgumentList ".\host_gui\project_c_motor_gui.py --host 192.168.1.105"
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Transcript -Path .\evidence\day9_pid_tuning_soak\day9_startup_status_log.txt
+Transcript started, output file is .\evidence\day9_pid_tuning_soak\day9_startup_status_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=47 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=67168 heap_now=57560 heap_delta=9608 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+Transcript stopped, output file is C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day9_pid_tuning_soak\day9_startup_status_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Transcript -Path .\evidence\day9_pid_tuning_soak\day9_final_step_response_powershell_log.txt
+Transcript started, output file is .\evidence\day9_pid_tuning_soak\day9_final_step_response_powershell_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "ARM"
+CMD: ARM
+RSP: OK ARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=40 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58616 heap_now=56852 heap_delta=1764 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STEP_TEST"
+CMD: STEP_TEST
+RSP: OK STEP_TEST 500 1500
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 16
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=467 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58616 heap_now=56504 heap_delta=2112 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=467 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58616 heap_now=55976 heap_delta=2640 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+Transcript stopped, output file is C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day9_pid_tuning_soak\day9_final_step_response_powershell_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Transcript -Path .\evidence\day9_pid_tuning_soak\day9_stall_current_limit_FINAL_log.txt
+Transcript started, output file is .\evidence\day9_pid_tuning_soak\day9_stall_current_limit_FINAL_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=467 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58616 heap_now=59148 heap_delta=-532 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "ARM"
+CMD: ARM
+RSP: OK ARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "SET_SPEED 500"
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 8
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=501 duty=63 current_ma=219 peak_current_ma=339 pid_i_x1000=3944 fault=0x00 fault_name=NONE error=-1 delta=-230 missed=0 heap_start=57380 heap_now=58620 heap_delta=-1240 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=497 duty=63 current_ma=193 peak_current_ma=339 pid_i_x1000=3978 fault=0x00 fault_name=NONE error=3 delta=-228 missed=0 heap_start=57380 heap_now=58444 heap_delta=-1064 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=495 duty=63 current_ma=156 peak_current_ma=339 pid_i_x1000=3943 fault=0x00 fault_name=NONE error=5 delta=-227 missed=0 heap_start=57380 heap_now=56680 heap_delta=700 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "CLEAR_FAULT"
+CMD: CLEAR_FAULT
+RSP: OK CLEAR_FAULT
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=341 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=57380 heap_now=58792 heap_delta=-1412 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "ARM"
+CMD: ARM
+RSP: OK ARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "SET_SPEED 800"
+CMD: SET_SPEED 800
+RSP: OK SET_SPEED 800
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 6
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=800 target=800 actual=789 duty=70 current_ma=189 peak_current_ma=326 pid_i_x1000=1035 fault=0x00 fault_name=NONE error=11 delta=-362 missed=0 heap_start=58472 heap_now=58268 heap_delta=204 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=326 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58472 heap_now=56148 heap_delta=2324 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+Transcript stopped, output file is C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day9_pid_tuning_soak\day9_stall_current_limit_FINAL_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=326 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58472 heap_now=55800 heap_delta=2672 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+Stop-Transcript : An error occurred stopping transcription: The host is not currently transcribing.
+At line:1 char:1
++ Stop-Transcript
++ ~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [Stop-Transcript], PSInvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperation,Microsoft.PowerShell.Commands.StopTranscriptCommand
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Transcript -Path .\evidence\day9_pid_tuning_soak\day9_stall_trigger_VM_OFF_FINAL_log.txt
+Transcript started, output file is .\evidence\day9_pid_tuning_soak\day9_stall_trigger_VM_OFF_FINAL_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=326 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58472 heap_now=59148 heap_delta=-676 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "ARM"
+CMD: ARM
+RSP: OK ARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "SET_SPEED 500"
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 8
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=FAULT cmd=500 target=500 actual=0 duty=0 current_ma=40 peak_current_ma=293 pid_i_x1000=0 fault=0x02 fault_name=STALL error=500 delta=0 missed=2 heap_start=57384 heap_now=58616 heap_delta=-1232 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=FAULT cmd=500 target=500 actual=0 duty=0 current_ma=40 peak_current_ma=293 pid_i_x1000=0 fault=0x02 fault_name=STALL error=500 delta=0 missed=2 heap_start=57384 heap_now=58444 heap_delta=-1060 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=FAULT cmd=500 target=500 actual=0 duty=0 current_ma=40 peak_current_ma=293 pid_i_x1000=0 fault=0x02 fault_name=STALL error=500 delta=0 missed=2 heap_start=57384 heap_now=58268 heap_delta=-884 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "CLEAR_FAULT"
+CMD: CLEAR_FAULT
+RSP: OK CLEAR_FAULT
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=293 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=2 heap_start=57384 heap_now=57916 heap_delta=-532 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "ARM"
+CMD: ARM
+RSP: OK ARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "SET_SPEED 800"
+CMD: SET_SPEED 800
+RSP: OK SET_SPEED 800
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 6
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=800 target=800 actual=800 duty=70 current_ma=275 peak_current_ma=331 pid_i_x1000=1003 fault=0x00 fault_name=NONE error=0 delta=-367 missed=0 heap_start=57740 heap_now=57388 heap_delta=352 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=331 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=57740 heap_now=57388 heap_delta=352 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+Transcript stopped, output file is C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day9_pid_tuning_soak\day9_stall_trigger_VM_OFF_FINAL_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Transcript -Path .\evidence\day9_pid_tuning_soak\day9_official_10min_soak_log.txt
+Transcript started, output file is .\evidence\day9_pid_tuning_soak\day9_official_10min_soak_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=331 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=57740 heap_now=57560 heap_delta=180 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "ARM"
+CMD: ARM
+RSP: OK ARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 1
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=45 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58972 heap_now=57208 heap_delta=1764 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> for ($i = 1; $i -le 15; $i++) {
+>>     Write-Host "===== SOAK CYCLE $i / 15 : 500 RPM ====="
+>>     Send-MotorCmd "SET_SPEED 500"
+>>     Start-Sleep -Seconds 20
+>>     Send-MotorCmd "STATUS"
+>>
+>>     if (($i % 3) -eq 0) {
+>>         Write-Host ">>> Apply light finger load for 5 seconds, then release. Do NOT force-stop the shaft."
+>>         Start-Sleep -Seconds 5
+>>         Send-MotorCmd "STATUS"
+>>     }
+>>
+>>     if ($i -eq 8) {
+>>         Write-Host ">>> MID-SESSION STALL: turn bench supply OUTPUT OFF now for 8 seconds."
+>>         Start-Sleep -Seconds 8
+>>         Send-MotorCmd "STATUS"
+>>
+>>         Write-Host ">>> Turn bench supply OUTPUT ON now."
+>>         Start-Sleep -Seconds 2
+>>         Send-MotorCmd "STATUS"
+>>
+>>         Send-MotorCmd "CLEAR_FAULT"
+>>         Start-Sleep -Seconds 2
+>>         Send-MotorCmd "STATUS"
+>>
+>>         Send-MotorCmd "ARM"
+>>         Start-Sleep -Seconds 1
+>>         Send-MotorCmd "SET_SPEED 800"
+>>         Start-Sleep -Seconds 6
+>>         Send-MotorCmd "STATUS"
+>>     }
+>>
+>>     Write-Host "===== SOAK CYCLE $i / 15 : 1500 RPM ====="
+>>     Send-MotorCmd "SET_SPEED 1500"
+>>     Start-Sleep -Seconds 20
+>>     Send-MotorCmd "STATUS"
+>> }
+===== SOAK CYCLE 1 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=499 duty=62 current_ma=257 peak_current_ma=350 pid_i_x1000=2049 fault=0x00 fault_name=NONE error=1 delta=-229 missed=0 heap_start=58972 heap_now=56856 heap_delta=2116 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 1 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1518 duty=82 current_ma=311 peak_current_ma=397 pid_i_x1000=-8261 fault=0x00 fault_name=NONE error=-18 delta=-696 missed=0 heap_start=58972 heap_now=56504 heap_delta=2468 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 2 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=482 duty=62 current_ma=208 peak_current_ma=397 pid_i_x1000=2033 fault=0x00 fault_name=NONE error=18 delta=-221 missed=0 heap_start=58972 heap_now=57740 heap_delta=1232 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 2 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1536 duty=82 current_ma=350 peak_current_ma=467 pid_i_x1000=-8475 fault=0x00 fault_name=NONE error=-36 delta=-704 missed=0 heap_start=58972 heap_now=55800 heap_delta=3172 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 3 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=510 duty=62 current_ma=219 peak_current_ma=467 pid_i_x1000=2018 fault=0x00 fault_name=NONE error=-10 delta=-234 missed=0 heap_start=58972 heap_now=55800 heap_delta=3172 wifi_reconnects=0 step=0
+
+>>> Apply light finger load for 5 seconds, then release. Do NOT force-stop the shaft.
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=490 duty=62 current_ma=192 peak_current_ma=467 pid_i_x1000=2038 fault=0x00 fault_name=NONE error=10 delta=-225 missed=0 heap_start=58972 heap_now=57388 heap_delta=1584 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 3 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1546 duty=82 current_ma=293 peak_current_ma=467 pid_i_x1000=-8393 fault=0x00 fault_name=NONE error=-46 delta=-709 missed=0 heap_start=58972 heap_now=56152 heap_delta=2820 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 4 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=486 duty=62 current_ma=192 peak_current_ma=467 pid_i_x1000=2021 fault=0x00 fault_name=NONE error=14 delta=-223 missed=0 heap_start=58972 heap_now=56328 heap_delta=2644 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 4 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1536 duty=82 current_ma=296 peak_current_ma=467 pid_i_x1000=-8588 fault=0x00 fault_name=NONE error=-36 delta=-704 missed=0 heap_start=58972 heap_now=56324 heap_delta=2648 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 5 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=508 duty=62 current_ma=102 peak_current_ma=467 pid_i_x1000=2031 fault=0x00 fault_name=NONE error=-8 delta=-233 missed=0 heap_start=58972 heap_now=56324 heap_delta=2648 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 5 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1544 duty=82 current_ma=338 peak_current_ma=467 pid_i_x1000=-8786 fault=0x00 fault_name=NONE error=-44 delta=-708 missed=0 heap_start=58972 heap_now=56148 heap_delta=2824 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 6 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=514 duty=61 current_ma=207 peak_current_ma=467 pid_i_x1000=2007 fault=0x00 fault_name=NONE error=-14 delta=-236 missed=0 heap_start=58972 heap_now=57564 heap_delta=1408 wifi_reconnects=0 step=0
+
+>>> Apply light finger load for 5 seconds, then release. Do NOT force-stop the shaft.
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=484 duty=62 current_ma=193 peak_current_ma=467 pid_i_x1000=2023 fault=0x00 fault_name=NONE error=16 delta=-222 missed=0 heap_start=58972 heap_now=57740 heap_delta=1232 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 6 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1544 duty=82 current_ma=266 peak_current_ma=467 pid_i_x1000=-8801 fault=0x00 fault_name=NONE error=-44 delta=-708 missed=0 heap_start=58972 heap_now=56152 heap_delta=2820 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 7 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=495 duty=62 current_ma=112 peak_current_ma=467 pid_i_x1000=2014 fault=0x00 fault_name=NONE error=5 delta=-227 missed=0 heap_start=58972 heap_now=56152 heap_delta=2820 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 7 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1490 duty=82 current_ma=262 peak_current_ma=467 pid_i_x1000=-8952 fault=0x00 fault_name=NONE error=10 delta=-683 missed=0 heap_start=58972 heap_now=56152 heap_delta=2820 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 8 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=512 duty=61 current_ma=178 peak_current_ma=467 pid_i_x1000=2006 fault=0x00 fault_name=NONE error=-12 delta=-235 missed=0 heap_start=58972 heap_now=57740 heap_delta=1232 wifi_reconnects=0 step=0
+
+>>> MID-SESSION STALL: turn bench supply OUTPUT OFF now for 8 seconds.
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=493 duty=62 current_ma=118 peak_current_ma=467 pid_i_x1000=2028 fault=0x00 fault_name=NONE error=7 delta=-226 missed=0 heap_start=58972 heap_now=55976 heap_delta=2996 wifi_reconnects=0 step=0
+
+>>> Turn bench supply OUTPUT ON now.
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=-4 duty=63 current_ma=41 peak_current_ma=467 pid_i_x1000=2719 fault=0x00 fault_name=NONE error=504 delta=2 missed=0 heap_start=58972 heap_now=57388 heap_delta=1584 wifi_reconnects=0 step=0
+
+CMD: CLEAR_FAULT
+RSP: OK CLEAR_FAULT
+
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=467 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=58972 heap_now=55800 heap_delta=3172 wifi_reconnects=0 step=0
+
+CMD: ARM
+RSP: OK ARM
+
+CMD: SET_SPEED 800
+RSP: OK SET_SPEED 800
+
+CMD: STATUS
+RSP: OK STATUS state=FAULT cmd=800 target=800 actual=0 duty=0 current_ma=40 peak_current_ma=40 pid_i_x1000=0 fault=0x02 fault_name=STALL error=800 delta=0 missed=2 heap_start=55800 heap_now=55800 heap_delta=0 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 8 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: ERR FAULT
+
+CMD: STATUS
+RSP: OK STATUS state=FAULT cmd=800 target=800 actual=0 duty=0 current_ma=40 peak_current_ma=46 pid_i_x1000=0 fault=0x02 fault_name=STALL error=800 delta=0 missed=2 heap_start=55800 heap_now=55800 heap_delta=0 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 9 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: ERR FAULT
+
+CMD: STATUS
+RSP: OK STATUS state=FAULT cmd=800 target=800 actual=0 duty=0 current_ma=40 peak_current_ma=46 pid_i_x1000=0 fault=0x02 fault_name=STALL error=800 delta=0 missed=2 heap_start=55800 heap_now=55800 heap_delta=0 wifi_reconnects=0 step=0
+
+>>> Apply light finger load for 5 seconds, then release. Do NOT force-stop the shaft.
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=42 peak_current_ma=46 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=2 heap_start=55800 heap_now=57388 heap_delta=-1588 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 9 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: ERR NOT_ARMED
+
+CMD: STATUS
+RSP: OK STATUS state=ARMED cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=47 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=57388 heap_now=59156 heap_delta=-1768 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 10 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=517 duty=61 current_ma=224 peak_current_ma=332 pid_i_x1000=2013 fault=0x00 fault_name=NONE error=-17 delta=-237 missed=0 heap_start=57388 heap_now=55792 heap_delta=1596 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 10 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1507 duty=82 current_ma=332 peak_current_ma=424 pid_i_x1000=-8966 fault=0x00 fault_name=NONE error=-7 delta=-691 missed=0 heap_start=57388 heap_now=55792 heap_delta=1596 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 11 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=510 duty=62 current_ma=180 peak_current_ma=424 pid_i_x1000=2022 fault=0x00 fault_name=NONE error=-10 delta=-234 missed=0 heap_start=57388 heap_now=55796 heap_delta=1592 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 11 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1514 duty=81 current_ma=299 peak_current_ma=424 pid_i_x1000=-9008 fault=0x00 fault_name=NONE error=-14 delta=-694 missed=0 heap_start=57388 heap_now=55796 heap_delta=1592 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 12 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=493 duty=61 current_ma=232 peak_current_ma=424 pid_i_x1000=1973 fault=0x00 fault_name=NONE error=7 delta=-226 missed=0 heap_start=57388 heap_now=55796 heap_delta=1592 wifi_reconnects=0 step=0
+
+>>> Apply light finger load for 5 seconds, then release. Do NOT force-stop the shaft.
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=493 duty=62 current_ma=173 peak_current_ma=424 pid_i_x1000=2030 fault=0x00 fault_name=NONE error=7 delta=-226 missed=0 heap_start=57388 heap_now=55972 heap_delta=1416 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 12 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1507 duty=82 current_ma=261 peak_current_ma=448 pid_i_x1000=-8971 fault=0x00 fault_name=NONE error=-7 delta=-691 missed=0 heap_start=57388 heap_now=57552 heap_delta=-164 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 13 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=490 duty=61 current_ma=171 peak_current_ma=448 pid_i_x1000=1971 fault=0x00 fault_name=NONE error=10 delta=-225 missed=0 heap_start=57388 heap_now=55964 heap_delta=1424 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 13 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1514 duty=81 current_ma=311 peak_current_ma=448 pid_i_x1000=-9021 fault=0x00 fault_name=NONE error=-14 delta=-694 missed=0 heap_start=57388 heap_now=57720 heap_delta=-332 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 14 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=514 duty=61 current_ma=187 peak_current_ma=448 pid_i_x1000=2006 fault=0x00 fault_name=NONE error=-14 delta=-236 missed=0 heap_start=57388 heap_now=56308 heap_delta=1080 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 14 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1557 duty=81 current_ma=248 peak_current_ma=449 pid_i_x1000=-9030 fault=0x00 fault_name=NONE error=-57 delta=-714 missed=0 heap_start=57388 heap_now=56492 heap_delta=896 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 15 / 15 : 500 RPM =====
+CMD: SET_SPEED 500
+RSP: OK SET_SPEED 500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=488 duty=62 current_ma=145 peak_current_ma=449 pid_i_x1000=1986 fault=0x00 fault_name=NONE error=12 delta=-224 missed=0 heap_start=57388 heap_now=57904 heap_delta=-516 wifi_reconnects=0 step=0
+
+>>> Apply light finger load for 5 seconds, then release. Do NOT force-stop the shaft.
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=500 target=500 actual=499 duty=62 current_ma=240 peak_current_ma=449 pid_i_x1000=2015 fault=0x00 fault_name=NONE error=1 delta=-229 missed=0 heap_start=57388 heap_now=56484 heap_delta=904 wifi_reconnects=0 step=0
+
+===== SOAK CYCLE 15 / 15 : 1500 RPM =====
+CMD: SET_SPEED 1500
+RSP: OK SET_SPEED 1500
+
+CMD: STATUS
+RSP: OK STATUS state=RUNNING cmd=1500 target=1500 actual=1514 duty=81 current_ma=296 peak_current_ma=449 pid_i_x1000=-9003 fault=0x00 fault_name=NONE error=-14 delta=-694 missed=0 heap_start=57388 heap_now=56500 heap_delta=888 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STOP"
+CMD: STOP
+RSP: OK STOP
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "DISARM"
+CMD: DISARM
+RSP: OK DISARM
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Start-Sleep -Seconds 2
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Send-MotorCmd "STATUS"
+CMD: STATUS
+RSP: OK STATUS state=IDLE cmd=0 target=0 actual=0 duty=0 current_ma=40 peak_current_ma=449 pid_i_x1000=0 fault=0x00 fault_name=NONE error=0 delta=0 missed=0 heap_start=57388 heap_now=55968 heap_delta=1420 wifi_reconnects=0 step=0
+
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>
+PS C:\Users\pckal\esp_projects\project_c_motor_controller> Stop-Transcript
+Transcript stopped, output file is C:\Users\pckal\esp_projects\project_c_motor_controller\evidence\day9_pid_tuning_soak\day9_official_10min_soak_log.txt
+PS C:\Users\pckal\esp_projects\project_c_motor_controller>

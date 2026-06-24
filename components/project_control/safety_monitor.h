@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+/* Fault bits are ORed together and latched until CLEAR_FAULT succeeds. */
 #define SAFETY_FAULT_NONE         0x00U
 #define SAFETY_FAULT_OVERCURRENT  0x01U
 #define SAFETY_FAULT_STALL        0x02U
@@ -10,10 +11,10 @@
 
 typedef struct
 {
-    int32_t cmd_rpm;
-    int32_t actual_rpm;
-    int32_t duty_percent;
-    int32_t current_ma;
+    int32_t cmd_rpm;       /* Requested RPM from command layer. */
+    int32_t actual_rpm;    /* Encoder-measured RPM. */
+    int32_t duty_percent;  /* Signed PWM duty currently commanded. */
+    int32_t current_ma;    /* Latest ISEN-derived current estimate. */
 } safety_monitor_input_t;
 
 void safety_monitor_init(void);

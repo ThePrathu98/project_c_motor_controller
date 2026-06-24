@@ -1,0 +1,559 @@
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ git status --short --branch
+## day7-8-gui-live-plot...origin/day7-8-gui-live-plot
+ M components/project_comm/command_server.c
+ M components/project_comm/command_server.h
+ M components/project_comm/telemetry_server.c
+ M components/project_control/control_task.c
+ M components/project_control/control_task.h
+ M components/project_control/pid.c
+ M components/project_control/pid.h
+?? docs/day9_tuning_notes.md
+?? evidence/day9_pid_tuning_soak/
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ grep -n "esp_get_free_heap_size" components/project_control/control_task.c
+160:    s_heap_now = (uint32_t)esp_get_free_heap_size();
+731:    s_heap_start = (uint32_t)esp_get_free_heap_size();
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ export IDF_PATH=/c/esp/ESP8266_RTOS_SDK
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ . $IDF_PATH/export.sh
+Adding ESP-IDF tools to PATH...
+Checking if Python packages are up to date...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+Added the following directories to PATH:
+  /c/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool
+  /c/esp/ESP8266_RTOS_SDK/components/partition_table/
+  /c/esp/ESP8266_RTOS_SDK/tools
+Done! You can now compile ESP8266-RTOS-SDK projects.
+Go to the project directory and run:
+
+  make
+
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ idf.py build
+Checking Python dependencies...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See http
+s://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30
+. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+C:\esp\ESP8266_RTOS_SDK\tools\idf.py:658: DeprecationWarning: 'MultiCommand' is deprecated and will be removed in Click 9.0
+. Use 'Group' instead.
+  class CLI(click.MultiCommand):
+Executing action: all (aliases: build)
+Running ninja in directory c:\users\pckal\esp_projects\project_c_motor_controller\build
+Executing "ninja all"...
+[1/3] Performing build step for 'bootloader'
+ninja: no work to do.
+
+Project build complete. To flash, run this command:
+..\..\..\..\esp\ESP8266_RTOS_SDK\components\esptool_py\esptool\esptool.py -p (PORT) -b 460800 --after hard_reset write_flas
+h --flash_mode dio --flash_size 2MB --flash_freq 40m 0x0 build\bootloader\bootloader.bin 0x8000 build\partition_table\parti
+tion-table.bin 0x10000 build\project_c_motor_controller.bin
+or run 'idf.py -p (PORT) flash'
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ idf.py -p COM5 flash
+Checking Python dependencies...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See http
+s://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30
+. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+C:\esp\ESP8266_RTOS_SDK\tools\idf.py:658: DeprecationWarning: 'MultiCommand' is deprecated and will be removed in Click 9.0
+. Use 'Group' instead.
+  class CLI(click.MultiCommand):
+Adding flash's dependency "all" to list of actions
+Executing action: all (aliases: build)
+Running ninja in directory c:\users\pckal\esp_projects\project_c_motor_controller\build
+Executing "ninja all"...
+[1/3] Performing build step for 'bootloader'
+ninja: no work to do.
+Executing action: flash
+Running esptool.py in directory c:\users\pckal\esp_projects\project_c_motor_controller\build
+Executing "C:\Users\pckal\scoop\apps\python313\3.13.13\python.exe C:/esp/ESP8266_RTOS_SDK\components/esptool_py/esptool/esp
+tool.py -p COM5 -b 460800 --after hard_reset write_flash @flash_project_args"...
+esptool.py -p COM5 -b 460800 --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x8000 parti
+tion_table/partition-table.bin 0x0 bootloader/bootloader.bin 0x10000 project_c_motor_controller.bin
+esptool.py v2.4.0
+Connecting....
+Detecting chip type... ESP8266
+Chip is ESP8266EX
+Features: WiFi
+MAC: 34:5f:45:67:9b:df
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Compressed 3072 bytes to 83...
+Wrote 3072 bytes (83 compressed) at 0x00008000 in 0.0 seconds (effective 4340.2 kbit/s)...
+Hash of data verified.
+Compressed 9968 bytes to 6704...
+Wrote 9968 bytes (6704 compressed) at 0x00000000 in 0.2 seconds (effective 490.7 kbit/s)...
+Hash of data verified.
+Compressed 454832 bytes to 292455...
+Wrote 454832 bytes (292455 compressed) at 0x00010000 in 6.9 seconds (effective 525.1 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+Done
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$ idf.py -p COM5 monitor
+Checking Python dependencies...
+C:\esp\ESP8266_RTOS_SDK\tools\check_python_dependencies.py:22: UserWarning: pkg_resources is deprecated as an API. See http
+s://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30
+. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Python requirements from C:/esp/ESP8266_RTOS_SDK\requirements.txt are satisfied.
+C:\esp\ESP8266_RTOS_SDK\tools\idf.py:658: DeprecationWarning: 'MultiCommand' is deprecated and will be removed in Click 9.0
+. Use 'Group' instead.
+  class CLI(click.MultiCommand):
+Executing action: monitor
+Running idf_monitor in directory c:\users\pckal\esp_projects\project_c_motor_controller
+Executing "winpty C:\Users\pckal\scoop\apps\python313\3.13.13\python.exe C:/esp/ESP8266_RTOS_SDK\tools/idf_monitor.py -p CO
+M5 -b 74880 c:\users\pckal\esp_projects\project_c_motor_controller\build\project_c_motor_controller.elf -m 'C:\Users\pckal\
+scoop\apps\python313\3.13.13\python.exe' 'C:/esp/ESP8266_RTOS_SDK/tools/idf.py' '-p' 'COM5'"...
+C:\esp\ESP8266_RTOS_SDK\tools\idf_monitor.py:322: DeprecationWarning: distutils Version classes are deprecated. Use packagi
+ng.version instead.
+  if StrictVersion(serial.VERSION) < StrictVersion('3.3.0'):
+--- idf_monitor on COM5 74880 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+
+ ets Jan  8 2013,rst cause:2, boot mode:(3,6)
+
+load 0x40100000, len 6720, room 16
+tail 0
+chksum 0x6f
+load 0x3ffe8008, len 24, room 8
+tail 0
+chksum 0xe6
+load 0x3ffe8020, len 3184, room 8
+tail 8
+chksum 0xf4
+csum 0xf4
+I (42) boot: ESP-IDF v3.4 2nd stage bootloader
+I (42) boot: compile time 00:20:47
+I (42) qio_mode: Enabling default flash chip QIO
+I (48) boot: SPI Speed      : 40MHz
+I (54) boot: SPI Mode       : QIO
+I (60) boot: SPI Flash Size : 2MB
+I (66) boot: Partition Table:
+I (72) boot: ## Label            Usage          Type ST Offset   Length
+I (83) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (94) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (105) boot:  2 factory          factory app      00 00 00010000 000f0000
+I (117) boot: End of partition table
+I (123) esp_image: segment 0: paddr=0x00010010 vaddr=0x40210010 size=0x5938c (365452) map
+0x40210010: _stext at ??:?
+
+I (137) esp_image: segment 1: paddr=0x000693a4 vaddr=0x4026939c size=0x0fcfc ( 64764) map
+I (150) esp_image: segment 2: paddr=0x000790a8 vaddr=0x3ffe8000 size=0x0060c (  1548) load
+I (164) esp_image: segment 3: paddr=0x000796bc vaddr=0x40100000 size=0x00080 (   128) load
+I (177) esp_image: segment 4: paddr=0x00079744 vaddr=0x40100080 size=0x05940 ( 22848) load
+I (191) boot: Loaded app from partition at offset 0x10000
+I (220) app_main: Project C motor-control firmware starting
+I (222) motor_hal: Initializing motor PWM
+I (223) motor_hal: IN1 GPIO=14, IN2 GPIO=12, PWM period=50 us
+I (232) gpio: GPIO[12]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (246) gpio: GPIO[14]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (260) pwm: --- PWM v3.4
+
+I (266) motor_hal: Motor PWM initialized
+I (273) gpio: GPIO[4]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
+I (287) gpio: GPIO[5]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0
+I (301) encoder_hal: Encoder A-edge counting enabled: A=GPIO5, B=GPIO4
+I (312) adc_hal: ADC current estimate enabled: A0 <- DRV8870EVM ISEN, full_scale=3300 mV, Rsense=150 mohm
+I (328) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0
+I (342) led_hal: GPIO2 onboard LED initialized active-low
+I (353) system_api: Base MAC address is not set, read default base MAC address from EFUSE
+I (365) system_api: Base MAC address is not set, read default base MAC address from EFUSE
+phy_version: 1163.0, 665d56c, Jun 24 2020, 10:00:08, RTOS new
+I (443) phy_init: phy ver: 1163_0
+I (457) wifi:pm stop
+I (462) command_server: connecting to Wi-Fi SSID=NETGEAR38_EXT
+I (464) command_server: waiting for Wi-Fi connection before opening command socket
+I (470) app_main: Waiting 15 s for STA Wi-Fi before starting 1 kHz control task
+I (584) wifi:state: 0 -> 2 (b0)
+I (589) wifi:state: 2 -> 3 (0)
+I (591) wifi:state: 3 -> 5 (10)
+I (620) wifi:connected with NETGEAR38_EXT, aid = 4, channel 9, HT20, bssid = 78:20:51:95:de:c4
+I (1353) tcpip_adapter: sta ip: 192.168.1.105, mask: 255.255.255.0, gw: 192.168.1.1
+I (1357) command_server: Wi-Fi connected, IP=192.168.1.105
+I (1363) command_server: TCP command server listening on port 5005
+I (15486) control_task: 1 kHz control loop + safety monitor started
+I (15492) telemetry_server: binary telemetry listening on port 5006
+I (15494) app_main: System bring-up complete
+I (60484) telemetry_server: telemetry client connected
+W (60529) telemetry_server: telemetry client disconnected sent=-1 errno=104
+I (81479) telemetry_server: telemetry client connected
+I (106661) command_server: RX: STOP
+I (106663) control_task: STOP
+I (106706) command_server: RX: DISARM
+I (106709) control_task: DISARM
+I (108787) command_server: RX: STATUS
+I (125652) command_server: RX: STOP
+I (125654) control_task: STOP
+I (125715) command_server: RX: DISARM
+I (125718) control_task: DISARM
+I (127801) command_server: RX: ARM
+I (127804) control_task: ARM
+I (127850) command_server: RX: STATUS
+I (127912) command_server: RX: STEP_TEST
+I (127914) control_task: STEP_TEST 500 -> 1500 started
+I (127917) control_task: step_csv,1,500,500,0,0
+I (128016) control_task: step_csv,101,500,500,0,75
+I (128116) control_task: step_csv,201,500,500,0,75
+I (128216) control_task: step_csv,301,500,500,661,60
+I (128316) control_task: step_csv,401,500,500,661,60
+I (128415) control_task: step_csv,501,500,500,661,60
+I (128515) control_task: step_csv,601,500,500,735,60
+I (128615) control_task: step_csv,701,500,500,735,60
+I (128716) control_task: step_csv,801,500,500,523,60
+I (128815) control_task: step_csv,901,500,500,523,60
+I (128915) control_task: step_csv,1001,500,500,523,60
+I (129015) control_task: step_csv,1101,500,500,453,60
+I (129115) control_task: step_csv,1201,500,500,453,60
+I (129215) control_task: step_csv,1301,500,500,438,60
+I (129316) control_task: step_csv,1401,500,500,438,60
+I (129415) control_task: step_csv,1501,500,500,438,60
+I (129515) control_task: step_csv,1601,500,500,432,60
+I (129616) control_task: step_csv,1701,500,500,432,60
+I (129715) control_task: step_csv,1801,500,500,429,60
+I (129815) control_task: step_csv,1901,500,500,429,60
+I (129915) control_task: step_csv,2001,500,500,429,60
+I (130015) control_task: step_csv,2101,500,500,429,60
+I (130115) control_task: step_csv,2201,500,500,429,60
+I (130215) control_task: step_csv,2301,500,500,429,60
+I (130315) control_task: step_csv,2401,500,500,429,60
+I (130414) control_task: step_csv,2501,500,500,429,60
+I (130514) control_task: step_csv,2601,500,500,429,60
+I (130614) control_task: step_csv,2701,500,500,429,60
+I (130714) control_task: step_csv,2801,500,500,429,60
+I (130814) control_task: step_csv,2901,500,500,429,60
+I (130914) control_task: step_csv,3001,500,500,429,60
+I (131014) control_task: step_csv,3101,500,500,427,60
+I (131114) control_task: step_csv,3201,500,500,427,60
+I (131214) control_task: step_csv,3301,500,500,429,60
+I (131314) control_task: step_csv,3401,500,500,429,60
+I (131413) control_task: step_csv,3501,500,500,429,60
+I (131513) control_task: step_csv,3601,500,500,429,60
+I (131613) control_task: step_csv,3701,500,500,429,60
+I (131714) control_task: step_csv,3801,500,500,429,61
+I (131814) control_task: step_csv,3901,500,500,429,61
+I (131914) control_task: step_csv,4001,500,500,429,61
+I (132014) control_task: step_csv,4101,500,500,434,61
+I (132114) control_task: step_csv,4201,500,500,434,61
+I (132214) control_task: step_csv,4301,500,500,429,61
+I (132314) control_task: step_csv,4401,500,500,429,61
+I (132413) control_task: step_csv,4501,500,500,429,61
+I (132513) control_task: step_csv,4601,500,500,429,61
+I (132613) control_task: step_csv,4701,500,500,429,61
+I (132716) control_task: step_csv,4801,500,500,432,61
+I (132813) control_task: step_csv,4901,500,500,432,61
+I (132913) control_task: step_csv,5001,1500,504,432,61
+I (133013) control_task: step_csv,5101,1500,704,434,64
+I (133113) control_task: step_csv,5201,1500,904,434,64
+I (133213) control_task: step_csv,5301,1500,1104,504,80
+I (133313) control_task: step_csv,5401,1500,1304,504,80
+I (133413) control_task: step_csv,5501,1500,1500,504,80
+I (133512) control_task: step_csv,5601,1500,1500,1125,92
+I (133612) control_task: step_csv,5701,1500,1500,1125,92
+I (133713) control_task: step_csv,5801,1500,1500,1782,91
+I (133812) control_task: step_csv,5901,1500,1500,1782,91
+I (133912) control_task: step_csv,6001,1500,1500,1782,91
+I (134012) control_task: step_csv,6101,1500,1500,1935,90
+I (134112) control_task: step_csv,6201,1500,1500,1935,90
+I (134213) control_task: step_csv,6301,1500,1500,1920,90
+I (134315) control_task: step_csv,6401,1500,1500,1920,90
+I (134413) control_task: step_csv,6501,1500,1500,1920,90
+I (134513) control_task: step_csv,6601,1500,1500,1915,90
+I (134613) control_task: step_csv,6701,1500,1500,1915,90
+I (134713) control_task: step_csv,6801,1500,1500,1917,90
+I (134813) control_task: step_csv,6901,1500,1500,1917,90
+I (134913) control_task: step_csv,7001,1500,1500,1917,90
+I (135013) control_task: step_csv,7101,1500,1500,1920,90
+I (135113) control_task: step_csv,7201,1500,1500,1920,90
+I (135213) control_task: step_csv,7301,1500,1500,1924,89
+I (135312) control_task: step_csv,7401,1500,1500,1924,89
+I (135413) control_task: step_csv,7501,1500,1500,1924,89
+I (135512) control_task: step_csv,7601,1500,1500,1861,89
+I (135612) control_task: step_csv,7701,1500,1500,1861,89
+I (135712) control_task: step_csv,7801,1500,1500,1821,89
+I (135812) control_task: step_csv,7901,1500,1500,1821,89
+I (135912) control_task: step_csv,8001,1500,1500,1821,89
+I (136012) control_task: step_csv,8101,1500,1500,1819,89
+I (136112) control_task: step_csv,8201,1500,1500,1819,89
+I (136212) control_task: step_csv,8301,1500,1500,1815,88
+I (136312) control_task: step_csv,8401,1500,1500,1815,88
+I (136412) control_task: step_csv,8501,1500,1500,1815,88
+I (136512) control_task: step_csv,8601,1500,1500,1817,88
+I (136613) control_task: step_csv,8701,1500,1500,1817,88
+I (136713) control_task: step_csv,8801,1500,1500,1815,88
+I (136813) control_task: step_csv,8901,1500,1500,1815,88
+I (136912) control_task: step_csv,9001,1500,1500,1815,88
+I (137013) control_task: step_csv,9101,1500,1500,1819,87
+I (137112) control_task: step_csv,9201,1500,1500,1819,87
+I (137213) control_task: step_csv,9301,1500,1500,1760,87
+I (137312) control_task: step_csv,9401,1500,1500,1760,87
+I (137413) control_task: step_csv,9501,1500,1500,1760,87
+I (137512) control_task: step_csv,9601,1500,1500,1712,87
+I (137613) control_task: step_csv,9701,1500,1500,1712,87
+I (137712) control_task: step_csv,9801,1500,1500,1712,87
+I (137812) control_task: step_csv,9901,1500,1500,1712,87
+I (137912) control_task: step_csv,10001,1500,1500,1712,87
+I (138012) control_task: step_csv,10101,1500,1500,1710,87
+I (138112) control_task: step_csv,10201,1500,1500,1710,87
+I (138212) control_task: step_csv,10301,1500,1500,1712,86
+I (138311) control_task: step_csv,10401,1500,1500,1712,86
+I (138411) control_task: step_csv,10501,1500,1500,1712,86
+I (138511) control_task: step_csv,10601,1500,1500,1712,86
+I (138611) control_task: step_csv,10701,1500,1500,1712,86
+I (138712) control_task: step_csv,10801,1500,1500,1710,86
+I (138811) control_task: step_csv,10901,1500,1500,1710,86
+I (138911) control_task: step_csv,11001,1500,1500,1710,86
+I (139011) control_task: step_csv,11101,1500,1500,1712,86
+I (139111) control_task: step_csv,11201,1500,1500,1712,86
+I (139212) control_task: step_csv,11301,1500,1500,1712,85
+I (139312) control_task: step_csv,11401,1500,1500,1712,85
+I (139412) control_task: step_csv,11501,1500,1500,1712,85
+I (139512) control_task: step_csv,11601,1500,1500,1658,85
+I (139612) control_task: step_csv,11701,1500,1500,1658,85
+I (139712) control_task: step_csv,11801,1500,1500,1616,85
+I (139812) control_task: step_csv,11901,1500,1500,1616,85
+I (139912) control_task: step_csv,12001,1500,1500,1616,85
+I (140011) control_task: step_csv,12101,1500,1500,1614,85
+I (140111) control_task: step_csv,12201,1500,1500,1614,85
+I (140212) control_task: step_csv,12301,1500,1500,1614,85
+I (140311) control_task: step_csv,12401,1500,1500,1614,85
+I (140411) control_task: step_csv,12501,1500,1500,1614,85
+I (140511) control_task: step_csv,12601,1500,1500,1614,85
+I (140611) control_task: step_csv,12701,1500,1500,1614,85
+I (140711) control_task: step_csv,12801,1500,1500,1614,85
+I (140811) control_task: step_csv,12901,1500,1500,1614,85
+I (140911) control_task: step_csv,13001,1500,1500,1614,85
+I (141011) control_task: step_csv,13101,1500,1500,1614,85
+I (141111) control_task: step_csv,13201,1500,1500,1614,85
+I (141211) control_task: step_csv,13301,1500,1500,1616,85
+I (141312) control_task: step_csv,13401,1500,1500,1616,85
+I (141411) control_task: step_csv,13501,1500,1500,1616,85
+I (141511) control_task: step_csv,13601,1500,1500,1612,85
+I (141611) control_task: step_csv,13701,1500,1500,1612,85
+I (141712) control_task: step_csv,13801,1500,1500,1612,84
+I (141811) control_task: step_csv,13901,1500,1500,1612,84
+I (141911) control_task: step_csv,14001,1500,1500,1612,84
+I (142011) control_task: step_csv,14101,1500,1500,1612,84
+I (142111) control_task: step_csv,14201,1500,1500,1612,84
+I (142211) control_task: step_csv,14301,1500,1500,1612,84
+I (142311) control_task: step_csv,14401,1500,1500,1612,84
+I (142412) control_task: step_csv,14501,1500,1500,1612,84
+I (142511) control_task: step_csv,14601,1500,1500,1610,84
+I (142611) control_task: step_csv,14701,1500,1500,1610,84
+I (142711) control_task: step_csv,14801,1500,1500,1612,84
+I (142811) control_task: step_csv,14901,1500,1500,1612,84
+I (142910) control_task: STOP
+I (142911) control_task: step_test complete
+I (144025) command_server: RX: STATUS
+I (144132) command_server: RX: STOP
+I (144135) control_task: STOP
+I (144189) command_server: RX: DISARM
+I (144191) control_task: DISARM
+I (146261) command_server: RX: STATUS
+W (425852) telemetry_server: telemetry client disconnected sent=-1 errno=104
+I (436129) telemetry_server: telemetry client connected
+I (451635) command_server: RX: STOP
+I (451637) control_task: STOP
+I (451725) command_server: RX: DISARM
+I (451727) control_task: DISARM
+I (453882) command_server: RX: STATUS
+I (454000) command_server: RX: ARM
+I (454003) control_task: ARM
+I (454102) command_server: RX: SET_SPEED 500
+I (454104) control_task: SET_SPEED 500
+I (520087) command_server: RX: STATUS
+I (527615) command_server: RX: STATUS
+I (529722) command_server: RX: STATUS
+I (608745) command_server: RX: CLEAR_FAULT
+I (608750) control_task: CLEAR_FAULT
+I (610799) command_server: RX: STATUS
+I (610850) command_server: RX: ARM
+I (610852) control_task: ARM
+I (610916) command_server: RX: SET_SPEED 800
+I (610918) control_task: SET_SPEED 800
+I (617010) command_server: RX: STATUS
+I (617049) command_server: RX: STOP
+I (617052) control_task: STOP
+I (617087) command_server: RX: DISARM
+I (617089) control_task: DISARM
+I (619141) command_server: RX: STATUS
+I (645075) command_server: RX: STOP
+I (645077) control_task: STOP
+I (645111) command_server: RX: DISARM
+I (645113) control_task: DISARM
+I (647162) command_server: RX: STATUS
+I (1207482) command_server: RX: STOP
+I (1207484) control_task: STOP
+I (1207532) command_server: RX: DISARM
+I (1207535) control_task: DISARM
+I (1209620) command_server: RX: STATUS
+I (1209673) command_server: RX: ARM
+I (1209677) control_task: ARM
+I (1209711) command_server: RX: SET_SPEED 500
+I (1209717) control_task: SET_SPEED 500
+����������������������������������������������������������������r: FAULT STALL cmd=500 actual=0 duty=66
+E (1244981) control_task: FAULT latched flags=0x02 first=STALL current_ma=40 actual=0 duty=0
+I (1264078) command_server: RX: STATUS
+I (1273557) command_server: RX: STATUS
+I (1275622) command_server: RX: STATUS
+I (1306590) command_server: RX: CLEAR_FAULT
+I (1306596) control_task: CLEAR_FAULT
+I (1308653) command_server: RX: STATUS
+I (1308694) command_server: RX: ARM
+I (1308697) control_task: ARM
+I (1308741) command_server: RX: SET_SPEED 800
+I (1308744) control_task: SET_SPEED 800
+I (1314819) command_server: RX: STATUS
+I (1314876) command_server: RX: STOP
+I (1314878) control_task: STOP
+I (1314912) command_server: RX: DISARM
+I (1314918) control_task: DISARM
+I (1316996) command_server: RX: STATUS
+W (1635796) telemetry_server: telemetry client disconnected sent=-1 errno=104
+I (1646233) telemetry_server: telemetry client connected
+I (1802582) command_server: RX: STOP
+I (1802584) control_task: STOP
+I (1802614) command_server: RX: DISARM
+I (1802616) control_task: DISARM
+I (1804665) command_server: RX: STATUS
+I (1804720) command_server: RX: ARM
+I (1804726) control_task: ARM
+I (1810712) command_server: RX: STATUS
+I (1816372) command_server: RX: SET_SPEED 500
+I (1816374) control_task: SET_SPEED 500
+I (1836400) command_server: RX: STATUS
+I (1836441) command_server: RX: SET_SPEED 1500
+I (1836445) control_task: SET_SPEED 1500
+I (1856497) command_server: RX: STATUS
+I (1856539) command_server: RX: SET_SPEED 500
+I (1856545) control_task: SET_SPEED 500
+I (1876593) command_server: RX: STATUS
+I (1876668) command_server: RX: SET_SPEED 1500
+I (1876671) control_task: SET_SPEED 1500
+I (1896727) command_server: RX: STATUS
+I (1896761) command_server: RX: SET_SPEED 500
+I (1896764) control_task: SET_SPEED 500
+I (1916784) command_server: RX: STATUS
+I (1921821) command_server: RX: STATUS
+I (1921847) command_server: RX: SET_SPEED 1500
+I (1921850) control_task: SET_SPEED 1500
+I (1941869) command_server: RX: STATUS
+I (1941897) command_server: RX: SET_SPEED 500
+I (1941900) control_task: SET_SPEED 500
+����������������������������������������������������������������r: RX: STATUS
+I (1961943) command_server: RX: SET_SPEED 1500
+I (1961946) control_task: SET_SPEED 1500
+I (1981976) command_server: RX: STATUS
+I (1982003) command_server: RX: SET_SPEED 500
+I (1982005) control_task: SET_SPEED 500
+I (2002016) command_server: RX: STATUS
+I (2002045) command_server: RX: SET_SPEED 1500
+I (2002048) control_task: SET_SPEED 1500
+I (2022083) command_server: RX: STATUS
+I (2022113) command_server: RX: SET_SPEED 500
+I (2022116) control_task: SET_SPEED 500
+I (2042129) command_server: RX: STATUS
+I (2047150) command_server: RX: STATUS
+I (2047189) command_server: RX: SET_SPEED 1500
+I (2047192) control_task: SET_SPEED 1500
+I (2067207) command_server: RX: STATUS
+I (2067238) command_server: RX: SET_SPEED 500
+I (2067241) control_task: SET_SPEED 500
+I (2087259) command_server: RX: STATUS
+I (2087287) command_server: RX: SET_SPEED 1500
+I (2087290) control_task: SET_SPEED 1500
+I (2107302) command_server: RX: STATUS
+I (2107332) command_server: RX: SET_SPEED 500
+I (2107335) control_task: SET_SPEED 500
+����������������������������������������������������������������r: RX: STATUS
+I (2135404) command_server: RX: STATUS
+I (2137438) command_server: RX: STATUS
+I (2137467) command_server: RX: CLEAR_FAULT
+I (2137475) control_task: CLEAR_FAULT
+I (2139512) command_server: RX: STATUS
+I (2139541) command_server: RX: ARM
+I (2139543) control_task: ARM
+I (2140574) command_server: RX: SET_SPEED 800
+I (2140576) control_task: SET_SPEED 800
+E (2142255) safety_monitor: FAULT STALL cmd=800 actual=0 duty=75
+E (2142258) control_task: FAULT latched flags=0x02 first=STALL current_ma=40 actual=0 duty=0
+I (2146606) command_server: RX: STATUS
+I (2146734) command_server: RX: SET_SPEED 1500
+I (2166760) command_server: RX: STATUS
+I (2166789) command_server: RX: SET_SPEED 500
+I (2186823) command_server: RX: STATUS
+I (2189805) command_server: RX: CLEAR_FAULT
+I (2189808) control_task: CLEAR_FAULT
+I (2191862) command_server: RX: STATUS
+I (2191888) command_server: RX: SET_SPEED 1500
+I (2196823) command_server: RX: ARM
+I (2196825) control_task: ARM
+W (2203198) telemetry_server: telemetry client disconnected sent=-1 errno=104
+I (2211892) command_server: RX: STATUS
+I (2211917) command_server: RX: SET_SPEED 500
+I (2211919) control_task: SET_SPEED 500
+I (2213646) telemetry_server: telemetry client connected
+I (2231949) command_server: RX: STATUS
+I (2231998) command_server: RX: SET_SPEED 1500
+I (2232001) control_task: SET_SPEED 1500
+I (2252033) command_server: RX: STATUS
+I (2252061) command_server: RX: SET_SPEED 500
+I (2252066) control_task: SET_SPEED 500
+I (2272090) command_server: RX: STATUS
+I (2272120) command_server: RX: SET_SPEED 1500
+I (2272123) control_task: SET_SPEED 1500
+I (2292157) command_server: RX: STATUS
+I (2292187) command_server: RX: SET_SPEED 500
+I (2292190) control_task: SET_SPEED 500
+I (2312217) command_server: RX: STATUS
+I (2317256) command_server: RX: STATUS
+I (2317281) command_server: RX: SET_SPEED 1500
+I (2317284) control_task: SET_SPEED 1500
+I (2337319) command_server: RX: STATUS
+I (2337345) command_server: RX: SET_SPEED 500
+I (2337348) control_task: SET_SPEED 500
+I (2357375) command_server: RX: STATUS
+I (2357404) command_server: RX: SET_SPEED 1500
+I (2357407) control_task: SET_SPEED 1500
+I (2377467) command_server: RX: STATUS
+I (2377496) command_server: RX: SET_SPEED 500
+I (2377499) control_task: SET_SPEED 500
+I (2397522) command_server: RX: STATUS
+I (2397554) command_server: RX: SET_SPEED 1500
+I (2397556) control_task: SET_SPEED 1500
+I (2417576) command_server: RX: STATUS
+I (2417617) command_server: RX: SET_SPEED 500
+I (2417622) control_task: SET_SPEED 500
+I (2437656) command_server: RX: STATUS
+I (2442701) command_server: RX: STATUS
+I (2442736) command_server: RX: SET_SPEED 1500
+I (2442739) control_task: SET_SPEED 1500
+I (2462774) command_server: RX: STATUS
+I (2462865) command_server: RX: STOP
+I (2462868) control_task: STOP
+I (2462937) command_server: RX: DISARM
+I (2462939) control_task: DISARM
+I (2465012) command_server: RX: STATUS
+
+
+pckal@Nitish-PC MINGW64 ~/esp_projects/project_c_motor_controller (day7-8-gui-live-plot)
+$
